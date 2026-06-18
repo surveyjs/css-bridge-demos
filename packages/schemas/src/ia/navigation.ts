@@ -5,7 +5,12 @@
  * Bootstrap / shadcn / MUI hosts. Apps must not redefine routes locally.
  */
 
-export type NavId = "checkout" | "records" | "claims" | "builder";
+export type NavId =
+  | "checkout"
+  | "records"
+  | "claims"
+  | "builder"
+  | "all-questions";
 
 export interface NavItem {
   /** Stable id, also used as a React key. */
@@ -48,6 +53,13 @@ export const navItems: readonly NavItem[] = [
     path: "/builder",
     description: "Edit schemas live with SurveyJS Creator.",
   },
+  {
+    id: "all-questions",
+    label: "All Questions",
+    path: "/all-questions",
+    description: "Every question type, grouped by Creator toolbox category.",
+    schemaId: "all-questions",
+  },
 ] as const;
 
 /** Route path constants for type-safe linking from apps. */
@@ -58,6 +70,7 @@ export const routes = {
   recordDetail: (id: string) => `/records/${id}`,
   claims: "/claims",
   builder: "/builder",
+  allQuestions: "/all-questions",
 } as const;
 
 export function getNavItem(id: NavId): NavItem | undefined {

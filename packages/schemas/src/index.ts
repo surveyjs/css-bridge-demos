@@ -17,6 +17,7 @@ export type {
 export { checkoutJson, checkoutSchema } from "./schemas/checkout";
 export { insuranceClaimJson, insuranceClaimSchema } from "./schemas/insurance-claim";
 export { medicalFormJson, medicalFormSchema } from "./schemas/medical-form";
+export { allQuestionsJson, allQuestionsSchema } from "./schemas/all-questions";
 
 // Seed data
 export {
@@ -43,6 +44,7 @@ export {
 import { checkoutSchema } from "./schemas/checkout";
 import { insuranceClaimSchema } from "./schemas/insurance-claim";
 import { medicalFormSchema } from "./schemas/medical-form";
+import { allQuestionsSchema } from "./schemas/all-questions";
 import type { SchemaDefinition } from "./types";
 
 /** Registry of all schemas keyed by id, for lookups from app routes. */
@@ -50,6 +52,7 @@ export const schemaRegistry: Record<string, SchemaDefinition> = {
   [checkoutSchema.id]: checkoutSchema,
   [insuranceClaimSchema.id]: insuranceClaimSchema,
   [medicalFormSchema.id]: medicalFormSchema,
+  [allQuestionsSchema.id]: allQuestionsSchema,
 };
 
 /** All schemas as an array (e.g. for a landing page gallery). */
@@ -57,4 +60,5 @@ export const allSchemas: readonly SchemaDefinition[] = [
   checkoutSchema,
   insuranceClaimSchema,
   medicalFormSchema,
+  allQuestionsSchema,
 ];

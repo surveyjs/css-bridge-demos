@@ -2,6 +2,7 @@
 
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
+import AppsIcon from "@mui/icons-material/Apps";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import BuildIcon from "@mui/icons-material/Build";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
@@ -25,6 +26,7 @@ const ICONS: Record<NavId, SvgIconComponent> = {
   checkout: ShoppingCartCheckoutIcon,
   records: TableChartIcon,
   builder: BuildIcon,
+  "all-questions": AppsIcon,
 };
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {

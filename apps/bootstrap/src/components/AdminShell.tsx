@@ -1,0 +1,68 @@
+"use client";
+
+import { useState, type ReactNode } from "react";
+import { Container, Navbar, Offcanvas } from "react-bootstrap";
+import { Sidebar } from "./Sidebar";
+import { ThemeSwitcher } from "./ThemeSwitcher";
+
+/**
+ * Classic admin layout built from react-bootstrap: a fixed top header, a
+ * persistent sidebar on large screens (an Offcanvas drawer on small screens),
+ * and a scrolling content area. All chrome — no SurveyJS yet.
+ */
+export function AdminShell({ children }: { children: ReactNode }) {
+  const [navOpen, setNavOpen] = useState(false);
+
+  return (
+    <div className="d-flex flex-column min-vh-100 bg-body-tertiary">
+      <Navbar
+        as="header"
+        sticky="top"
+        className="bg-body border-bottom shadow-sm px-3"
+        expand
+      >
+        <Navbar.Toggle
+          aria-label="Toggle navigation"
+          className="d-lg-none me-2"
+          onClick={() => setNavOpen(true)}
+        />
+        <Navbar.Brand className="fw-bold d-flex align-items-center gap-2">
+          <span aria-hidden>🧩</span>
+          SurveyJS Bridge
+          <span className="badge text-bg-primary fw-normal">Bootstrap</span>
+        </Navbar.Brand>
+        <div className="ms-auto">
+          <ThemeSwitcher />
+        </div>
+      </Navbar>
+
+      <div className="d-flex flex-grow-1">
+        {/* Persistent sidebar (large screens) */}
+        <aside
+          className="d-none d-lg-block border-end bg-body"
+          style={{ width: 280, flexShrink: 0 }}
+        >
+          <div className="position-sticky" style={{ top: "4rem" }}>
+            <Sidebar />
+          </div>
+        </aside>
+
+        {/* Drawer sidebar (small screens only; persistent aside handles ≥lg) */}
+        <Offcanvas show={navOpen} onHide={() => setNavOpen(false)} className="d-lg-none">
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Navigation</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body className="p-0" onClick={() => setNavOpen(false)}>
+            <Sidebar />
+          </Offcanvas.Body>
+        </Offcanvas>
+
+        <main className="flex-grow-1 p-3 p-md-4" style={{ minWidth: 0 }}>
+          <Container fluid className="px-0">
+            {children}
+          </Container>
+        </main>
+      </div>
+    </div>
+  );
+}

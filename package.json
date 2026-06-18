@@ -1,0 +1,21 @@
+{
+  "name": "surveyjs-bridge-demos",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.7.0",
+  "description": "SurveyJS V3 CSS bridge demos (Bootstrap, shadcn, MUI) over a single shared schema package.",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}

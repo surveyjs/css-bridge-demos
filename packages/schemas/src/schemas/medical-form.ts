@@ -1,0 +1,215 @@
+import type { SchemaDefinition, SurveyJSON } from "../types";
+
+/**
+ * Patient intake / medical-insurance form.
+ *
+ * Demonstrates: paged sections, demographics, insurance coverage with a
+ * conditional secondary-insurance panel, a matrix of yes/no medical history,
+ * allergies (dynamic rows), and a signature/consent step.
+ *
+ * Representative V3 JSON — drop-in replaceable with a real patient-intake schema.
+ */
+export const medicalFormJson: SurveyJSON = {
+  title: "Patient Intake",
+  description: "Tell us about you and your insurance coverage.",
+  showProgressBar: true,
+  progressBarLocation: "aboveHeader",
+  progressBarType: "pages",
+  showQuestionNumbers: "off",
+  widthMode: "responsive",
+  pages: [
+    {
+      name: "patient",
+      title: "Patient",
+      elements: [
+        { type: "text", name: "firstName", title: "First name", isRequired: true },
+        {
+          type: "text",
+          name: "lastName",
+          title: "Last name",
+          isRequired: true,
+          startWithNewLine: false,
+        },
+        {
+          type: "text",
+          name: "dob",
+          title: "Date of birth",
+          inputType: "date",
+          isRequired: true,
+        },
+        {
+          type: "radiogroup",
+          name: "sex",
+          title: "Sex assigned at birth",
+          startWithNewLine: false,
+          colCount: 2,
+          choices: [
+            { value: "f", text: "Female" },
+            { value: "m", text: "Male" },
+          ],
+        },
+        {
+          type: "text",
+          name: "phone",
+          title: "Mobile phone",
+          inputType: "tel",
+          maskType: "pattern",
+          maskSettings: { pattern: "+1 (999) 999-9999" },
+        },
+        {
+          type: "dropdown",
+          name: "preferredContact",
+          title: "Preferred contact method",
+          startWithNewLine: false,
+          choices: ["Phone", "Email", "Text message"],
+        },
+      ],
+    },
+    {
+      name: "insurance",
+      title: "Insurance",
+      elements: [
+        {
+          type: "panel",
+          name: "primaryInsurance",
+          title: "Primary insurance",
+          elements: [
+            { type: "text", name: "carrier", title: "Insurance carrier", isRequired: true },
+            {
+              type: "text",
+              name: "memberId",
+              title: "Member ID",
+              isRequired: true,
+              startWithNewLine: false,
+            },
+            {
+              type: "text",
+              name: "groupNumber",
+              title: "Group number",
+              startWithNewLine: false,
+            },
+            {
+              type: "radiogroup",
+              name: "relationshipToInsured",
+              title: "Patient is the…",
+              colCount: 3,
+              defaultValue: "self",
+              choices: [
+                { value: "self", text: "Policyholder" },
+                { value: "spouse", text: "Spouse" },
+                { value: "dependent", text: "Dependent" },
+              ],
+            },
+          ],
+        },
+        {
+          type: "boolean",
+          name: "hasSecondary",
+          title: "Do you have secondary insurance?",
+          defaultValue: false,
+        },
+        {
+          type: "panel",
+          name: "secondaryInsurance",
+          title: "Secondary insurance",
+          visibleIf: "{hasSecondary} = true",
+          elements: [
+            { type: "text", name: "carrier2", title: "Insurance carrier", isRequired: true },
+            {
+              type: "text",
+              name: "memberId2",
+              title: "Member ID",
+              isRequired: true,
+              startWithNewLine: false,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: "history",
+      title: "History",
+      elements: [
+        {
+          type: "matrix",
+          name: "medicalHistory",
+          title: "Have you ever been diagnosed with any of the following?",
+          columns: [
+            { value: "yes", text: "Yes" },
+            { value: "no", text: "No" },
+            { value: "unsure", text: "Unsure" },
+          ],
+          rows: [
+            { value: "diabetes", text: "Diabetes" },
+            { value: "hypertension", text: "High blood pressure" },
+            { value: "asthma", text: "Asthma" },
+            { value: "heart", text: "Heart disease" },
+          ],
+        },
+        {
+          type: "matrixdynamic",
+          name: "allergies",
+          title: "Allergies",
+          addRowText: "Add allergy",
+          columnColCount: 1,
+          rowCount: 0,
+          columns: [
+            { name: "allergen", title: "Allergen", cellType: "text", isRequired: true },
+            {
+              name: "severity",
+              title: "Severity",
+              cellType: "dropdown",
+              choices: ["Mild", "Moderate", "Severe"],
+            },
+            { name: "reaction", title: "Reaction", cellType: "text" },
+          ],
+        },
+        {
+          type: "comment",
+          name: "currentMedications",
+          title: "Current medications",
+          rows: 3,
+        },
+      ],
+    },
+    {
+      name: "consent",
+      title: "Consent",
+      elements: [
+        {
+          type: "boolean",
+          name: "consentTreatment",
+          title: "I consent to treatment",
+          isRequired: true,
+        },
+        {
+          type: "boolean",
+          name: "consentPrivacy",
+          title: "I acknowledge the privacy practices (HIPAA)",
+          isRequired: true,
+        },
+        {
+          type: "signaturepad",
+          name: "signature",
+          title: "Signature",
+        },
+        {
+          type: "text",
+          name: "signedDate",
+          title: "Date",
+          inputType: "date",
+          startWithNewLine: false,
+        },
+      ],
+    },
+  ],
+  completedHtml: "<h4>Thank you. Your intake form has been submitted.</h4>",
+};
+
+export const medicalFormSchema: SchemaDefinition = {
+  id: "medical-form",
+  title: "Patient Intake",
+  description:
+    "Multi-step medical/insurance intake with coverage panels, history matrix and consent.",
+  json: medicalFormJson,
+};

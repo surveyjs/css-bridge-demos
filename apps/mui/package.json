@@ -1,0 +1,36 @@
+{
+  "name": "@bridge/mui",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf .next *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@bridge/schemas": "workspace:*",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.2.5",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+    "@mui/material-nextjs": "^7.1.0",
+    "next": "^15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "survey-core": "link:C:/survey.js/LibV3/survey-library/packages/survey-core/build",
+    "survey-react-ui": "link:C:/survey.js/LibV3/survey-library/packages/survey-react-ui/build",
+    "survey-creator-core": "link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-core/build",
+    "survey-creator-react": "link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-react/build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
+  }
+}

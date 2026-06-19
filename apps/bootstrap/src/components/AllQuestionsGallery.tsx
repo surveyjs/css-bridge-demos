@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Survey } from "survey-react-ui";
 import { allQuestionsSchema, createSurveyModel } from "@bridge/schemas";
 import { useAllQuestionsMode } from "./AllQuestionsMode";
+import { useBorderlessMode } from "./BorderlessMode";
 
 // Same import order as SurveyForm: base V3 CSS first, Bootstrap bridge on top.
 // This page adds NO bridge code — it reuses the existing stylesheet verbatim.
@@ -33,6 +34,13 @@ export function AllQuestionsGallery() {
   useEffect(() => {
     model.mode = readOnly ? "display" : "edit";
   }, [model, readOnly]);
+
+  // "Borderless questions" switch (top menu) → survey-core's `isCompact`, set on
+  // the live model. Reactive, so the gallery re-renders in place.
+  const { borderless } = useBorderlessMode();
+  useEffect(() => {
+    model.isCompact = borderless;
+  }, [model, borderless]);
 
   // SurveyJS renders against the DOM root, absent during Next's prerender;
   // render only after mount so the bridge stays CSS-only.

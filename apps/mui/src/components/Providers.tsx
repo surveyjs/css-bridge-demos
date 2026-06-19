@@ -5,6 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@/theme/theme";
 import { AllQuestionsModeProvider } from "./AllQuestionsMode";
+import { BorderlessModeProvider } from "./BorderlessMode";
 
 /**
  * Client-side MUI runtime. ThemeProvider doubles as the CSS-variables provider
@@ -16,7 +17,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider theme={theme} defaultMode="light">
       <CssBaseline />
-      <AllQuestionsModeProvider>{children}</AllQuestionsModeProvider>
+      <BorderlessModeProvider>
+        <AllQuestionsModeProvider>{children}</AllQuestionsModeProvider>
+      </BorderlessModeProvider>
     </ThemeProvider>
   );
 }

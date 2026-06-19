@@ -8,6 +8,7 @@ import {
   type SurveyData,
   type SurveyMode,
 } from "@bridge/schemas";
+import { useBorderlessMode } from "./BorderlessMode";
 
 // Base V3 CSS FIRST, then the MUI bridge ON TOP so the bridge's `--sjs2-*`
 // overrides (declared on the same `.sjs-theme-overrides` root that survey-core
@@ -43,6 +44,15 @@ export function SurveyForm({
     () => createSurveyModel(schema, { data, mode }),
     [schema, data, mode],
   );
+
+  // "Borderless questions" switch (top menu) → survey-core's `isCompact`. It is
+  // a non-serializable runtime flag, so it's set on the LIVE model here rather
+  // than baked into the schema; survey-core is reactive, so the form re-renders
+  // in place. Re-applied if the model is rebuilt (schema/data/mode change).
+  const { borderless } = useBorderlessMode();
+  useEffect(() => {
+    model.isCompact = borderless;
+  }, [model, borderless]);
 
   // Bridge stays CSS-only: completion is a model event on the headless model,
   // not a renderer/component override.

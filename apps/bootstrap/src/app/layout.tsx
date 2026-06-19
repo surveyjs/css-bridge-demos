@@ -4,6 +4,7 @@ import Script from "next/script";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AdminShell } from "@/components/AdminShell";
 import { AllQuestionsModeProvider } from "@/components/AllQuestionsMode";
+import { BorderlessModeProvider } from "@/components/BorderlessMode";
 import { themeBootstrapScript } from "@/lib/themes";
 
 export const metadata: Metadata = {
@@ -29,9 +30,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {themeBootstrapScript()}
         </Script>
         <ThemeProvider>
-          <AllQuestionsModeProvider>
-            <AdminShell>{children}</AdminShell>
-          </AllQuestionsModeProvider>
+          <BorderlessModeProvider>
+            <AllQuestionsModeProvider>
+              <AdminShell>{children}</AdminShell>
+            </AllQuestionsModeProvider>
+          </BorderlessModeProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { Sidebar } from "./Sidebar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { AllQuestionsToggle } from "./AllQuestionsToggle";
 
 /**
  * Classic shadcn/ui admin layout, native chrome only — no SurveyJS yet.
@@ -78,7 +79,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
           <Brand />
         </div>
 
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-3">
+          {/* Route-scoped: only renders on /all-questions. */}
+          <AllQuestionsToggle />
           <ThemeSwitcher />
         </div>
       </header>

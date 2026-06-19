@@ -1,5 +1,5 @@
-import { PagePlaceholder } from "@/components/PagePlaceholder";
+import { AllQuestionsGallery } from "@/components/AllQuestionsGallery";
 
 export default function AllQuestionsPage() {
-  return <PagePlaceholder />;
+  return <AllQuestionsGallery />;
 }

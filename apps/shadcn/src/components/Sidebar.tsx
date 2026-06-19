@@ -1,0 +1,72 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  ClipboardListIcon,
+  ShoppingCartIcon,
+  TableIcon,
+  WrenchIcon,
+  LayoutGridIcon,
+  type LucideIcon,
+} from "lucide-react";
+import { navItems, type NavId } from "@bridge/schemas";
+import { cn } from "@/lib/utils";
+
+/**
+ * Sidebar navigation. The item list comes straight from the shared IA
+ * (`navItems` in @bridge/schemas) — no local copy, identical order — so the
+ * Bootstrap, shadcn, and MUI shells expose the identical routes. Only the icon
+ * mapping (pure host chrome) is app-local.
+ */
+const ICONS: Record<NavId, LucideIcon> = {
+  claims: ClipboardListIcon,
+  checkout: ShoppingCartIcon,
+  records: TableIcon,
+  builder: WrenchIcon,
+  "all-questions": LayoutGridIcon,
+};
+
+export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+  const pathname = usePathname();
+
+  return (
+    <nav aria-label="Primary" className="flex flex-col gap-1 p-3">
+      {navItems.map((item) => {
+        const active =
+          pathname === item.path || pathname.startsWith(`${item.path}/`);
+        const Icon = ICONS[item.id];
+        return (
+          <Link
+            key={item.id}
+            href={item.path}
+            onClick={onNavigate}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              "group flex items-start gap-3 rounded-md px-3 py-2 text-sm transition-colors outline-none",
+              "focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+              active
+                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+            )}
+          >
+            <Icon
+              className={cn(
+                "mt-0.5 size-4 shrink-0",
+                active
+                  ? "text-sidebar-primary"
+                  : "text-sidebar-foreground/60 group-hover:text-sidebar-accent-foreground",
+              )}
+            />
+            <span className="flex flex-col gap-0.5">
+              <span>{item.label}</span>
+              <span className="text-muted-foreground text-xs leading-tight">
+                {item.description}
+              </span>
+            </span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}

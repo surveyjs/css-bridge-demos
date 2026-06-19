@@ -1,0 +1,15 @@
+/* shadcn/ui "base-nova" style. Load after shadcn.css (overrides only). */
+[data-shadcn-style="base-nova"] .sjs-theme-overrides {
+  /* buttons */
+  --sjs2-radius-component-action: var(--radius);
+
+  /* formboxes */
+  --sjs2-layout-component-input-medium-content-padding-horizontal: calc(2.5 * var(--sjs2-spacing-x100));
+  --sjs2-layout-component-input-medium-content-padding-vertical: calc(var(--spacing) * 4 - var(--text-sm--line-height) * 0.5em); /* py-1 */
+
+  /* checkboxes and radio */
+  --sjs2-radius-component-checkbox: 4px;
+
+  /* common and other */
+  --sjs2-radius-component-panel: calc(var(--radius) + 2px);
+}

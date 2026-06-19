@@ -1,0 +1,16 @@
+import { checkoutSchema } from "@bridge/schemas";
+import { SurveyForm } from "@/components/SurveyForm";
+
+/**
+ * Checkout — the clean parity page. A single SurveyJS multi-page wizard
+ * (per-page validation + masked card/expiry inputs) rendered straight through
+ * the shadcn CSS bridge. The schema comes from `@bridge/schemas` unchanged;
+ * there is nothing app-specific here beyond the shadcn chrome around the form.
+ */
+export default function CheckoutPage() {
+  return (
+    <div className="mx-auto w-full max-w-3xl">
+      <SurveyForm schema={checkoutSchema} />
+    </div>
+  );
+}

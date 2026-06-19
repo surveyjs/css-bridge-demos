@@ -15,6 +15,7 @@ import {
 import { Sidebar } from "./Sidebar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { AllQuestionsToggle } from "./AllQuestionsToggle";
+import { BorderlessToggle } from "./BorderlessToggle";
 
 /**
  * Classic shadcn/ui admin layout, native chrome only — no SurveyJS yet.
@@ -82,6 +83,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
         <div className="ml-auto flex items-center gap-3">
           {/* Route-scoped: only renders on /all-questions. */}
           <AllQuestionsToggle />
+          {/* Shown only where a page-level survey is mounted (/claims, /checkout,
+              /all-questions); hidden on the Dashboard, Builder and Records. */}
+          <BorderlessToggle />
           <ThemeSwitcher />
         </div>
       </header>

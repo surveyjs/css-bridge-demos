@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AdminShell } from "@/components/AdminShell";
 import { AllQuestionsModeProvider } from "@/components/AllQuestionsMode";
+import { BorderlessModeProvider } from "@/components/BorderlessMode";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <ThemeProvider>
           <AllQuestionsModeProvider>
-            <AdminShell>{children}</AdminShell>
+            <BorderlessModeProvider>
+              <AdminShell>{children}</AdminShell>
+            </BorderlessModeProvider>
           </AllQuestionsModeProvider>
         </ThemeProvider>
       </body>

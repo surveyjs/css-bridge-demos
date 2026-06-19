@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { Container, Navbar, Offcanvas } from "react-bootstrap";
 import { Sidebar } from "./Sidebar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { AllQuestionsToggle } from "./AllQuestionsToggle";
 
 /**
  * Classic admin layout built from react-bootstrap: a fixed top header, a
@@ -31,7 +32,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
           SurveyJS Bridge
           <span className="badge text-bg-primary fw-normal">Bootstrap</span>
         </Navbar.Brand>
-        <div className="ms-auto">
+        <div className="ms-auto d-flex align-items-center gap-3">
+          {/* Route-scoped: only renders on /all-questions. */}
+          <AllQuestionsToggle />
           <ThemeSwitcher />
         </div>
       </Navbar>

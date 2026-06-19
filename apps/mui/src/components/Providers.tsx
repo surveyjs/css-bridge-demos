@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@/theme/theme";
+import { AllQuestionsModeProvider } from "./AllQuestionsMode";
 
 /**
  * Client-side MUI runtime. ThemeProvider doubles as the CSS-variables provider
@@ -15,7 +16,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider theme={theme} defaultMode="light">
       <CssBaseline />
-      {children}
+      <AllQuestionsModeProvider>{children}</AllQuestionsModeProvider>
     </ThemeProvider>
   );
 }

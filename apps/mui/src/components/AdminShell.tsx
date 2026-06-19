@@ -13,6 +13,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Sidebar } from "./Sidebar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { AllQuestionsToggle } from "./AllQuestionsToggle";
 
 const DRAWER_WIDTH = 280;
 
@@ -66,6 +67,8 @@ export function AdminShell({ children }: { children: ReactNode }) {
           </Typography>
           <Chip label="MUI" color="primary" size="small" sx={{ ml: 1 }} />
           <Box sx={{ flexGrow: 1 }} />
+          {/* Route-scoped: only renders on /all-questions. */}
+          <AllQuestionsToggle />
           <ThemeSwitcher />
         </Toolbar>
       </AppBar>

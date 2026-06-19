@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Script from "next/script";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AdminShell } from "@/components/AdminShell";
+import { AllQuestionsModeProvider } from "@/components/AllQuestionsMode";
 import { themeBootstrapScript } from "@/lib/themes";
 
 export const metadata: Metadata = {
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {themeBootstrapScript()}
         </Script>
         <ThemeProvider>
-          <AdminShell>{children}</AdminShell>
+          <AllQuestionsModeProvider>
+            <AdminShell>{children}</AdminShell>
+          </AllQuestionsModeProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,7 +1,4 @@
-import { getNavItem } from "@bridge/schemas";
 import { AllQuestionsGallery } from "@/components/AllQuestionsGallery";
-
-const nav = getNavItem("all-questions")!;
 
 /**
  * All-questions gallery route — every SurveyJS V3 question type, grouped into
@@ -10,14 +7,5 @@ const nav = getNavItem("all-questions")!;
  * `@bridge/schemas` unchanged. This is the broadest stress test of the bridge.
  */
 export default function AllQuestionsPage() {
-  return (
-    <>
-      <div className="mb-4">
-        <h1 className="h3 mb-1">{nav.label}</h1>
-        <p className="text-body-secondary mb-0">{nav.description}</p>
-      </div>
-
-      <AllQuestionsGallery />
-    </>
-  );
+  return <AllQuestionsGallery />;
 }

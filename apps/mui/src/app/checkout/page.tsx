@@ -1,9 +1,6 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { checkoutSchema, getNavItem } from "@bridge/schemas";
+import { checkoutSchema } from "@bridge/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
-
-const nav = getNavItem("checkout")!;
 
 /**
  * Checkout — the clean parity page. A single SurveyJS multi-page wizard
@@ -13,22 +10,13 @@ const nav = getNavItem("checkout")!;
  */
 export default function CheckoutPage() {
   return (
-    <Box>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h1" gutterBottom>
-          {nav.label}
-        </Typography>
-        <Typography color="text.secondary">{nav.description}</Typography>
-      </Box>
-
-      <Box
-        sx={{
-          mx: "auto",
-          maxWidth: { xs: "100%", xl: 760 },
-        }}
-      >
-        <SurveyForm schema={checkoutSchema} />
-      </Box>
+    <Box
+      sx={{
+        mx: "auto",
+        maxWidth: { xs: "100%", xl: 760 },
+      }}
+    >
+      <SurveyForm schema={checkoutSchema} />
     </Box>
   );
 }

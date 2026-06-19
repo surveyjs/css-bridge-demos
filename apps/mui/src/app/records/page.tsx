@@ -22,15 +22,12 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import {
-  getNavItem,
   insuranceClaimSchema,
   insuranceClaimSeed,
   type ClaimRecord,
   type SurveyData,
 } from "@bridge/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
-
-const nav = getNavItem("records")!;
 
 /** CRUD lifecycle off ONE schema: create / edit drive an edit-mode form,
  * read drives the same form in display mode. */
@@ -133,22 +130,7 @@ export default function RecordsPage() {
 
   return (
     <Box>
-      <Box
-        sx={{
-          mb: 4,
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: 2,
-        }}
-      >
-        <Box>
-          <Typography variant="h1" gutterBottom>
-            {nav.label}
-          </Typography>
-          <Typography color="text.secondary">{nav.description}</Typography>
-        </Box>
+      <Box sx={{ mb: 4, display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"
           startIcon={<AddIcon />}

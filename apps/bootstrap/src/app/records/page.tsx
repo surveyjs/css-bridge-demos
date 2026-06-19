@@ -3,15 +3,12 @@
 import { useCallback, useMemo, useState } from "react";
 import { Badge, Button, ButtonGroup, Card, Modal, Table } from "react-bootstrap";
 import {
-  getNavItem,
   insuranceClaimSchema,
   insuranceClaimSeed,
   type ClaimRecord,
   type SurveyData,
 } from "@bridge/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
-
-const nav = getNavItem("records")!;
 
 /** CRUD lifecycle off ONE schema: create / edit drive an edit-mode form,
  * read drives the same form in display mode. */
@@ -113,11 +110,7 @@ export default function RecordsPage() {
 
   return (
     <>
-      <div className="d-flex flex-wrap align-items-start justify-content-between gap-2 mb-4">
-        <div>
-          <h1 className="h3 mb-1">{nav.label}</h1>
-          <p className="text-body-secondary mb-0">{nav.description}</p>
-        </div>
+      <div className="d-flex justify-content-end mb-4">
         <Button variant="primary" onClick={() => open("create", null)}>
           + New claim
         </Button>

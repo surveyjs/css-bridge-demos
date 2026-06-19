@@ -1,10 +1,7 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { getNavItem, medicalFormSchema } from "@bridge/schemas";
+import { medicalFormSchema } from "@bridge/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
 import { NativeControls } from "@/components/NativeControls";
-
-const nav = getNavItem("claims")!;
 
 /**
  * First (and, for this stage, only) route wired to SurveyJS — the proof point
@@ -16,26 +13,17 @@ const nav = getNavItem("claims")!;
  */
 export default function ClaimsPage() {
   return (
-    <Box>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h1" gutterBottom>
-          {nav.label}
-        </Typography>
-        <Typography color="text.secondary">{nav.description}</Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "grid",
-          gap: 4,
-          alignItems: "start",
-          gridTemplateColumns: { xs: "1fr", lg: "7fr 5fr", xl: "8fr 4fr" },
-        }}
-      >
-        <SurveyForm schema={medicalFormSchema} />
-        <Box sx={{ position: { lg: "sticky" }, top: { lg: "5rem" } }}>
-          <NativeControls />
-        </Box>
+    <Box
+      sx={{
+        display: "grid",
+        gap: 4,
+        alignItems: "start",
+        gridTemplateColumns: { xs: "1fr", lg: "7fr 5fr", xl: "8fr 4fr" },
+      }}
+    >
+      <SurveyForm schema={medicalFormSchema} />
+      <Box sx={{ position: { lg: "sticky" }, top: { lg: "5rem" } }}>
+        <NativeControls />
       </Box>
     </Box>
   );

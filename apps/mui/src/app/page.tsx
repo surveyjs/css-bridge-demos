@@ -1,6 +1,5 @@
 import NextLink from "next/link";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -15,42 +14,31 @@ import { navItems } from "@bridge/schemas";
  */
 export default function HomePage() {
   return (
-    <Box>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h1" gutterBottom>
-          Dashboard
-        </Typography>
-        <Typography color="text.secondary">
-          SurveyJS V3 CSS-bridge demo over a native MUI admin shell.
-        </Typography>
-      </Box>
-
-      <Grid container spacing={3}>
-        {navItems.map((item) => (
-          <Grid key={item.id} size={{ xs: 12, sm: 6, lg: 3 }}>
-            <Card variant="outlined" sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" gutterBottom>
-                  {item.label}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {item.description}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button
-                  component={NextLink}
-                  href={item.path}
-                  endIcon={<ArrowForwardIcon />}
-                  size="small"
-                >
-                  Open {item.label}
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    <Grid container spacing={3}>
+      {navItems.map((item) => (
+        <Grid key={item.id} size={{ xs: 12, sm: 6, lg: 3 }}>
+          <Card variant="outlined" sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Typography variant="h6" gutterBottom>
+                {item.label}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {item.description}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                component={NextLink}
+                href={item.path}
+                endIcon={<ArrowForwardIcon />}
+                size="small"
+              >
+                Open {item.label}
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 }

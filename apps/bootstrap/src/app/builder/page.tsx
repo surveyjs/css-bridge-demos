@@ -1,7 +1,5 @@
-import { getNavItem, medicalFormJson } from "@bridge/schemas";
+import { medicalFormJson } from "@bridge/schemas";
 import { BuilderCreator } from "@/components/BuilderCreator";
-
-const nav = getNavItem("builder")!;
 
 /**
  * Builder route — the SurveyJS V3 Creator mounted against a SHARED schema from
@@ -14,14 +12,5 @@ const nav = getNavItem("builder")!;
  * bridge CSS or component overrides. See `BuilderCreator` for the layering.
  */
 export default function BuilderPage() {
-  return (
-    <>
-      <div className="mb-4">
-        <h1 className="h3 mb-1">{nav.label}</h1>
-        <p className="text-body-secondary mb-0">{nav.description}</p>
-      </div>
-
-      <BuilderCreator json={medicalFormJson} />
-    </>
-  );
+  return <BuilderCreator json={medicalFormJson} />;
 }

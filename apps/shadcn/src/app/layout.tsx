@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 // reads the persisted style and applies `data-shadcn-style` to <html> so the
 // token preset is in place with no flash (parallel to next-themes' own .dark
 // script). Kept inline + tiny; mirrors the StyleProvider key + default.
-const STYLE_BOOTSTRAP = `(function(){try{var s=localStorage.getItem('shadcn-style');var ok=['default','new-york','base-nova','base-vega'];document.documentElement.setAttribute('data-shadcn-style',ok.indexOf(s)>-1?s:'default');}catch(e){document.documentElement.setAttribute('data-shadcn-style','default');}})();`;
+const STYLE_BOOTSTRAP = `(function(){try{var s=localStorage.getItem('shadcn-style');var ok=['default','new-york','base-nova','base-vega','base-maia','base-lyra','base-mira','base-luma','base-sera','base-rhea'];document.documentElement.setAttribute('data-shadcn-style',ok.indexOf(s)>-1?s:'default');}catch(e){document.documentElement.setAttribute('data-shadcn-style','default');}})();`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

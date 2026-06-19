@@ -140,45 +140,54 @@
    the neutral base above.
    ────────────────────────────────────────────────────────────────────────── */
 
-/* new-york — neutral palette, tighter geometry (smaller radius). */
+/* All shadcn "base" styles share the neutral palette (every demo
+   components.json is baseColor: "neutral") — they differ ONLY in geometry,
+   exactly like shadcn's website. So each preset below sets only --radius (and
+   no color tint); the per-style survey bridge carries the finer geometry. */
+
+/* new-york — tighter geometry (smaller radius). */
 [data-shadcn-style="new-york"] {
   --radius: 0.5rem;
 }
 
-/* base-nova — rounder geometry + an indigo primary accent. */
+/* base-nova — rounder geometry. */
 [data-shadcn-style="base-nova"] {
   --radius: 0.85rem;
-  --primary: oklch(0.55 0.22 264);
-  --primary-foreground: oklch(0.985 0 0);
-  --ring: oklch(0.55 0.22 264);
-  --sidebar-primary: oklch(0.55 0.22 264);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-ring: oklch(0.55 0.22 264);
-}
-[data-shadcn-style="base-nova"].dark {
-  --primary: oklch(0.62 0.19 264);
-  --primary-foreground: oklch(0.985 0 0);
-  --ring: oklch(0.62 0.19 264);
-  --sidebar-primary: oklch(0.62 0.19 264);
-  --sidebar-ring: oklch(0.62 0.19 264);
 }
 
-/* base-vega — sharper geometry + an emerald primary accent. */
+/* base-vega — sharper geometry. */
 [data-shadcn-style="base-vega"] {
   --radius: 0.35rem;
-  --primary: oklch(0.6 0.13 163);
-  --primary-foreground: oklch(0.985 0 0);
-  --ring: oklch(0.6 0.13 163);
-  --sidebar-primary: oklch(0.6 0.13 163);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-ring: oklch(0.6 0.13 163);
 }
-[data-shadcn-style="base-vega"].dark {
-  --primary: oklch(0.7 0.15 163);
-  --primary-foreground: oklch(0.205 0 0);
-  --ring: oklch(0.7 0.15 163);
-  --sidebar-primary: oklch(0.7 0.15 163);
-  --sidebar-ring: oklch(0.7 0.15 163);
+
+/* base-luma — pill-soft, large radius. */
+[data-shadcn-style="base-luma"] {
+  --radius: 1.5rem;
+}
+
+/* base-lyra — square, zero radius. */
+[data-shadcn-style="base-lyra"] {
+  --radius: 0;
+}
+
+/* base-maia — scales geometry off the neutral default radius. */
+[data-shadcn-style="base-maia"] {
+  --radius: 0.625rem;
+}
+
+/* base-mira — compact, slightly tighter radius. */
+[data-shadcn-style="base-mira"] {
+  --radius: 0.5rem;
+}
+
+/* base-rhea — rounded. */
+[data-shadcn-style="base-rhea"] {
+  --radius: 1rem;
+}
+
+/* base-sera — square, zero radius. */
+[data-shadcn-style="base-sera"] {
+  --radius: 0;
 }
 
 @layer base {

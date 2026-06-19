@@ -31,6 +31,12 @@ import "@/bridge/shadcn-default.css";
 import "@/bridge/shadcn-new-york.css";
 import "@/bridge/shadcn-base-nova.css";
 import "@/bridge/shadcn-base-vega.css";
+import "@/bridge/shadcn-base-maia.css";
+import "@/bridge/shadcn-base-lyra.css";
+import "@/bridge/shadcn-base-mira.css";
+import "@/bridge/shadcn-base-luma.css";
+import "@/bridge/shadcn-base-sera.css";
+import "@/bridge/shadcn-base-rhea.css";
 
 /**
  * Mounts the SurveyJS V3 Creator on the Builder route, seeded with a shared

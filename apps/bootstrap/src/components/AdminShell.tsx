@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { routes } from "@bridge/schemas";
 import { Container, Navbar, Offcanvas } from "react-bootstrap";
 import { Sidebar } from "./Sidebar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
@@ -14,6 +16,12 @@ import { BorderlessToggle } from "./BorderlessToggle";
  */
 export function AdminShell({ children }: { children: ReactNode }) {
   const [navOpen, setNavOpen] = useState(false);
+  // The Builder hosts the full-height SurveyJS Creator, which needs the whole
+  // viewport — so it renders edge-to-edge: no content padding, no fluid gutter,
+  // filling the area below the sticky header. Every other route keeps the
+  // padded reading column.
+  const pathname = usePathname();
+  const isBuilder = pathname === routes.builder;
 
   return (
     <div className="d-flex flex-column min-vh-100 bg-body-tertiary">
@@ -63,10 +71,17 @@ export function AdminShell({ children }: { children: ReactNode }) {
           </Offcanvas.Body>
         </Offcanvas>
 
-        <main className="flex-grow-1 p-3 p-md-4" style={{ minWidth: 0 }}>
-          <Container fluid className="px-0">
-            {children}
-          </Container>
+        <main
+          className={isBuilder ? "flex-grow-1" : "flex-grow-1 p-3 p-md-4"}
+          style={{ minWidth: 0 }}
+        >
+          {isBuilder ? (
+            children
+          ) : (
+            <Container fluid className="px-0">
+              {children}
+            </Container>
+          )}
         </main>
       </div>
     </div>

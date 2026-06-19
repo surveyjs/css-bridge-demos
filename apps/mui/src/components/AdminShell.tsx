@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { routes } from "@bridge/schemas";
 import MenuIcon from "@mui/icons-material/Menu";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import AppBar from "@mui/material/AppBar";
@@ -29,6 +31,12 @@ const DRAWER_WIDTH = 280;
  */
 export function AdminShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  // The Builder hosts the full-height SurveyJS Creator, which needs the whole
+  // viewport — so it renders edge-to-edge: no centered Container, no content
+  // padding, filling the area below the fixed AppBar. Every other route keeps
+  // the padded, max-width reading column.
+  const pathname = usePathname();
+  const isBuilder = pathname === routes.builder;
 
   const brand = (
     <Toolbar sx={{ gap: 1 }}>
@@ -109,13 +117,28 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
       <Box
         component="main"
-        sx={{ flexGrow: 1, minWidth: 0, width: { md: `calc(100% - ${DRAWER_WIDTH}px)` } }}
+        sx={{
+          flexGrow: 1,
+          minWidth: 0,
+          width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
+          ...(isBuilder && {
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }),
+        }}
       >
         {/* Spacer matching the fixed AppBar height. */}
         <Toolbar />
-        <Container maxWidth="xl" sx={{ py: { xs: 3, md: 4 } }}>
-          {children}
-        </Container>
+        {isBuilder ? (
+          // Fill the remaining height below the AppBar spacer; the Creator inside
+          // stretches to 100% of this region.
+          <Box sx={{ flexGrow: 1, minHeight: 0 }}>{children}</Box>
+        ) : (
+          <Container maxWidth="xl" sx={{ py: { xs: 3, md: 4 } }}>
+            {children}
+          </Container>
+        )}
       </Box>
     </Box>
   );

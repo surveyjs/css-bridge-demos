@@ -8,25 +8,39 @@ import type { SurveyJSON } from "@bridge/schemas";
 //   1. survey-core base      — the headless library's V3 stylesheet
 //   2. survey-creator-core   — the Creator chrome, built ON TOP of (1) and
 //                              consuming the SAME `--sjs2-*` custom properties
-//   3. the Bootstrap bridge  — maps `--sjs2-* → --bs-*` on `.sjs-theme-overrides`
+//                              on the SAME `.sjs-theme-overrides` theme root
+//   3. the shadcn bridge     — maps `--sjs2-* → shadcn tokens` on that root.
+//                              TWO layers, exactly as SurveyForm imports them:
+//                              `shadcn.css` is the always-on base map; each
+//                              `shadcn-<style>.css` carries that visual style's
+//                              deltas, scoped under `[data-shadcn-style="…"]`.
 //
-// KEY INSIGHT (prompt 5): there is intentionally NO separate Creator bridge.
-// The Creator emits the same `.sd-theme-root` theme root the form does, so the
-// existing form bridge's variable overrides are expected to cascade into the
-// Creator chrome automatically. This file authors zero new bridge CSS.
+// KEY INSIGHT (prompt 4): there is intentionally NO separate Creator bridge.
+// The Creator emits the same `.sjs-theme-overrides` theme root the form does, so
+// the existing form bridge's variable overrides cascade into the Creator chrome
+// (toolbar, tabs, toolbox, property grid, designer surface) automatically. This
+// file authors zero new bridge CSS. The shadcn tokens the bridge reads
+// (--background, --primary, --border, --ring, --radius, …) live on <html> under
+// `.dark` and `[data-shadcn-style="…"]`, and the Creator renders in that same
+// subtree (ThemeProvider → AdminShell), so it re-themes in lockstep with both
+// the light/dark toggle and the visual-style switcher.
 import "survey-core/survey-core.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
-import "@/bridge/bootstrap.css";
+import "@/bridge/shadcn.css";
+import "@/bridge/shadcn-default.css";
+import "@/bridge/shadcn-new-york.css";
+import "@/bridge/shadcn-base-nova.css";
+import "@/bridge/shadcn-base-vega.css";
 
 /**
  * Mounts the SurveyJS V3 Creator on the Builder route, seeded with a shared
  * schema from `@bridge/schemas` so the builder edits the very same definition
  * the other routes render.
  *
- * CSS-only, like the rest of the Bootstrap bridge: it renders the stock
+ * CSS-only, like the rest of the shadcn bridge: it renders the stock
  * `survey-creator-react` component with no renderer/component overrides and no
  * Creator-specific theme code. Re-theming rides entirely on the shared
- * `--sjs2-*` overrides changing with the Bootstrap theme.
+ * `--sjs2-*` overrides resolving against the active shadcn tokens.
  */
 export function BuilderCreator({ json }: { json: SurveyJSON }) {
   // The Creator's constructor reaches for the browser DOM `environment`

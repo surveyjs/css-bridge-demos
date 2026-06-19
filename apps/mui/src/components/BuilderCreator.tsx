@@ -55,13 +55,14 @@ export function BuilderCreator({ json }: { json: SurveyJSON }) {
   }, [json]);
 
   if (!creator) {
-    return <div aria-busy="true" style={{ minHeight: "70vh" }} />;
+    return <div aria-busy="true" style={{ height: "100%", minHeight: "40rem" }} />;
   }
 
-  // The Creator is full-height chrome; give it a tall, bounded viewport so the
-  // toolbox / designer / property grid lay out as they do in a real builder.
+  // The Creator is full-height chrome. The Builder route renders edge-to-edge
+  // (see AdminShell), so fill the parent's height outright — the toolbox /
+  // designer / property grid then get the whole viewport below the header.
   return (
-    <div style={{ height: "calc(100vh - 8rem)", minHeight: "40rem" }}>
+    <div style={{ height: "100%", minHeight: "40rem" }}>
       <SurveyCreatorComponent creator={creator} />
     </div>
   );

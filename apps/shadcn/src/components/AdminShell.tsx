@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { routes } from "@bridge/schemas";
 import { MenuIcon, LayersIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +42,12 @@ function Brand() {
 
 export function AdminShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  // The Builder hosts the full-height SurveyJS Creator, which needs the whole
+  // viewport — so it renders edge-to-edge: no centered max-width, no content
+  // padding, and a height pinned to the area below the sticky header. Every
+  // other route keeps the padded, max-width reading column.
+  const pathname = usePathname();
+  const isBuilder = pathname === routes.builder;
 
   return (
     <div className="bg-background text-foreground min-h-svh">
@@ -85,9 +93,13 @@ export function AdminShell({ children }: { children: ReactNode }) {
         </aside>
 
         <main className="min-w-0 flex-1">
-          <div className="mx-auto w-full max-w-[96rem] px-4 py-6 sm:px-6 lg:py-8">
-            {children}
-          </div>
+          {isBuilder ? (
+            <div className="h-[calc(100svh-3.5rem)]">{children}</div>
+          ) : (
+            <div className="mx-auto w-full max-w-[96rem] px-4 py-6 sm:px-6 lg:py-8">
+              {children}
+            </div>
+          )}
         </main>
       </div>
     </div>

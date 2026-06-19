@@ -11,11 +11,12 @@ export const metadata: Metadata = {
   description: "SurveyJS V3 CSS bridge demo (shadcn/ui).",
 };
 
-// Pre-paint visual-style bootstrap. Runs before React hydrates and before paint:
-// reads the persisted style and applies `data-shadcn-style` to <html> so the
-// token preset is in place with no flash (parallel to next-themes' own .dark
-// script). Kept inline + tiny; mirrors the StyleProvider key + default.
-const STYLE_BOOTSTRAP = `(function(){try{var s=localStorage.getItem('shadcn-style');var ok=['default','new-york','base-nova','base-vega','base-maia','base-lyra','base-mira','base-luma','base-sera','base-rhea'];document.documentElement.setAttribute('data-shadcn-style',ok.indexOf(s)>-1?s:'default');}catch(e){document.documentElement.setAttribute('data-shadcn-style','default');}})();`;
+// Pre-paint theming bootstrap. Runs before React hydrates and before paint:
+// reads the persisted visual style AND base color and applies
+// `data-shadcn-style` + `data-shadcn-base-color` to <html> so both token presets
+// are in place with no flash (parallel to next-themes' own .dark script). Kept
+// inline + tiny; mirrors the StyleProvider / BaseColorProvider keys + defaults.
+const STYLE_BOOTSTRAP = `(function(){try{var s=localStorage.getItem('shadcn-style');var ok=['default','new-york','base-nova','base-vega','base-maia','base-lyra','base-mira','base-luma','base-sera','base-rhea'];document.documentElement.setAttribute('data-shadcn-style',ok.indexOf(s)>-1?s:'default');var c=localStorage.getItem('shadcn-base-color');var okc=['neutral','gray','zinc','stone','slate'];document.documentElement.setAttribute('data-shadcn-base-color',okc.indexOf(c)>-1?c:'neutral');}catch(e){document.documentElement.setAttribute('data-shadcn-style','default');document.documentElement.setAttribute('data-shadcn-base-color','neutral');}})();`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

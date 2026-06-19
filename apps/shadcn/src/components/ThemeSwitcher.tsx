@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { MoonIcon, SunIcon, PaletteIcon, CheckIcon } from "lucide-react";
+import { MoonIcon, SunIcon, PaletteIcon, DropletIcon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,19 +13,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useStyle } from "./StyleProvider";
+import { useBaseColor } from "./BaseColorProvider";
 import { VISUAL_STYLES } from "@/lib/styles";
+import { BASE_COLORS } from "@/lib/baseColors";
 
 /**
  * Header theme controls — the native shadcn analog of Bootswatch / MUI palettes:
  *  - a light/dark toggle (next-themes `setTheme`)
- *  - a visual-style dropdown that flips `data-shadcn-style` on <html>
+ *  - a visual-style dropdown that flips `data-shadcn-style` on <html> (geometry)
+ *  - a base-color dropdown that flips `data-shadcn-base-color` on <html> (palette)
  *
- * Both selections persist and re-apply before paint (next-themes + the layout's
- * inline style script), so the whole shell re-themes with zero flash.
+ * The style and base-color axes are independent and compose freely. All
+ * selections persist and re-apply before paint (next-themes + the layout's
+ * inline script), so the whole shell re-themes with zero flash.
  */
 export function ThemeSwitcher() {
   const { resolvedTheme, setTheme } = useTheme();
   const { style, setStyle } = useStyle();
+  const { baseColor, setBaseColor } = useBaseColor();
   const [mounted, setMounted] = useState(false);
 
   // next-themes / localStorage are client-only — render a stable placeholder
@@ -60,6 +65,31 @@ export function ThemeSwitcher() {
             >
               {s.label}
               {s.id === style && <CheckIcon className="size-4" />}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="gap-2">
+            <DropletIcon />
+            <span className="hidden sm:inline">
+              {BASE_COLORS.find((c) => c.id === baseColor)?.label ?? "Base color"}
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-44">
+          <DropdownMenuLabel>Base color</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {BASE_COLORS.map((c) => (
+            <DropdownMenuItem
+              key={c.id}
+              onSelect={() => setBaseColor(c.id)}
+              className="justify-between"
+            >
+              {c.label}
+              {c.id === baseColor && <CheckIcon className="size-4" />}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

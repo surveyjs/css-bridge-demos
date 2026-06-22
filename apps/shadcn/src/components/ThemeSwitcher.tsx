@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { MoonIcon, SunIcon, PaletteIcon, DropletIcon, CheckIcon } from "lucide-react";
+import { MoonIcon, SunIcon, PaletteIcon, DropletIcon, RadiusIcon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,16 +14,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useStyle } from "./StyleProvider";
 import { useBaseColor } from "./BaseColorProvider";
+import { useRadius } from "./RadiusProvider";
 import { VISUAL_STYLES } from "@/lib/styles";
 import { BASE_COLORS } from "@/lib/baseColors";
+import { RADII } from "@/lib/radii";
 
 /**
  * Header theme controls — the native shadcn analog of Bootswatch / MUI palettes:
  *  - a light/dark toggle (next-themes `setTheme`)
  *  - a visual-style dropdown that flips `data-shadcn-style` on <html> (geometry)
  *  - a base-color dropdown that flips `data-shadcn-base-color` on <html> (palette)
+ *  - a radius dropdown that flips `data-shadcn-radius` on <html> (corner rounding)
  *
- * The style and base-color axes are independent and compose freely. All
+ * The style, base-color and radius axes are independent and compose freely. All
  * selections persist and re-apply before paint (next-themes + the layout's
  * inline script), so the whole shell re-themes with zero flash.
  */
@@ -31,6 +34,7 @@ export function ThemeSwitcher() {
   const { resolvedTheme, setTheme } = useTheme();
   const { style, setStyle } = useStyle();
   const { baseColor, setBaseColor } = useBaseColor();
+  const { radius, setRadius } = useRadius();
   const [mounted, setMounted] = useState(false);
 
   // next-themes / localStorage are client-only — render a stable placeholder
@@ -90,6 +94,31 @@ export function ThemeSwitcher() {
             >
               {c.label}
               {c.id === baseColor && <CheckIcon className="size-4" />}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="gap-2">
+            <RadiusIcon />
+            <span className="hidden sm:inline">
+              {RADII.find((r) => r.id === radius)?.label ?? "Radius"}
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-44">
+          <DropdownMenuLabel>Radius</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {RADII.map((r) => (
+            <DropdownMenuItem
+              key={r.id}
+              onSelect={() => setRadius(r.id)}
+              className="justify-between"
+            >
+              {r.label}
+              {r.id === radius && <CheckIcon className="size-4" />}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

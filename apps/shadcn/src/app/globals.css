@@ -478,6 +478,150 @@
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
+   Theme (accent) presets — the FOURTH, independent theming axis (the chromatic
+   "themes" from shadcn's customizer: https://ui.shadcn.com/themes). Where the
+   base-color axis above swaps the NEUTRAL surfaces, each block here overrides
+   ONLY the ACCENT tokens the Prompt-2 survey bridge reads through `var(--…)`:
+   `--primary` / `--primary-foreground` / `--ring` and their `--sidebar-*` twins.
+   It sets NO surfaces and NO geometry, so base color × theme compose — base
+   color picks the greys, theme tints the accent on top.
+
+   Scoped under the `data-shadcn-theme` attribute on <html>; light values sit on
+   `[data-shadcn-theme="x"]`, dark deltas on `[data-shadcn-theme="x"].dark`. Placed
+   AFTER the base-color blocks on purpose: a theme's accent ties the base-color
+   selectors on specificity, so source order lets it WIN the shared `--primary` /
+   `--ring` tokens. "default" needs no block — it sets no override, so the active
+   base color's own neutral accent stays in effect (base color × theme compose).
+   Accent values are Tailwind v4 oklch hues (light = 600, dark = 500).
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* red */
+[data-shadcn-theme="red"] {
+  --primary: oklch(0.577 0.245 27.325);
+  --primary-foreground: oklch(0.971 0.013 17.38);
+  --ring: oklch(0.577 0.245 27.325);
+  --sidebar-primary: oklch(0.577 0.245 27.325);
+  --sidebar-primary-foreground: oklch(0.971 0.013 17.38);
+  --sidebar-ring: oklch(0.577 0.245 27.325);
+}
+[data-shadcn-theme="red"].dark {
+  --primary: oklch(0.637 0.237 25.331);
+  --primary-foreground: oklch(0.971 0.013 17.38);
+  --ring: oklch(0.637 0.237 25.331);
+  --sidebar-primary: oklch(0.637 0.237 25.331);
+  --sidebar-primary-foreground: oklch(0.971 0.013 17.38);
+  --sidebar-ring: oklch(0.637 0.237 25.331);
+}
+
+/* rose */
+[data-shadcn-theme="rose"] {
+  --primary: oklch(0.586 0.253 17.585);
+  --primary-foreground: oklch(0.969 0.015 12.422);
+  --ring: oklch(0.586 0.253 17.585);
+  --sidebar-primary: oklch(0.586 0.253 17.585);
+  --sidebar-primary-foreground: oklch(0.969 0.015 12.422);
+  --sidebar-ring: oklch(0.586 0.253 17.585);
+}
+[data-shadcn-theme="rose"].dark {
+  --primary: oklch(0.645 0.246 16.439);
+  --primary-foreground: oklch(0.969 0.015 12.422);
+  --ring: oklch(0.645 0.246 16.439);
+  --sidebar-primary: oklch(0.645 0.246 16.439);
+  --sidebar-primary-foreground: oklch(0.969 0.015 12.422);
+  --sidebar-ring: oklch(0.645 0.246 16.439);
+}
+
+/* orange */
+[data-shadcn-theme="orange"] {
+  --primary: oklch(0.646 0.222 41.116);
+  --primary-foreground: oklch(0.98 0.016 73.684);
+  --ring: oklch(0.646 0.222 41.116);
+  --sidebar-primary: oklch(0.646 0.222 41.116);
+  --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
+  --sidebar-ring: oklch(0.646 0.222 41.116);
+}
+[data-shadcn-theme="orange"].dark {
+  --primary: oklch(0.705 0.213 47.604);
+  --primary-foreground: oklch(0.98 0.016 73.684);
+  --ring: oklch(0.705 0.213 47.604);
+  --sidebar-primary: oklch(0.705 0.213 47.604);
+  --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
+  --sidebar-ring: oklch(0.705 0.213 47.604);
+}
+
+/* green */
+[data-shadcn-theme="green"] {
+  --primary: oklch(0.627 0.194 149.214);
+  --primary-foreground: oklch(0.982 0.018 155.826);
+  --ring: oklch(0.627 0.194 149.214);
+  --sidebar-primary: oklch(0.627 0.194 149.214);
+  --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
+  --sidebar-ring: oklch(0.627 0.194 149.214);
+}
+[data-shadcn-theme="green"].dark {
+  --primary: oklch(0.723 0.219 149.579);
+  --primary-foreground: oklch(0.982 0.018 155.826);
+  --ring: oklch(0.723 0.219 149.579);
+  --sidebar-primary: oklch(0.723 0.219 149.579);
+  --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
+  --sidebar-ring: oklch(0.723 0.219 149.579);
+}
+
+/* blue */
+[data-shadcn-theme="blue"] {
+  --primary: oklch(0.546 0.245 262.881);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --ring: oklch(0.546 0.245 262.881);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-ring: oklch(0.546 0.245 262.881);
+}
+[data-shadcn-theme="blue"].dark {
+  --primary: oklch(0.623 0.214 259.815);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --ring: oklch(0.623 0.214 259.815);
+  --sidebar-primary: oklch(0.623 0.214 259.815);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-ring: oklch(0.623 0.214 259.815);
+}
+
+/* yellow — a light accent, so it keeps a DARK foreground for contrast. */
+[data-shadcn-theme="yellow"] {
+  --primary: oklch(0.795 0.184 86.047);
+  --primary-foreground: oklch(0.421 0.095 57.708);
+  --ring: oklch(0.795 0.184 86.047);
+  --sidebar-primary: oklch(0.795 0.184 86.047);
+  --sidebar-primary-foreground: oklch(0.421 0.095 57.708);
+  --sidebar-ring: oklch(0.795 0.184 86.047);
+}
+[data-shadcn-theme="yellow"].dark {
+  --primary: oklch(0.795 0.184 86.047);
+  --primary-foreground: oklch(0.421 0.095 57.708);
+  --ring: oklch(0.795 0.184 86.047);
+  --sidebar-primary: oklch(0.795 0.184 86.047);
+  --sidebar-primary-foreground: oklch(0.421 0.095 57.708);
+  --sidebar-ring: oklch(0.795 0.184 86.047);
+}
+
+/* violet */
+[data-shadcn-theme="violet"] {
+  --primary: oklch(0.541 0.281 293.009);
+  --primary-foreground: oklch(0.969 0.016 293.756);
+  --ring: oklch(0.541 0.281 293.009);
+  --sidebar-primary: oklch(0.541 0.281 293.009);
+  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
+  --sidebar-ring: oklch(0.541 0.281 293.009);
+}
+[data-shadcn-theme="violet"].dark {
+  --primary: oklch(0.606 0.25 292.717);
+  --primary-foreground: oklch(0.969 0.016 293.756);
+  --ring: oklch(0.606 0.25 292.717);
+  --sidebar-primary: oklch(0.606 0.25 292.717);
+  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
+  --sidebar-ring: oklch(0.606 0.25 292.717);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
    Radius presets — the THIRD, independent theming axis (native shadcn
    "radius": https://ui.shadcn.com/create). Each block overrides ONLY `--radius`
    — the corner-rounding token the whole `--radius-sm…4xl` scale above (and the

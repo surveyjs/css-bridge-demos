@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { MoonIcon, SunIcon, PaletteIcon, DropletIcon, RadiusIcon, CheckIcon } from "lucide-react";
+import { MoonIcon, SunIcon, PaletteIcon, DropletIcon, PaintbrushIcon, RadiusIcon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,26 +14,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useStyle } from "./StyleProvider";
 import { useBaseColor } from "./BaseColorProvider";
+import { useThemeColor } from "./ThemeColorProvider";
 import { useRadius } from "./RadiusProvider";
 import { VISUAL_STYLES } from "@/lib/styles";
 import { BASE_COLORS } from "@/lib/baseColors";
+import { THEMES } from "@/lib/themes";
 import { RADII } from "@/lib/radii";
 
 /**
  * Header theme controls — the native shadcn analog of Bootswatch / MUI palettes:
  *  - a light/dark toggle (next-themes `setTheme`)
  *  - a visual-style dropdown that flips `data-shadcn-style` on <html> (geometry)
- *  - a base-color dropdown that flips `data-shadcn-base-color` on <html> (palette)
+ *  - a base-color dropdown that flips `data-shadcn-base-color` on <html> (neutral palette)
+ *  - a theme dropdown that flips `data-shadcn-theme` on <html> (accent hue)
  *  - a radius dropdown that flips `data-shadcn-radius` on <html> (corner rounding)
  *
- * The style, base-color and radius axes are independent and compose freely. All
- * selections persist and re-apply before paint (next-themes + the layout's
- * inline script), so the whole shell re-themes with zero flash.
+ * The style, base-color, theme and radius axes are independent and compose
+ * freely. All selections persist and re-apply before paint (next-themes + the
+ * layout's inline script), so the whole shell re-themes with zero flash.
  */
 export function ThemeSwitcher() {
   const { resolvedTheme, setTheme } = useTheme();
   const { style, setStyle } = useStyle();
   const { baseColor, setBaseColor } = useBaseColor();
+  const { theme: accent, setTheme: setAccent } = useThemeColor();
   const { radius, setRadius } = useRadius();
   const [mounted, setMounted] = useState(false);
 
@@ -94,6 +98,31 @@ export function ThemeSwitcher() {
             >
               {c.label}
               {c.id === baseColor && <CheckIcon className="size-4" />}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="gap-2">
+            <PaintbrushIcon />
+            <span className="hidden sm:inline">
+              {THEMES.find((t) => t.id === accent)?.label ?? "Theme"}
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-44">
+          <DropdownMenuLabel>Theme</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {THEMES.map((t) => (
+            <DropdownMenuItem
+              key={t.id}
+              onSelect={() => setAccent(t.id)}
+              className="justify-between"
+            >
+              {t.label}
+              {t.id === accent && <CheckIcon className="size-4" />}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

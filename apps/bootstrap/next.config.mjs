@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import { applyDevWatchPatches } from "../../scripts/webpack-dev-watch.mjs";
+
 const nextConfig = {
   reactStrictMode: true,
   // Linked SurveyJS builds live outside this app; allow transpile + file watching.
@@ -29,15 +31,7 @@ const nextConfig = {
     config.resolve.symlinks = false;
 
     if (dev) {
-      // Linked survey-* packages are junctions into sibling repos. Webpack treats
-      // node_modules as immutable by default and caches aggressively — disable
-      // both so `next dev` picks up survey-library rebuilds without a restart.
-      config.cache = false;
-      config.snapshot = {
-        ...config.snapshot,
-        immutablePaths: [],
-        managedPaths: [],
-      };
+      applyDevWatchPatches(config);
     }
 
     return config;

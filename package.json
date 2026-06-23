@@ -6,12 +6,17 @@
   "description": "SurveyJS V3 CSS bridge demos (Bootstrap, shadcn, MUI) over a single shared schema package.",
   "scripts": {
     "dev": "turbo run dev",
+    "dev:bootstrap": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../survey-library/packages/survey-react-ui\" \"pnpm --filter @bridge/bootstrap dev\"",
+    "dev:bootstrap:creator": "concurrently -k -n core,react-ui,creator-core,creator-react,demo -c blue,magenta,cyan,yellow,green \"npm run watch:dev --prefix ../survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../survey-library/packages/survey-react-ui\" \"npm run watch:dev --prefix ../survey-creator/packages/survey-creator-core\" \"npm run watch:dev --prefix ../survey-creator/packages/survey-creator-react\" \"pnpm --filter @bridge/bootstrap dev\"",
+    "dev:mui": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../survey-library/packages/survey-react-ui\" \"pnpm --filter @bridge/mui dev\"",
+    "dev:shadcn": "concurrently -k -n core,react-ui,adapters,demo -c blue,magenta,cyan,green \"npm run watch:dev --prefix ../survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../survey-library/packages/survey-react-ui\" \"npm exec --prefix ../survey-library/packages/survey-core -- rollup -c rollup.adapters.config.mjs -w --environment emitMinified\" \"pnpm --filter @bridge/shadcn dev\"",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "turbo": "^2.5.0",
     "typescript": "^5.6.3"
   },

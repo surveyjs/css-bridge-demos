@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import { applyDevWatchPatches } from "../../scripts/webpack-dev-watch.mjs";
+
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
@@ -28,12 +30,7 @@ const nextConfig = {
     config.resolve.symlinks = false;
 
     if (dev) {
-      config.cache = false;
-      config.snapshot = {
-        ...config.snapshot,
-        immutablePaths: [],
-        managedPaths: [],
-      };
+      applyDevWatchPatches(config);
     }
 
     return config;

@@ -17,6 +17,7 @@ export const medicalFormJson: SurveyJSON = {
   progressBarType: "pages",
   showQuestionNumbers: "off",
   widthMode: "responsive",
+  questionErrorLocation: "bottom",
   pages: [
     {
       name: "patient",
@@ -42,7 +43,6 @@ export const medicalFormJson: SurveyJSON = {
           name: "sex",
           title: "Sex assigned at birth",
           startWithNewLine: false,
-          colCount: 2,
           choices: [
             { value: "f", text: "Female" },
             { value: "m", text: "Male" },

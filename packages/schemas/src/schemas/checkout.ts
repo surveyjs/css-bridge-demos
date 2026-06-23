@@ -15,6 +15,7 @@ export const checkoutJson: SurveyJSON = {
   showTOC: true,
   showQuestionNumbers: "off",
   widthMode: "responsive",
+  questionErrorLocation: "bottom",
   pages: [
     {
       name: "contact",

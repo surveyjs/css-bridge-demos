@@ -22,6 +22,7 @@ export const allQuestionsJson: SurveyJSON = {
   showQuestionNumbers: "off",
   widthMode: "responsive",
   showTOC: true,
+  questionErrorLocation: "bottom",
   pages: [
     // 1 — choice → "Choice Questions"
     {

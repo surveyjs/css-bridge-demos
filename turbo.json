@@ -1,6 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "stream",
+  "globalDependencies": [
+    "../survey-library/packages/survey-core/build/**",
+    "../survey-library/packages/survey-react-ui/build/**",
+    "../survey-creator/packages/survey-creator-core/build/**",
+    "../survey-creator/packages/survey-creator-react/build/**"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

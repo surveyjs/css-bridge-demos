@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    externalDir: true,
+  },
   // Linked local SurveyJS builds ship ESM/source that Next must transpile.
   // `@bridge/schemas` is listed too so Next compiles it into the app's watch
   // graph instead of treating it as an external node_module — otherwise a
@@ -13,7 +16,7 @@ const nextConfig = {
     "survey-creator-react",
     "@bridge/schemas",
   ],
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     // Single React instance. The linked SurveyJS builds live OUTSIDE the
     // workspace (absolute `link:` symlinks) and have no React of their own, so
     // they must resolve the app's copy. pnpm hoists exactly one react/react-dom
@@ -23,6 +26,16 @@ const nextConfig = {
     // We deliberately do NOT hard-alias `react`, which would break Next's App
     // Router RSC layer (it relies on the `react-server` conditional export).
     config.resolve.symlinks = false;
+
+    if (dev) {
+      config.cache = false;
+      config.snapshot = {
+        ...config.snapshot,
+        immutablePaths: [],
+        managedPaths: [],
+      };
+    }
+
     return config;
   },
 };

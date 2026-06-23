@@ -6,7 +6,7 @@ import { NativeControls } from "@/components/NativeControls";
 /**
  * First (and, for this stage, only) route wired to SurveyJS — the proof point
  * for the MUI CSS bridge. The medical/insurance schema comes from
- * `@bridge/schemas` unchanged; styling is CSS-only via `src/bridge/mui.css`.
+ * `@bridge/schemas` unchanged; styling is CSS-only via survey-core/themes/adapters.
  *
  * The native-controls column sits beside the form so the bridge's fidelity is
  * verifiable by eye and re-themes in lockstep with the chrome.

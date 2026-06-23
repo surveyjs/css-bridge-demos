@@ -16,7 +16,7 @@ import { useBorderlessMode } from "./BorderlessMode";
 // Bootstrap `--bs-*` tokens — there is NO SurveyJS-specific theme code: the form
 // re-skins automatically whenever the active Bootstrap theme/mode changes.
 import "survey-core/survey-core.min.css";
-import "@/bridge/bootstrap.css";
+import "survey-core/themes/adapters/bootstrap.min.css";
 
 /**
  * Renders a SurveyJS V3 model with the Bootstrap CSS bridge applied.

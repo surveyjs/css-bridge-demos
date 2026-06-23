@@ -6,22 +6,9 @@ import { allQuestionsSchema, createSurveyModel } from "@bridge/schemas";
 import { useAllQuestionsMode } from "./AllQuestionsMode";
 import { useBorderlessMode } from "./BorderlessMode";
 
-// Same import order as SurveyForm: base V3 CSS first, then the shadcn bridge
-// stack on top (base map + every visual-style delta, the active one picked by
-// `data-shadcn-style` on <html>). This page adds NO bridge code — it reuses the
-// existing stylesheets verbatim.
+// Same import order as SurveyForm: base V3 CSS first; the active shadcn adapter
+// bundle is loaded by <ShadcnSurveyAdapterStyles /> in ThemeProvider.
 import "survey-core/survey-core.min.css";
-import "@/bridge/shadcn.css";
-import "@/bridge/shadcn-default.css";
-import "@/bridge/shadcn-new-york.css";
-import "@/bridge/shadcn-base-nova.css";
-import "@/bridge/shadcn-base-vega.css";
-import "@/bridge/shadcn-base-maia.css";
-import "@/bridge/shadcn-base-lyra.css";
-import "@/bridge/shadcn-base-mira.css";
-import "@/bridge/shadcn-base-luma.css";
-import "@/bridge/shadcn-base-sera.css";
-import "@/bridge/shadcn-base-rhea.css";
 
 /**
  * All-questions gallery — the bridge's widest fidelity sweep. Builds ONE

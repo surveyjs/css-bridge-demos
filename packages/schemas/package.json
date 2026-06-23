@@ -25,7 +25,7 @@
     "lint": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "survey-core": "link:C:/survey.js/LibV3/survey-library/packages/survey-core/build"
+    "survey-core": "link:../../../survey-library/packages/survey-core/build"
   },
   "devDependencies": {
     "rimraf": "^6.0.1",

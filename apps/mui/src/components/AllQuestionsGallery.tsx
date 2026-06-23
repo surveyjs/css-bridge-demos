@@ -9,7 +9,7 @@ import { useBorderlessMode } from "./BorderlessMode";
 // Same import order as SurveyForm: base V3 CSS first, MUI bridge on top.
 // This page adds NO bridge code — it reuses the existing stylesheet verbatim.
 import "survey-core/survey-core.min.css";
-import "@/bridge/mui.css";
+import "survey-core/themes/adapters/mui.min.css";
 
 /**
  * All-questions gallery — the bridge's widest fidelity sweep. Builds ONE

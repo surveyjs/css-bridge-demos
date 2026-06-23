@@ -25,10 +25,10 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.2",
-    "survey-core": "link:C:/survey.js/LibV3/survey-library/packages/survey-core/build",
-    "survey-react-ui": "link:C:/survey.js/LibV3/survey-library/packages/survey-react-ui/build",
-    "survey-creator-core": "link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-core/build",
-    "survey-creator-react": "link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-react/build"
+    "survey-core": "link:../../../survey-library/packages/survey-core/build",
+    "survey-react-ui": "link:../../../survey-library/packages/survey-react-ui/build",
+    "survey-creator-core": "link:../../../survey-creator/packages/survey-creator-core/build",
+    "survey-creator-react": "link:../../../survey-creator/packages/survey-creator-react/build"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",

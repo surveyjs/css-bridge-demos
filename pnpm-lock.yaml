@@ -43,17 +43,17 @@ importers:
         specifier: ^19.0.0
         version: 19.2.7(react@19.2.7)
       survey-core:
-        specifier: link:C:/survey.js/LibV3/survey-library/packages/survey-core/build
-        version: link:../../../../LibV3/survey-library/packages/survey-core/build
+        specifier: link:../../../survey-library/packages/survey-core/build
+        version: link:../../../survey-library/packages/survey-core/build
       survey-creator-core:
-        specifier: link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-core/build
-        version: link:../../../../LibV3/survey-creator/packages/survey-creator-core/build
+        specifier: link:../../../survey-creator/packages/survey-creator-core/build
+        version: link:../../../survey-creator/packages/survey-creator-core/build
       survey-creator-react:
-        specifier: link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-react/build
-        version: link:../../../../LibV3/survey-creator/packages/survey-creator-react/build
+        specifier: link:../../../survey-creator/packages/survey-creator-react/build
+        version: link:../../../survey-creator/packages/survey-creator-react/build
       survey-react-ui:
-        specifier: link:C:/survey.js/LibV3/survey-library/packages/survey-react-ui/build
-        version: link:../../../../LibV3/survey-library/packages/survey-react-ui/build
+        specifier: link:../../../survey-library/packages/survey-react-ui/build
+        version: link:../../../survey-library/packages/survey-react-ui/build
     devDependencies:
       '@types/node':
         specifier: ^20.14.0
@@ -104,17 +104,17 @@ importers:
         specifier: ^19.0.0
         version: 19.2.7(react@19.2.7)
       survey-core:
-        specifier: link:C:/survey.js/LibV3/survey-library/packages/survey-core/build
-        version: link:../../../../LibV3/survey-library/packages/survey-core/build
+        specifier: link:../../../survey-library/packages/survey-core/build
+        version: link:../../../survey-library/packages/survey-core/build
       survey-creator-core:
-        specifier: link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-core/build
-        version: link:../../../../LibV3/survey-creator/packages/survey-creator-core/build
+        specifier: link:../../../survey-creator/packages/survey-creator-core/build
+        version: link:../../../survey-creator/packages/survey-creator-core/build
       survey-creator-react:
-        specifier: link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-react/build
-        version: link:../../../../LibV3/survey-creator/packages/survey-creator-react/build
+        specifier: link:../../../survey-creator/packages/survey-creator-react/build
+        version: link:../../../survey-creator/packages/survey-creator-react/build
       survey-react-ui:
-        specifier: link:C:/survey.js/LibV3/survey-library/packages/survey-react-ui/build
-        version: link:../../../../LibV3/survey-library/packages/survey-react-ui/build
+        specifier: link:../../../survey-library/packages/survey-react-ui/build
+        version: link:../../../survey-library/packages/survey-react-ui/build
     devDependencies:
       '@types/node':
         specifier: ^20.14.0
@@ -174,17 +174,17 @@ importers:
         specifier: ^19.0.0
         version: 19.2.7(react@19.2.7)
       survey-core:
-        specifier: link:C:/survey.js/LibV3/survey-library/packages/survey-core/build
-        version: link:../../../../LibV3/survey-library/packages/survey-core/build
+        specifier: link:../../../survey-library/packages/survey-core/build
+        version: link:../../../survey-library/packages/survey-core/build
       survey-creator-core:
-        specifier: link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-core/build
-        version: link:../../../../LibV3/survey-creator/packages/survey-creator-core/build
+        specifier: link:../../../survey-creator/packages/survey-creator-core/build
+        version: link:../../../survey-creator/packages/survey-creator-core/build
       survey-creator-react:
-        specifier: link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-react/build
-        version: link:../../../../LibV3/survey-creator/packages/survey-creator-react/build
+        specifier: link:../../../survey-creator/packages/survey-creator-react/build
+        version: link:../../../survey-creator/packages/survey-creator-react/build
       survey-react-ui:
-        specifier: link:C:/survey.js/LibV3/survey-library/packages/survey-react-ui/build
-        version: link:../../../../LibV3/survey-library/packages/survey-react-ui/build
+        specifier: link:../../../survey-library/packages/survey-react-ui/build
+        version: link:../../../survey-library/packages/survey-react-ui/build
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.6.0
@@ -220,8 +220,8 @@ importers:
   packages/schemas:
     dependencies:
       survey-core:
-        specifier: link:C:/survey.js/LibV3/survey-library/packages/survey-core/build
-        version: link:../../../../LibV3/survey-library/packages/survey-core/build
+        specifier: link:../../../survey-library/packages/survey-core/build
+        version: link:../../../survey-library/packages/survey-core/build
     devDependencies:
       rimraf:
         specifier: ^6.0.1

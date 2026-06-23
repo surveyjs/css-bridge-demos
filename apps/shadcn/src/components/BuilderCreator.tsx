@@ -9,11 +9,8 @@ import type { SurveyJSON } from "@bridge/schemas";
 //   2. survey-creator-core   — the Creator chrome, built ON TOP of (1) and
 //                              consuming the SAME `--sjs2-*` custom properties
 //                              on the SAME `.sjs-theme-overrides` theme root
-//   3. the shadcn bridge     — maps `--sjs2-* → shadcn tokens` on that root.
-//                              TWO layers, exactly as SurveyForm imports them:
-//                              `shadcn.css` is the always-on base map; each
-//                              `shadcn-<style>.css` carries that visual style's
-//                              deltas, scoped under `[data-shadcn-style="…"]`.
+//   3. the shadcn adapter    — loaded from survey-core/themes/adapters by
+//                              <ShadcnSurveyAdapterStyles /> (ThemeProvider).
 //
 // KEY INSIGHT (prompt 4): there is intentionally NO separate Creator bridge.
 // The Creator emits the same `.sjs-theme-overrides` theme root the form does, so
@@ -26,17 +23,6 @@ import type { SurveyJSON } from "@bridge/schemas";
 // the light/dark toggle and the visual-style switcher.
 import "survey-core/survey-core.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
-import "@/bridge/shadcn.css";
-import "@/bridge/shadcn-default.css";
-import "@/bridge/shadcn-new-york.css";
-import "@/bridge/shadcn-base-nova.css";
-import "@/bridge/shadcn-base-vega.css";
-import "@/bridge/shadcn-base-maia.css";
-import "@/bridge/shadcn-base-lyra.css";
-import "@/bridge/shadcn-base-mira.css";
-import "@/bridge/shadcn-base-luma.css";
-import "@/bridge/shadcn-base-sera.css";
-import "@/bridge/shadcn-base-rhea.css";
 
 /**
  * Mounts the SurveyJS V3 Creator on the Builder route, seeded with a shared

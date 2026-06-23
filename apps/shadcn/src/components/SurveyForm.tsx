@@ -10,31 +10,12 @@ import {
 } from "@bridge/schemas";
 import { useBorderlessMode } from "./BorderlessMode";
 
-// Base V3 CSS FIRST, then the shadcn bridge ON TOP so the bridge's `--sjs2-*`
-// overrides (declared on the same `.sjs-theme-overrides` root that survey-core
-// emits) win by source order. The bridge maps those variables onto shadcn
-// tokens (--background, --primary, --border, --ring, --radius, …) — there is NO
-// SurveyJS-specific theme code: the form re-skins automatically whenever the
-// active visual style (`data-shadcn-style` on <html>) or light/dark (`.dark`)
-// flips a shadcn variable.
-//
-// The bridge is TWO layers: `shadcn.css` is the always-on base map; each
-// `shadcn-<style>.css` carries only that visual style's deltas and is scoped
-// under `[data-shadcn-style="<style>"]`, so they can all be loaded at once and
-// the attribute on <html> picks the active one — the SAME switch that drives the
-// chrome token presets (see StyleProvider) thus drives the survey bridge too.
+// Base V3 CSS FIRST, then the shadcn adapter from survey-core ON TOP so the
+// bridge's `--sjs2-*` overrides win by source order. The active visual-style
+// bundle is loaded by <ShadcnSurveyAdapterStyles /> (see ThemeProvider) and
+// tracks `data-shadcn-style` on <html>; light/dark flips shadcn tokens via
+// `.dark` on the same root.
 import "survey-core/survey-core.min.css";
-import "@/bridge/shadcn.css";
-import "@/bridge/shadcn-default.css";
-import "@/bridge/shadcn-new-york.css";
-import "@/bridge/shadcn-base-nova.css";
-import "@/bridge/shadcn-base-vega.css";
-import "@/bridge/shadcn-base-maia.css";
-import "@/bridge/shadcn-base-lyra.css";
-import "@/bridge/shadcn-base-mira.css";
-import "@/bridge/shadcn-base-luma.css";
-import "@/bridge/shadcn-base-sera.css";
-import "@/bridge/shadcn-base-rhea.css";
 
 /**
  * Renders a SurveyJS V3 model with the shadcn CSS bridge applied.

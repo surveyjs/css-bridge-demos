@@ -5,10 +5,10 @@
   "scripts": {
     "copy-themes": "node scripts/copy-themes.mjs",
     "predev": "node scripts/copy-themes.mjs",
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "prebuild": "node scripts/copy-themes.mjs",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf .next *.tsbuildinfo"

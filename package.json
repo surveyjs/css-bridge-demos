@@ -10,7 +10,17 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
+    "dev:bootstrap": "turbo run dev --filter=@bridge/bootstrap",
+    "dev:shadcn": "turbo run dev --filter=@bridge/shadcn",
+    "dev:mui": "turbo run dev --filter=@bridge/mui",
     "build": "turbo run build",
+    "build:bootstrap": "turbo run build --filter=@bridge/bootstrap",
+    "build:shadcn": "turbo run build --filter=@bridge/shadcn",
+    "build:mui": "turbo run build --filter=@bridge/mui",
+    "start": "turbo run start",
+    "start:bootstrap": "turbo run start --filter=@bridge/bootstrap",
+    "start:shadcn": "turbo run start --filter=@bridge/shadcn",
+    "start:mui": "turbo run start --filter=@bridge/mui",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean"

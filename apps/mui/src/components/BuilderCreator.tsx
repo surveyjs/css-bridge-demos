@@ -21,7 +21,7 @@ import type { SurveyJSON } from "@bridge/schemas";
 // so it re-themes in lockstep with the switcher.
 import "survey-core/survey-core.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
-import "@/bridge/mui.css";
+import "survey-core/themes/adapters/mui.min.css";
 
 /**
  * Mounts the SurveyJS V3 Creator on the Builder route, seeded with a shared

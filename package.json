@@ -10,9 +10,10 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "dev:bootstrap": "turbo run dev --filter=@bridge/bootstrap",
-    "dev:shadcn": "turbo run dev --filter=@bridge/shadcn",
-    "dev:mui": "turbo run dev --filter=@bridge/mui",
+    "dev:bootstrap": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/bootstrap\"",
+    "dev:bootstrap:creator": "concurrently -k -n core,react-ui,creator-core,creator-react,demo -c blue,magenta,cyan,yellow,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run watch:dev --prefix ../../LibV3/survey-creator/packages/survey-creator-core\" \"npm run watch:dev --prefix ../../LibV3/survey-creator/packages/survey-creator-react\" \"npm run dev --workspace @bridge/bootstrap\"",
+    "dev:mui": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/mui\"",
+    "dev:shadcn": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/shadcn\"",
     "build": "turbo run build",
     "build:bootstrap": "turbo run build --filter=@bridge/bootstrap",
     "build:shadcn": "turbo run build --filter=@bridge/shadcn",
@@ -26,6 +27,7 @@
     "clean": "turbo run clean"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "turbo": "^2.5.0",
     "typescript": "^5.6.3"
   },

@@ -18,7 +18,7 @@ import { useBorderlessMode } from "./BorderlessMode";
 // variables it reads exist only because the app's theme was built with
 // `cssVariables` (see src/theme/theme.ts) — do not remove that flag.
 import "survey-core/survey-core.min.css";
-import "@/bridge/mui.css";
+import "survey-core/themes/adapters/mui.min.css";
 
 /**
  * Renders a SurveyJS V3 model with the MUI CSS bridge applied.

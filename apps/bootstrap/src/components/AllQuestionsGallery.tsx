@@ -9,7 +9,7 @@ import { useBorderlessMode } from "./BorderlessMode";
 // Same import order as SurveyForm: base V3 CSS first, Bootstrap bridge on top.
 // This page adds NO bridge code — it reuses the existing stylesheet verbatim.
 import "survey-core/survey-core.min.css";
-import "@/bridge/bootstrap.css";
+import "survey-core/themes/adapters/bootstrap.min.css";
 
 /**
  * All-questions gallery — the bridge's widest fidelity sweep. Builds ONE

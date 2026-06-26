@@ -3,9 +3,8 @@
  *
  * Each entry is a TOKEN PRESET applied to <html> via the `data-shadcn-style`
  * attribute (see src/app/globals.css). Every shadcn style that ships a matching
- * `shadcn-<id>.css` survey bridge in C:\survey.js\Examples\css-bridges\ is wired
- * here (all 10), so the chrome and the SurveyJS bridge stay paired. Order mirrors
- * the canonical demo (C:\survey.js\Examples\css-bridges\demos\shadcn).
+ * `shadcn-<id>.css` adapter in survey-core/themes/adapters is wired here (all
+ * 10), so the chrome and the SurveyJS bridge stay paired.
  */
 export const VISUAL_STYLES = [
   { id: "default", label: "Default" },

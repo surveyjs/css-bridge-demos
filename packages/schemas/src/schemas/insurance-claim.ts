@@ -14,6 +14,7 @@ export const insuranceClaimJson: SurveyJSON = {
   description: "Create or edit a claim record.",
   showQuestionNumbers: "off",
   widthMode: "responsive",
+  questionErrorLocation: "bottom",
   pages: [
     {
       name: "claim",

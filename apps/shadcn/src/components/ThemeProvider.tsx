@@ -6,6 +6,7 @@ import { StyleProvider } from "./StyleProvider";
 import { BaseColorProvider } from "./BaseColorProvider";
 import { ThemeColorProvider } from "./ThemeColorProvider";
 import { RadiusProvider } from "./RadiusProvider";
+import { ShadcnSurveyAdapterStyles } from "./ShadcnSurveyAdapterStyles";
 
 /**
  * Client theming runtime. Five independent axes, all applied before paint:
@@ -29,6 +30,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       disableTransitionOnChange
     >
       <StyleProvider>
+        <ShadcnSurveyAdapterStyles />
         <BaseColorProvider>
           <ThemeColorProvider>
             <RadiusProvider>{children}</RadiusProvider>

@@ -16,7 +16,7 @@ import type { SurveyJSON } from "@bridge/schemas";
 // Creator chrome automatically. This file authors zero new bridge CSS.
 import "survey-core/survey-core.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
-import "@/bridge/bootstrap.css";
+import "survey-core/themes/adapters/bootstrap.min.css";
 
 /**
  * Mounts the SurveyJS V3 Creator on the Builder route, seeded with a shared

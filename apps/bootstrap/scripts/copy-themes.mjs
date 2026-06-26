@@ -4,7 +4,7 @@
  * swapped at runtime (and set before paint by the no-flash inline script).
  *
  * Run automatically via the `predev`/`prebuild` npm scripts. Keeping the source
- * files in node_modules (not committed copies) means a `pnpm update` of Bootstrap
+ * files in node_modules (not committed copies) means an `npm update` of Bootstrap
  * / Bootswatch flows straight through.
  */
 import { createRequire } from "node:module";

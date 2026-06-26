@@ -11,7 +11,7 @@
     "clean": "rimraf .next *.tsbuildinfo"
   },
   "dependencies": {
-    "@bridge/schemas": "workspace:*",
+    "@bridge/schemas": "*",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.2.5",
@@ -21,10 +21,10 @@
     "next": "^15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "survey-core": "link:C:/survey.js/LibV3/survey-library/packages/survey-core/build",
-    "survey-react-ui": "link:C:/survey.js/LibV3/survey-library/packages/survey-react-ui/build",
-    "survey-creator-core": "link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-core/build",
-    "survey-creator-react": "link:C:/survey.js/LibV3/survey-creator/packages/survey-creator-react/build"
+    "survey-core": "file:C:/survey.js/LibV3/survey-library/packages/survey-core/build",
+    "survey-react-ui": "file:C:/survey.js/LibV3/survey-library/packages/survey-react-ui/build",
+    "survey-creator-core": "file:C:/survey.js/LibV3/survey-creator/packages/survey-creator-core/build",
+    "survey-creator-react": "file:C:/survey.js/LibV3/survey-creator/packages/survey-creator-react/build"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",

@@ -15,9 +15,9 @@ const nextConfig = {
   ],
   webpack: (config) => {
     // Single React instance. The linked SurveyJS builds live OUTSIDE the
-    // workspace (absolute `link:` symlinks) and have no React of their own, so
-    // they must resolve the app's copy. pnpm hoists exactly one react/react-dom
-    // (enforced by the workspace `overrides`); disabling symlink realpath
+    // workspace (absolute `file:` symlinks) and have no React of their own, so
+    // they must resolve the app's copy. npm hoists exactly one react/react-dom
+    // (enforced by the root `overrides`); disabling symlink realpath
     // resolution keeps those external packages resolving modules through the
     // app's node_modules instead of walking up their own (React-less) tree.
     // We deliberately do NOT hard-alias `react`, which would break Next's App

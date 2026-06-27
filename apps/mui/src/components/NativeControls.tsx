@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  useRef,
+  useState,
+  type FormEvent,
+  type PointerEvent,
+} from "react";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,96 +16,657 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
+import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Stepper from "@mui/material/Stepper";
+import Switch from "@mui/material/Switch";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { medicalFormJson } from "@bridge/schemas";
+import { FormCompleted } from "./FormCompleted";
 
 /**
- * Stock MUI form controls shown beside the SurveyJS form so the bridge's
- * fidelity is verifiable by eye: each control here is the native MUI rendering
- * the bridged SurveyJS field should be indistinguishable from. Pure chrome — no
- * SurveyJS involvement. Field set mirrors apps/bootstrap's NativeControls so the
- * two demos compare like-for-like.
+ * Hand-built Material UI twin of the SurveyJS medical-intake form
+ * (`medicalFormJson` in @bridge/schemas), grouped into the SAME four sections —
+ * Patient, Insurance, History, Consent — and PAGED into them as a wizard to
+ * match the SurveyJS form's `showProgressBar` / `progressBarType: "pages"`.
+ *
+ * Mirrors the SAME chrome (the survey title + description) and the SAME
+ * behaviours: controlled inputs, per-page required-field validation that blocks
+ * Next, a conditional secondary-insurance section, dynamic add/remove allergy
+ * rows, a drawable signature pad, and a final Complete that validates the whole
+ * form and shows a success state.
+ *
+ * This column is deliberately UNBRIDGED: it is the "what you'd hand-write per
+ * form" baseline the comparison footer measures against (see FormMetricsFooter).
+ * SurveyJS pages from the JSON for free; here every step is wired by hand — that
+ * gap is the point. Pure host chrome — Material UI only, zero SurveyJS
+ * involvement (the imported `medicalFormJson` is read only for its description
+ * string, so the two columns share the exact same wording).
+ *
+ * Its line count is cited by the comparison footer — measured in claims/page.tsx
+ * (a server component) rather than exported from here, because a plain value
+ * exported from a "use client" module can't be read on the server.
  */
+
+type Sex = "f" | "m" | "";
+type Relationship = "self" | "spouse" | "dependent";
+type HistoryAnswer = "yes" | "no" | "unsure";
+
+type Allergy = { allergen: string; severity: string; reaction: string };
+
+const PAGES = ["Patient", "Insurance", "History", "Consent"] as const;
+const LAST_PAGE = PAGES.length - 1;
+
+const HISTORY_ROWS = [
+  { value: "diabetes", text: "Diabetes" },
+  { value: "hypertension", text: "High blood pressure" },
+  { value: "asthma", text: "Asthma" },
+  { value: "heart", text: "Heart disease" },
+] as const;
+
+/** Mask a raw phone string into the +1 (999) 999-9999 pattern. */
+function maskPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "").replace(/^1/, "").slice(0, 10);
+  const area = digits.slice(0, 3);
+  const prefix = digits.slice(3, 6);
+  const line = digits.slice(6, 10);
+  let out = "+1";
+  if (area) out += ` (${area}`;
+  if (area.length === 3) out += ")";
+  if (prefix) out += ` ${prefix}`;
+  if (line) out += `-${line}`;
+  return out;
+}
+
 export function NativeControls() {
+  // Wizard paging — render ONE section at a time (Patient → … → Consent).
+  const [currentPage, setCurrentPage] = useState(0);
+  const [attempted, setAttempted] = useState([false, false, false, false]);
+
+  // Patient
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dob, setDob] = useState("");
+  const [sex, setSex] = useState<Sex>("");
+  const [phone, setPhone] = useState("");
+  const [preferredContact, setPreferredContact] = useState("");
+
+  // Insurance
+  const [carrier, setCarrier] = useState("");
+  const [memberId, setMemberId] = useState("");
+  const [groupNumber, setGroupNumber] = useState("");
+  const [relationship, setRelationship] = useState<Relationship>("self");
+  const [hasSecondary, setHasSecondary] = useState(false);
+  const [carrier2, setCarrier2] = useState("");
+  const [memberId2, setMemberId2] = useState("");
+
+  // History
+  const [history, setHistory] = useState<Record<string, HistoryAnswer>>({});
+  const [allergies, setAllergies] = useState<Allergy[]>([]);
+  const [currentMedications, setCurrentMedications] = useState("");
+
+  // Consent
+  const [consentTreatment, setConsentTreatment] = useState(false);
+  const [consentPrivacy, setConsentPrivacy] = useState(false);
+  const [signedDate, setSignedDate] = useState("");
+
+  const [submitted, setSubmitted] = useState(false);
+
+  // Signature pad
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const drawing = useRef(false);
+
+  function pointerPos(e: PointerEvent<HTMLCanvasElement>) {
+    const canvas = canvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: ((e.clientX - rect.left) / rect.width) * canvas.width,
+      y: ((e.clientY - rect.top) / rect.height) * canvas.height,
+    };
+  }
+
+  function startStroke(e: PointerEvent<HTMLCanvasElement>) {
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
+    drawing.current = true;
+    const { x, y } = pointerPos(e);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    canvasRef.current?.setPointerCapture(e.pointerId);
+  }
+
+  function moveStroke(e: PointerEvent<HTMLCanvasElement>) {
+    if (!drawing.current) return;
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
+    const { x, y } = pointerPos(e);
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "currentColor";
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+
+  function endStroke() {
+    drawing.current = false;
+  }
+
+  function clearSignature() {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // Dynamic allergy rows
+  function addAllergy() {
+    setAllergies((rows) => [...rows, { allergen: "", severity: "", reaction: "" }]);
+  }
+  function removeAllergy(index: number) {
+    setAllergies((rows) => rows.filter((_, i) => i !== index));
+  }
+  function updateAllergy(index: number, field: keyof Allergy, value: string) {
+    setAllergies((rows) =>
+      rows.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
+    );
+  }
+
+  // Required-field validation — mirrors the SurveyJS schema's `isRequired` flags.
+  const errors = {
+    firstName: !firstName.trim(),
+    lastName: !lastName.trim(),
+    dob: !dob,
+    carrier: !carrier.trim(),
+    memberId: !memberId.trim(),
+    carrier2: hasSecondary && !carrier2.trim(),
+    memberId2: hasSecondary && !memberId2.trim(),
+    allergens: allergies.map((a) => !a.allergen.trim()),
+    consentTreatment: !consentTreatment,
+    consentPrivacy: !consentPrivacy,
+  };
+
+  // Which required fields belong to which wizard page.
+  function isPageValid(page: number): boolean {
+    switch (page) {
+      case 0:
+        return !errors.firstName && !errors.lastName && !errors.dob;
+      case 1:
+        return !errors.carrier && !errors.memberId && !errors.carrier2 && !errors.memberId2;
+      case 2:
+        return !errors.allergens.some(Boolean);
+      case 3:
+        return !errors.consentTreatment && !errors.consentPrivacy;
+      default:
+        return true;
+    }
+  }
+
+  // Show inline errors on the current page only once it has been attempted
+  // (Next/Complete pressed), so the user isn't yelled at before they act.
+  const showErrors = attempted[currentPage];
+
+  function markAttempted(page: number) {
+    setAttempted((a) => (a[page] ? a : a.map((v, i) => (i === page ? true : v))));
+  }
+
+  function goBack() {
+    setCurrentPage((p) => Math.max(0, p - 1));
+  }
+
+  function goNext() {
+    markAttempted(currentPage);
+    if (isPageValid(currentPage)) setCurrentPage((p) => Math.min(LAST_PAGE, p + 1));
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setAttempted([true, true, true, true]);
+    // By construction earlier pages were valid to reach here, but re-check the
+    // whole form and jump back to the first offending page if anything changed.
+    const firstInvalid = PAGES.findIndex((_, i) => !isPageValid(i));
+    if (firstInvalid >= 0) {
+      setCurrentPage(firstInvalid);
+      return;
+    }
+    setSubmitted(true);
+  }
+
+  function resetForm() {
+    setSubmitted(false);
+    setCurrentPage(0);
+    setAttempted([false, false, false, false]);
+  }
+
+  if (submitted) {
+    return (
+      <FormCompleted
+        message="Thank you. Your intake form has been submitted."
+        onEdit={resetForm}
+      />
+    );
+  }
+
   return (
     <Card variant="outlined">
       <CardContent>
-        <Typography variant="h6" fontWeight={600} gutterBottom>
-          Native MUI
+        {/* Survey title + description — mirrors the SurveyJS column's header,
+            sharing the schema's exact description so only the "(…)" suffix
+            differs between the two forms. */}
+        <Typography variant="h5" fontWeight={600} gutterBottom>
+          Patient Intake (Native MUI)
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Stock Material UI controls — the bridged form should match these.
+        <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
+          {medicalFormJson.description as string}
         </Typography>
 
-        <Stack spacing={3}>
-          <TextField label="First name" placeholder="Enter text…" variant="outlined" fullWidth />
+        {/* ── Wizard progress (mirrors SurveyJS progressBarType: "pages") ── */}
+        <Stepper activeStep={currentPage} alternativeLabel sx={{ mb: 4 }}>
+          {PAGES.map((title) => (
+            <Step key={title}>
+              <StepLabel>{title}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
-          <FormControl fullWidth>
-            <InputLabel id="native-select-label">Preferred contact method</InputLabel>
-            <Select
-              labelId="native-select-label"
-              label="Preferred contact method"
-              defaultValue=""
-            >
-              <MenuItem value="" disabled>
-                Select an option…
-              </MenuItem>
-              <MenuItem value="phone">Phone</MenuItem>
-              <MenuItem value="email">Email</MenuItem>
-              <MenuItem value="text">Text message</MenuItem>
-            </Select>
-          </FormControl>
+        {/* Per-page title — the SurveyJS pages each carry a title, so the
+            native wizard shows the active page's title too. */}
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          {PAGES[currentPage]}
+        </Typography>
 
-          <TextField
-            label="Current medications"
-            placeholder="Enter longer text…"
-            variant="outlined"
-            fullWidth
-            multiline
-            minRows={3}
-          />
+        <Box component="form" noValidate onSubmit={handleSubmit}>
+          {/* ── Patient ───────────────────────────────────────────── */}
+          {currentPage === 0 && (
+            <Stack spacing={3}>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <TextField
+                  label="First name"
+                  fullWidth
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  error={showErrors && errors.firstName}
+                  helperText={showErrors && errors.firstName ? "First name is required." : " "}
+                  required
+                />
+                <TextField
+                  label="Last name"
+                  fullWidth
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  error={showErrors && errors.lastName}
+                  helperText={showErrors && errors.lastName ? "Last name is required." : " "}
+                  required
+                />
+              </Stack>
 
-          <FormControl>
-            <FormLabel id="native-radio-label">Sex assigned at birth</FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="native-radio-label"
-              name="native-radio"
-              defaultValue="f"
-            >
-              <FormControlLabel value="f" control={<Radio />} label="Female" />
-              <FormControlLabel value="m" control={<Radio />} label="Male" />
-            </RadioGroup>
-          </FormControl>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="flex-start">
+                <TextField
+                  label="Date of birth"
+                  type="date"
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                  error={showErrors && errors.dob}
+                  helperText={showErrors && errors.dob ? "Date of birth is required." : " "}
+                  required
+                />
+                <FormControl fullWidth>
+                  <FormLabel id="nf-sex-label">Sex assigned at birth</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="nf-sex-label"
+                    value={sex}
+                    onChange={(e) => setSex(e.target.value as Sex)}
+                  >
+                    <FormControlLabel value="f" control={<Radio />} label="Female" />
+                    <FormControlLabel value="m" control={<Radio />} label="Male" />
+                  </RadioGroup>
+                </FormControl>
+              </Stack>
 
-          <FormControl>
-            <FormLabel>Consent</FormLabel>
-            <FormControlLabel
-              control={<Checkbox defaultChecked />}
-              label="I consent to treatment"
-            />
-          </FormControl>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <TextField
+                  label="Mobile phone"
+                  type="tel"
+                  fullWidth
+                  placeholder="+1 (___) ___-____"
+                  value={phone}
+                  onChange={(e) => setPhone(maskPhone(e.target.value))}
+                />
+                <FormControl fullWidth>
+                  <InputLabel id="nf-contact-label">Preferred contact method</InputLabel>
+                  <Select
+                    labelId="nf-contact-label"
+                    label="Preferred contact method"
+                    value={preferredContact}
+                    onChange={(e) => setPreferredContact(e.target.value)}
+                  >
+                    <MenuItem value="Phone">Phone</MenuItem>
+                    <MenuItem value="Email">Email</MenuItem>
+                    <MenuItem value="Text message">Text message</MenuItem>
+                  </Select>
+                </FormControl>
+              </Stack>
+            </Stack>
+          )}
 
-          <TextField
-            label="Required field (invalid state)"
-            variant="outlined"
-            fullWidth
-            error
-            defaultValue=""
-            helperText="This field is required."
-          />
+          {/* ── Insurance ─────────────────────────────────────────── */}
+          {currentPage === 1 && (
+            <Stack spacing={3}>
+              <Card variant="outlined" sx={{ bgcolor: "action.hover" }}>
+                <CardContent>
+                  <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                    Primary insurance
+                  </Typography>
+                  <Stack spacing={2}>
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                      <TextField
+                        label="Insurance carrier"
+                        fullWidth
+                        value={carrier}
+                        onChange={(e) => setCarrier(e.target.value)}
+                        error={showErrors && errors.carrier}
+                        helperText={showErrors && errors.carrier ? "Insurance carrier is required." : " "}
+                        required
+                      />
+                      <TextField
+                        label="Member ID"
+                        fullWidth
+                        value={memberId}
+                        onChange={(e) => setMemberId(e.target.value)}
+                        error={showErrors && errors.memberId}
+                        helperText={showErrors && errors.memberId ? "Member ID is required." : " "}
+                        required
+                      />
+                    </Stack>
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                      <TextField
+                        label="Group number"
+                        fullWidth
+                        value={groupNumber}
+                        onChange={(e) => setGroupNumber(e.target.value)}
+                        sx={{ maxWidth: { sm: "calc(50% - 8px)" } }}
+                      />
+                    </Stack>
+                    <FormControl>
+                      <FormLabel id="nf-rel-label">Patient is the…</FormLabel>
+                      <RadioGroup
+                        row
+                        aria-labelledby="nf-rel-label"
+                        value={relationship}
+                        onChange={(e) => setRelationship(e.target.value as Relationship)}
+                      >
+                        <FormControlLabel value="self" control={<Radio />} label="Policyholder" />
+                        <FormControlLabel value="spouse" control={<Radio />} label="Spouse" />
+                        <FormControlLabel value="dependent" control={<Radio />} label="Dependent" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Stack>
+                </CardContent>
+              </Card>
 
-          <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
-            <Button variant="contained">Complete</Button>
-            <Button variant="outlined">Check</Button>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={hasSecondary}
+                    onChange={(e) => setHasSecondary(e.target.checked)}
+                  />
+                }
+                label="Do you have secondary insurance?"
+              />
+
+              {hasSecondary && (
+                <Card variant="outlined" sx={{ bgcolor: "action.hover" }}>
+                  <CardContent>
+                    <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                      Secondary insurance
+                    </Typography>
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                      <TextField
+                        label="Insurance carrier"
+                        fullWidth
+                        value={carrier2}
+                        onChange={(e) => setCarrier2(e.target.value)}
+                        error={showErrors && errors.carrier2}
+                        helperText={showErrors && errors.carrier2 ? "Insurance carrier is required." : " "}
+                        required
+                      />
+                      <TextField
+                        label="Member ID"
+                        fullWidth
+                        value={memberId2}
+                        onChange={(e) => setMemberId2(e.target.value)}
+                        error={showErrors && errors.memberId2}
+                        helperText={showErrors && errors.memberId2 ? "Member ID is required." : " "}
+                        required
+                      />
+                    </Stack>
+                  </CardContent>
+                </Card>
+              )}
+            </Stack>
+          )}
+
+          {/* ── History ───────────────────────────────────────────── */}
+          {currentPage === 2 && (
+            <Stack spacing={3}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend" sx={{ mb: 1 }}>
+                  Have you ever been diagnosed with any of the following?
+                </FormLabel>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell />
+                      <TableCell align="center">Yes</TableCell>
+                      <TableCell align="center">No</TableCell>
+                      <TableCell align="center">Unsure</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {HISTORY_ROWS.map((row) => (
+                      <TableRow key={row.value}>
+                        <TableCell component="th" scope="row">
+                          {row.text}
+                        </TableCell>
+                        {(["yes", "no", "unsure"] as const).map((answer) => (
+                          <TableCell key={answer} align="center" padding="none">
+                            <Radio
+                              name={`nf-history-${row.value}`}
+                              inputProps={{ "aria-label": `${row.text}: ${answer}` }}
+                              checked={history[row.value] === answer}
+                              onChange={() =>
+                                setHistory((h) => ({ ...h, [row.value]: answer }))
+                              }
+                            />
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </FormControl>
+
+              <Box>
+                <FormLabel sx={{ display: "block", mb: 1 }}>Allergies</FormLabel>
+                {allergies.length === 0 && (
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    No allergies added.
+                  </Typography>
+                )}
+                <Stack spacing={2}>
+                  {allergies.map((allergy, index) => (
+                    <Stack
+                      key={index}
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={1}
+                      alignItems="flex-start"
+                    >
+                      <TextField
+                        label="Allergen"
+                        size="small"
+                        fullWidth
+                        value={allergy.allergen}
+                        onChange={(e) => updateAllergy(index, "allergen", e.target.value)}
+                        error={showErrors && errors.allergens[index]}
+                        helperText={showErrors && errors.allergens[index] ? "Allergen is required." : " "}
+                        required
+                      />
+                      <FormControl size="small" fullWidth>
+                        <InputLabel id={`nf-severity-${index}`}>Severity</InputLabel>
+                        <Select
+                          labelId={`nf-severity-${index}`}
+                          label="Severity"
+                          value={allergy.severity}
+                          onChange={(e) => updateAllergy(index, "severity", e.target.value)}
+                        >
+                          <MenuItem value="Mild">Mild</MenuItem>
+                          <MenuItem value="Moderate">Moderate</MenuItem>
+                          <MenuItem value="Severe">Severe</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        label="Reaction"
+                        size="small"
+                        fullWidth
+                        value={allergy.reaction}
+                        onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
+                      />
+                      <IconButton
+                        color="error"
+                        onClick={() => removeAllergy(index)}
+                        aria-label={`Remove allergy ${index + 1}`}
+                      >
+                        ✕
+                      </IconButton>
+                    </Stack>
+                  ))}
+                </Stack>
+                <Button variant="outlined" size="small" sx={{ mt: 1 }} onClick={addAllergy}>
+                  Add allergy
+                </Button>
+              </Box>
+
+              <TextField
+                label="Current medications"
+                fullWidth
+                multiline
+                minRows={3}
+                value={currentMedications}
+                onChange={(e) => setCurrentMedications(e.target.value)}
+              />
+            </Stack>
+          )}
+
+          {/* ── Consent ───────────────────────────────────────────── */}
+          {currentPage === 3 && (
+            <Stack spacing={2}>
+              <FormControl error={showErrors && errors.consentTreatment}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={consentTreatment}
+                      onChange={(e) => setConsentTreatment(e.target.checked)}
+                    />
+                  }
+                  label="I consent to treatment"
+                />
+                {showErrors && errors.consentTreatment && (
+                  <FormHelperText>Consent to treatment is required.</FormHelperText>
+                )}
+              </FormControl>
+
+              <FormControl error={showErrors && errors.consentPrivacy}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={consentPrivacy}
+                      onChange={(e) => setConsentPrivacy(e.target.checked)}
+                    />
+                  }
+                  label="I acknowledge the privacy practices (HIPAA)"
+                />
+                {showErrors && errors.consentPrivacy && (
+                  <FormHelperText>Acknowledgement is required.</FormHelperText>
+                )}
+              </FormControl>
+
+              <Box>
+                <FormLabel sx={{ display: "block", mb: 1 }}>Signature</FormLabel>
+                <Box
+                  component="canvas"
+                  ref={canvasRef}
+                  width={400}
+                  height={140}
+                  sx={{
+                    border: 1,
+                    borderColor: "divider",
+                    borderRadius: 1,
+                    width: "100%",
+                    maxWidth: "100%",
+                    bgcolor: "background.paper",
+                    color: "text.primary",
+                    touchAction: "none",
+                    cursor: "crosshair",
+                  }}
+                  onPointerDown={startStroke}
+                  onPointerMove={moveStroke}
+                  onPointerUp={endStroke}
+                  onPointerLeave={endStroke}
+                />
+                <Box>
+                  <Button variant="text" size="small" sx={{ px: 0 }} onClick={clearSignature}>
+                    Clear signature
+                  </Button>
+                </Box>
+              </Box>
+
+              <TextField
+                label="Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={signedDate}
+                onChange={(e) => setSignedDate(e.target.value)}
+                sx={{ maxWidth: { sm: "calc(50% - 8px)" } }}
+              />
+            </Stack>
+          )}
+
+          {showErrors && !isPageValid(currentPage) && (
+            <Alert severity="error" sx={{ mt: 3, py: 0.5 }}>
+              Please fix the highlighted fields before continuing.
+            </Alert>
+          )}
+
+          {/* ── Wizard navigation ─────────────────────────────────── */}
+          <Stack direction="row" justifyContent="space-between" sx={{ mt: 3 }}>
+            <Button variant="outlined" onClick={goBack} disabled={currentPage === 0}>
+              Previous
+            </Button>
+            {currentPage < LAST_PAGE ? (
+              <Button variant="contained" onClick={goNext}>
+                Next
+              </Button>
+            ) : (
+              <Button type="submit" variant="contained">
+                Complete
+              </Button>
+            )}
           </Stack>
-        </Stack>
+        </Box>
       </CardContent>
     </Card>
   );

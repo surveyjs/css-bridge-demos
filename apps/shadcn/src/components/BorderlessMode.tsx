@@ -21,7 +21,7 @@ interface BorderlessModeValue {
 const BorderlessModeContext = createContext<BorderlessModeValue | null>(null);
 
 export function BorderlessModeProvider({ children }: { children: ReactNode }) {
-  const [borderless, setBorderless] = useState(false);
+  const [borderless, setBorderless] = useState(true);
   return (
     <BorderlessModeContext.Provider value={{ borderless, setBorderless }}>
       {children}

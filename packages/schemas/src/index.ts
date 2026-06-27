@@ -41,6 +41,17 @@ export {
   type NavId,
 } from "./ia/navigation";
 
+// Shared content (renderer-agnostic copy reused across apps)
+export {
+  formatKB,
+  buildFormMetricsRows,
+  FORM_METRICS_SUMMARY,
+  FORM_METRICS_SURVEYJS_LABEL,
+  FORM_METRICS_CAPTION,
+  type FormMetricsRow,
+  type FormMetricsInput,
+} from "./content/form-metrics";
+
 import { checkoutSchema } from "./schemas/checkout";
 import { insuranceClaimSchema } from "./schemas/insurance-claim";
 import { medicalFormSchema } from "./schemas/medical-form";

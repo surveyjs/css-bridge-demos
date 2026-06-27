@@ -21,7 +21,7 @@ import { FormMetricsFooter } from "@/components/FormMetricsFooter";
 // app — NOT the schema, and NOT the shared completion screen (that lives in
 // FormCompleted.tsx, excluded from both counts). Recompute with:
 //   wc -l src/components/SurveyForm.tsx
-const SURVEYJS_LINES = 99;
+const SURVEYJS_LINES = 108;
 
 // Line count of the hand-written native form — likewise excluding the shared
 // completion screen. Measured here (a server component) rather than imported

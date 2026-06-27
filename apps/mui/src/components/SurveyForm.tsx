@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Card from "@mui/material/Card";
 import { Survey } from "survey-react-ui";
 import {
   createSurveyModel,
@@ -95,5 +96,13 @@ export function SurveyForm({
     return <FormCompleted message={completedMessage} onEdit={handleEdit} />;
   }
 
-  return <Survey model={model} />;
+  // Wrap the live form in the same outlined Card as the native column (and as
+  // this column's own completion screen) so the SurveyJS root sits in identical
+  // chrome. No CardContent padding — the survey body already supplies its own
+  // inner padding; `overflow: hidden` clips the form's title bar to the radius.
+  return (
+    <Card variant="outlined" sx={{ overflow: "hidden" }}>
+      <Survey model={model} />
+    </Card>
+  );
 }

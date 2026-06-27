@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Survey } from "survey-react-ui";
+import { Card } from "@/components/ui/card";
 import {
   createSurveyModel,
   type SchemaInput,
@@ -92,5 +93,14 @@ export function SurveyForm({
     return <FormCompleted message={completedMessage} onEdit={handleEdit} />;
   }
 
-  return <Survey model={model} />;
+  // Wrap the live form in the same bordered Card as the native column (and as
+  // this column's own completion screen) so the SurveyJS root sits in identical
+  // chrome. `py-0 gap-0` strips the Card's built-in vertical padding — the
+  // survey body already supplies its own inner padding; `overflow-hidden` clips
+  // the form's title bar to the radius.
+  return (
+    <Card className="overflow-hidden py-0 gap-0">
+      <Survey model={model} />
+    </Card>
+  );
 }

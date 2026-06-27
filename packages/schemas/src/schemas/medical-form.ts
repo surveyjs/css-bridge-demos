@@ -10,11 +10,13 @@ import type { SchemaDefinition, SurveyJSON } from "../types";
  * Representative V3 JSON — drop-in replaceable with a real patient-intake schema.
  */
 export const medicalFormJson: SurveyJSON = {
-  title: "Patient Intake",
+  title: "Patient Intake (SurveyJS)",
   description: "Tell us about you and your insurance coverage.",
   showProgressBar: true,
   progressBarLocation: "aboveHeader",
   progressBarType: "pages",
+  progressBarShowPageTitles: true,
+  progressBarShowPageNumbers: true,
   showQuestionNumbers: "off",
   widthMode: "responsive",
   questionErrorLocation: "bottom",
@@ -43,6 +45,7 @@ export const medicalFormJson: SurveyJSON = {
           name: "sex",
           title: "Sex assigned at birth",
           startWithNewLine: false,
+          colCount: 0,
           choices: [
             { value: "f", text: "Female" },
             { value: "m", text: "Male" },
@@ -92,7 +95,7 @@ export const medicalFormJson: SurveyJSON = {
               type: "radiogroup",
               name: "relationshipToInsured",
               title: "Patient is the…",
-              colCount: 3,
+              colCount: 0,
               defaultValue: "self",
               choices: [
                 { value: "self", text: "Policyholder" },

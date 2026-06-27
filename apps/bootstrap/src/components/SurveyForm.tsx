@@ -9,6 +9,7 @@ import {
   type SurveyMode,
 } from "@bridge/schemas";
 import { useBorderlessMode } from "./BorderlessMode";
+import { FormCompleted } from "./FormCompleted";
 
 // Base V3 CSS FIRST, then the Bootstrap bridge ON TOP so the bridge's
 // `--sjs2-*` overrides (declared on the same `.sjs-theme-overrides` root that
@@ -30,6 +31,7 @@ export function SurveyForm({
   data,
   mode,
   onComplete,
+  completedMessage = "Thank you. Your response has been submitted.",
 }: {
   schema: SchemaInput;
   data?: SurveyData;
@@ -37,6 +39,8 @@ export function SurveyForm({
   mode?: SurveyMode;
   /** Called with the response data when the survey is submitted. */
   onComplete?: (data: SurveyData) => void;
+  /** Message shown on the custom completion screen (see below). */
+  completedMessage?: string;
 }) {
   const model = useMemo(
     () => createSurveyModel(schema, { data, mode }),
@@ -52,14 +56,28 @@ export function SurveyForm({
     model.isCompact = borderless;
   }, [model, borderless]);
 
-  // Bridge stays CSS-only: completion is a model event on the headless model,
-  // not a renderer/component override.
+  // On completion, hide the SurveyJS widget and show our own success screen
+  // (matching the native column's submitted state) instead of the model's
+  // default completed page. This is host-level React reacting to a model
+  // event — NOT a SurveyJS renderer/component override, so the bridge stays
+  // CSS-only. Reset when the model is rebuilt (schema/data/mode change).
+  const [completed, setCompleted] = useState(false);
+  useEffect(() => setCompleted(false), [model]);
   useEffect(() => {
-    if (!onComplete) return;
-    const handler = (sender: typeof model) => onComplete(sender.data);
+    const handler = (sender: typeof model) => {
+      setCompleted(true);
+      onComplete?.(sender.data);
+    };
     model.onComplete.add(handler);
     return () => model.onComplete.remove(handler);
   }, [model, onComplete]);
+
+  // "Edit Response" — keep the answers (clear(false) leaves data intact, just
+  // flips the model out of its completed state) and show the widget again.
+  const handleEdit = () => {
+    model.clear(false);
+    setCompleted(false);
+  };
 
   // SurveyJS renders against the browser `environment` (the DOM root), which is
   // absent during Next's server prerender. Render the form only after mount so
@@ -69,6 +87,10 @@ export function SurveyForm({
 
   if (!mounted) {
     return <div aria-busy="true" style={{ minHeight: "60vh" }} />;
+  }
+
+  if (completed) {
+    return <FormCompleted message={completedMessage} onEdit={handleEdit} />;
   }
 
   return <Survey model={model} />;

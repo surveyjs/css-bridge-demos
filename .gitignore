@@ -10,3 +10,5 @@ promts/
 .claude/
 CLAUDE.md
 package-lock.json
+.env
+.env.example

@@ -9,6 +9,11 @@
     "apps/*"
   ],
   "scripts": {
+    "sync:deps": "node scripts/sync-deps.mjs",
+    "install:all": "node scripts/sync-deps.mjs && npm install --workspaces --include-workspace-root",
+    "install:bootstrap": "node scripts/sync-deps.mjs && npm install --workspace @bridge/bootstrap",
+    "install:shadcn": "node scripts/sync-deps.mjs && npm install --workspace @bridge/shadcn",
+    "install:mui": "node scripts/sync-deps.mjs && npm install --workspace @bridge/mui",
     "dev": "turbo run dev",
     "dev:bootstrap": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/bootstrap\"",
     "dev:bootstrap:creator": "concurrently -k -n core,react-ui,creator-core,creator-react,demo -c blue,magenta,cyan,yellow,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run watch:dev --prefix ../../LibV3/survey-creator/packages/survey-creator-core\" \"npm run watch:dev --prefix ../../LibV3/survey-creator/packages/survey-creator-react\" \"npm run dev --workspace @bridge/bootstrap\"",

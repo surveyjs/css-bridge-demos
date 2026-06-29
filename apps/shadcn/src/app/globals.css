@@ -140,20 +140,16 @@
    the neutral base above.
    ────────────────────────────────────────────────────────────────────────── */
 
-/* All shadcn "base" styles share the neutral palette (every demo
-   components.json is baseColor: "neutral") — they differ in GEOMETRY. This
-   block carries only the CORNER half (--radius): it is the one token BOTH the
-   native chrome (every rounded-* utility derives from it) and the survey bridge
-   read, so corners stay identical across the two columns and flash-free (the
-   pre-paint inline script sets data-shadcn-style before first paint).
+/* Visual-style CORNER tokens. Each style is a vendored component set under
+   src/components/ui/styles/<id>/ (its own Button/Input with baked control
+   heights), but corner radius stays a shared CSS variable — the component sets'
+   rounded-* utilities AND the survey bridge both derive from --radius, so corners
+   match across the two columns and are flash-free (the pre-paint inline script
+   sets data-shadcn-style before paint). Control DENSITY lives in the vendored
+   sets (height N = the style's survey adapter --sjs2-shadcn-input-height). Radius
+   reflects each style's corner character; "default" is the :root baseline. */
 
-   The DENSITY half (control heights, flat-shadow flavour) lives in the per-style
-   component presets — src/components/ui/presets.ts — applied at render by the
-   native primitives, the local stand-in for "shadcn generates a component set
-   per style". Radius values reflect each style's character (survey adapter);
-   "default" is the :root baseline above (--radius 0.625rem). */
-
-/* new-york — tight. */
+/* new-york — tight corners. */
 [data-shadcn-style="new-york"] {
   --radius: 0.5rem;
 }
@@ -183,7 +179,7 @@
   --radius: 0.9rem;
 }
 
-/* base-mira — compact, tight radius. */
+/* base-mira — compact, tight corners. */
 [data-shadcn-style="base-mira"] {
   --radius: 0.375rem;
 }
@@ -193,8 +189,8 @@
   --radius: 1rem;
 }
 
-/* base-sera — square (zero radius); its roomy control height in the preset is
-   what distinguishes it from base-lyra, which shares the square radius. */
+/* base-sera — square (zero radius); its taller vendored controls are what
+   distinguish it from base-lyra, which shares the square radius. */
 [data-shadcn-style="base-sera"] {
   --radius: 0;
 }

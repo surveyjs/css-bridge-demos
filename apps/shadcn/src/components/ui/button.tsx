@@ -1,67 +1,42 @@
 "use client";
 
+// Dispatcher: renders the active visual style's vendored <Button> (one full
+// component set per style lives in ./styles/<id>/). Call sites import from here
+// unchanged. Selecting the set in JS means a cold-load flash for a persisted
+// non-default style (corners, via --radius, stay flash-free).
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils";
-import { useStylePreset } from "@/components/ui/presets";
+import { useStyle } from "@/components/StyleProvider";
+import type { VisualStyleId } from "@/lib/styles";
+import { Button as Button_default } from "./styles/default/button";
+import { Button as Button_new_york } from "./styles/new-york/button";
+import { Button as Button_base_nova } from "./styles/base-nova/button";
+import { Button as Button_base_vega } from "./styles/base-vega/button";
+import { Button as Button_base_maia } from "./styles/base-maia/button";
+import { Button as Button_base_lyra } from "./styles/base-lyra/button";
+import { Button as Button_base_mira } from "./styles/base-mira/button";
+import { Button as Button_base_luma } from "./styles/base-luma/button";
+import { Button as Button_base_sera } from "./styles/base-sera/button";
+import { Button as Button_base_rhea } from "./styles/base-rhea/button";
+export { buttonVariants } from "./styles/default/button";
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-  {
-    variants: {
-      variant: {
-        default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  },
-);
+const BUTTONS: Record<VisualStyleId, typeof Button_default> = {
+  "default": Button_default,
+  "new-york": Button_new_york,
+  "base-nova": Button_base_nova,
+  "base-vega": Button_base_vega,
+  "base-maia": Button_base_maia,
+  "base-lyra": Button_base_lyra,
+  "base-mira": Button_base_mira,
+  "base-luma": Button_base_luma,
+  "base-sera": Button_base_sera,
+  "base-rhea": Button_base_rhea,
+};
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : "button";
-
-  // Per-style height/shadow applies only to the DEFAULT size — the semantic
-  // sm/lg/icon variants (header chrome) keep their own sizing.
-  const preset = useStylePreset();
-  const presetClass = (size ?? "default") === "default" ? preset.button : "";
-
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size }), presetClass, className)}
-      {...props}
-    />
-  );
+function Button(props: React.ComponentProps<typeof Button_default>) {
+  const { style } = useStyle();
+  const Impl = BUTTONS[style] ?? Button_default;
+  return <Impl {...props} />;
 }
 
-export { Button, buttonVariants };
+export { Button };

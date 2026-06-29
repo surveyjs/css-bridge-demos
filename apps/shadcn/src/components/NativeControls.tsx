@@ -21,7 +21,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { useStylePreset } from "@/components/ui/presets";
+import { useStyle } from "@/components/StyleProvider";
+import { STYLE_GEOMETRY } from "@/components/ui/styles/geometry";
 import { medicalFormJson, medicalFormSample } from "@bridge/schemas";
 import { FormCompleted } from "./FormCompleted";
 
@@ -67,9 +68,11 @@ const HISTORY_ROWS = [
 ] as const;
 
 // Tailwind-styled native <select>, matching the original sample's shadcn idiom.
-// Height tracks the visual-style preset (--control-height), like <Input>.
+// shadcn ships no <Select>, so this raw element can't use the vendored per-style
+// component sets — it reads the active style's height from STYLE_GEOMETRY instead
+// (see fieldClass below). Height/shadow are added there.
 const selectClass =
-  "border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 h-[var(--control-height,2.25rem)] w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:ring-[3px]";
+  "border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:ring-[3px]";
 
 /** Mask a raw phone string into the +1 (999) 999-9999 pattern. */
 function maskPhone(raw: string): string {
@@ -86,8 +89,10 @@ function maskPhone(raw: string): string {
 }
 
 export function NativeControls() {
-  // Native <select> tracks the active style's control preset, like <Input>.
-  const fieldClass = cn(selectClass, useStylePreset().control);
+  // Native <select> tracks the active visual style via STYLE_GEOMETRY (the raw
+  // element can't use the vendored per-style component sets), like <Input>.
+  const { style } = useStyle();
+  const fieldClass = cn(selectClass, STYLE_GEOMETRY[style].control);
   // Wizard paging — render ONE section at a time (Patient → … → Consent).
   const [currentPage, setCurrentPage] = useState(0);
   const [attempted, setAttempted] = useState([false, false, false, false]);

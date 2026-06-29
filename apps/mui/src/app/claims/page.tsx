@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { medicalFormJson, medicalFormSchema } from "@bridge/schemas";
+import { medicalFormJson, medicalFormSchema, medicalFormSample } from "@bridge/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
 import { NativeControls } from "@/components/NativeControls";
 import { FormMetricsFooter } from "@/components/FormMetricsFooter";
@@ -21,14 +21,14 @@ import { FormMetricsFooter } from "@/components/FormMetricsFooter";
 // app — NOT the schema, and NOT the shared completion screen (that lives in
 // FormCompleted.tsx, excluded from both counts). Recompute with:
 //   wc -l src/components/SurveyForm.tsx
-const SURVEYJS_LINES = 108;
+const SURVEYJS_LINES = 137;
 
 // Line count of the hand-written native form — likewise excluding the shared
 // completion screen. Measured here (a server component) rather than imported
 // from NativeControls.tsx, because a plain value exported from a "use client"
 // module becomes an unreadable client reference on the server. Recompute with:
 //   wc -l src/components/NativeControls.tsx
-const NATIVE_FORM_LINES = 673;
+const NATIVE_FORM_LINES = 712;
 
 // Byte size of the form's JSON schema, computed live from the imported source so
 // it never drifts from packages/schemas.
@@ -49,6 +49,7 @@ export default function ClaimsPage() {
       <SurveyForm
         schema={medicalFormSchema}
         completedMessage="Thank you. Your intake form has been submitted."
+        prefillData={medicalFormSample}
       />
       <NativeControls />
       <Box sx={{ gridColumn: { lg: "1 / -1" } }}>

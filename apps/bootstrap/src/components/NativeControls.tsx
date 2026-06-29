@@ -2,7 +2,7 @@
 
 import { useRef, useState, type ChangeEvent, type FormEvent, type PointerEvent } from "react";
 import { Alert, Button, Card, Col, Form, ProgressBar, Row, Table } from "react-bootstrap";
-import { medicalFormJson } from "@bridge/schemas";
+import { medicalFormJson, medicalFormSample } from "@bridge/schemas";
 import { FormCompleted } from "./FormCompleted";
 
 /**
@@ -215,6 +215,34 @@ export function NativeControls() {
     setSubmitted(false);
     setCurrentPage(0);
     setAttempted([false, false, false, false]);
+  }
+
+  // "Prefill demo data" — the native twin of the SurveyJS column's custom
+  // navigation button. SurveyJS prefills its whole model from one shared object
+  // (medicalFormSample) in a single `mergeData` call; here the SAME object has
+  // to be unpacked field-by-field into every piece of controlled state by hand —
+  // another slice of the per-form code the metrics footer is measuring.
+  function prefillForm() {
+    const s = medicalFormSample;
+    setFirstName(s.firstName as string);
+    setLastName(s.lastName as string);
+    setDob(s.dob as string);
+    setSex(s.sex as Sex);
+    setPhone(s.phone as string);
+    setPreferredContact(s.preferredContact as string);
+    setCarrier(s.carrier as string);
+    setMemberId(s.memberId as string);
+    setGroupNumber(s.groupNumber as string);
+    setRelationship(s.relationshipToInsured as Relationship);
+    setHasSecondary(s.hasSecondary as boolean);
+    setCarrier2(s.carrier2 as string);
+    setMemberId2(s.memberId2 as string);
+    setHistory(s.medicalHistory as Record<string, HistoryAnswer>);
+    setAllergies(s.allergies as Allergy[]);
+    setCurrentMedications(s.currentMedications as string);
+    setConsentTreatment(s.consentTreatment as boolean);
+    setConsentPrivacy(s.consentPrivacy as boolean);
+    setSignedDate(s.signedDate as string);
   }
 
   if (submitted) {
@@ -657,13 +685,20 @@ export function NativeControls() {
 
           {/* ── Wizard navigation ─────────────────────────────────── */}
           <div className="d-flex justify-content-between mt-4">
-            <Button
-              variant="outline-secondary"
-              onClick={goBack}
-              disabled={currentPage === 0}
-            >
-              Previous
-            </Button>
+            <div className="d-flex gap-2">
+              <Button
+                variant="outline-secondary"
+                type="button"
+                onClick={goBack}
+                disabled={currentPage === 0}
+              >
+                Previous
+              </Button>
+              {/* Native twin of the SurveyJS custom "Prefill demo data" button. */}
+              <Button variant="outline-primary" type="button" onClick={prefillForm}>
+                Prefill demo data
+              </Button>
+            </div>
             {currentPage < LAST_PAGE ? (
               <Button variant="primary" onClick={goNext}>
                 Next

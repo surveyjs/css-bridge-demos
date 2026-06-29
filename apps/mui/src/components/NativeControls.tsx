@@ -34,7 +34,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { medicalFormJson } from "@bridge/schemas";
+import { medicalFormJson, medicalFormSample } from "@bridge/schemas";
 import { FormCompleted } from "./FormCompleted";
 
 /**
@@ -247,6 +247,34 @@ export function NativeControls() {
     setSubmitted(false);
     setCurrentPage(0);
     setAttempted([false, false, false, false]);
+  }
+
+  // "Prefill demo data" — the native twin of the SurveyJS column's custom
+  // navigation button. SurveyJS prefills its whole model from one shared object
+  // (medicalFormSample) in a single `mergeData` call; here the SAME object has
+  // to be unpacked field-by-field into every piece of controlled state by hand —
+  // another slice of the per-form code the metrics footer is measuring.
+  function prefillForm() {
+    const s = medicalFormSample;
+    setFirstName(s.firstName as string);
+    setLastName(s.lastName as string);
+    setDob(s.dob as string);
+    setSex(s.sex as Sex);
+    setPhone(s.phone as string);
+    setPreferredContact(s.preferredContact as string);
+    setCarrier(s.carrier as string);
+    setMemberId(s.memberId as string);
+    setGroupNumber(s.groupNumber as string);
+    setRelationship(s.relationshipToInsured as Relationship);
+    setHasSecondary(s.hasSecondary as boolean);
+    setCarrier2(s.carrier2 as string);
+    setMemberId2(s.memberId2 as string);
+    setHistory(s.medicalHistory as Record<string, HistoryAnswer>);
+    setAllergies(s.allergies as Allergy[]);
+    setCurrentMedications(s.currentMedications as string);
+    setConsentTreatment(s.consentTreatment as boolean);
+    setConsentPrivacy(s.consentPrivacy as boolean);
+    setSignedDate(s.signedDate as string);
   }
 
   if (submitted) {
@@ -653,9 +681,20 @@ export function NativeControls() {
 
           {/* ── Wizard navigation ─────────────────────────────────── */}
           <Stack direction="row" justifyContent="space-between" sx={{ mt: 3 }}>
-            <Button variant="outlined" onClick={goBack} disabled={currentPage === 0}>
-              Previous
-            </Button>
+            <Stack direction="row" spacing={1}>
+              <Button
+                variant="outlined"
+                type="button"
+                onClick={goBack}
+                disabled={currentPage === 0}
+              >
+                Previous
+              </Button>
+              {/* Native twin of the SurveyJS custom "Prefill demo data" button. */}
+              <Button variant="outlined" type="button" onClick={prefillForm}>
+                Prefill demo data
+              </Button>
+            </Stack>
             {currentPage < LAST_PAGE ? (
               <Button variant="contained" onClick={goNext}>
                 Next

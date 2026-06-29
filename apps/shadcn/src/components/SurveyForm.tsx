@@ -32,6 +32,8 @@ export function SurveyForm({
   mode,
   onComplete,
   completedMessage = "Thank you. Your response has been submitted.",
+  prefillData,
+  prefillLabel = "Prefill demo data",
 }: {
   schema: SchemaInput;
   data?: SurveyData;
@@ -41,11 +43,38 @@ export function SurveyForm({
   onComplete?: (data: SurveyData) => void;
   /** Message shown on the custom completion screen (see below). */
   completedMessage?: string;
+  /**
+   * When provided, a custom "Prefill demo data" button is added to the survey's
+   * navigation bar that fills every page's answers in one click.
+   */
+  prefillData?: SurveyData;
+  /** Label for the prefill button (see `prefillData`). */
+  prefillLabel?: string;
 }) {
   const model = useMemo(
     () => createSurveyModel(schema, { data, mode }),
     [schema, data, mode],
   );
+
+  // Optional "Prefill demo data" custom button. Added to the survey's OWN
+  // navigation bar through the public `addNavigationItem` API (it renders a
+  // stock `sv-nav-btn` — host-level use of the model API, NOT a renderer/
+  // component override, so the bridge stays CSS-only). One click fills every
+  // page's answers so the end-user can page straight through without typing;
+  // `mergeData` keeps anything already entered and fills the rest. Re-added if
+  // the model is rebuilt (schema/data/mode change).
+  useEffect(() => {
+    if (!prefillData) return;
+    const id = "sv-prefill-demo";
+    model.addNavigationItem({
+      id,
+      title: prefillLabel,
+      action: () => model.mergeData(prefillData),
+    });
+    return () => {
+      model.navigationBar.removeActionById(id);
+    };
+  }, [model, prefillData, prefillLabel]);
 
   // "Borderless questions" switch (top menu) → survey-core's `isCompact`. It is
   // a non-serializable runtime flag, so it's set on the LIVE model here rather

@@ -1,9 +1,9 @@
 "use client";
 
-// Dispatcher: renders the active visual style's vendored <Input>
-// (one set per style in ./styles/<id>/). See ui/button.tsx for the rationale.
+// GLUE (not a shadcn component): renders the active visual style's CLI-generated
+// <Input> from styles/<id>/. shadcn has no runtime style switch, so this selector
+// is hand-written. Re-run scripts/gen-ui.mjs to regenerate.
 import * as React from "react";
-
 import { useStyle } from "@/components/StyleProvider";
 import type { VisualStyleId } from "@/lib/styles";
 import { Input as Input_default } from "./styles/default/input";
@@ -17,7 +17,7 @@ import { Input as Input_base_luma } from "./styles/base-luma/input";
 import { Input as Input_base_sera } from "./styles/base-sera/input";
 import { Input as Input_base_rhea } from "./styles/base-rhea/input";
 
-const INPUTS: Record<VisualStyleId, typeof Input_default> = {
+const INPUTS: Record<VisualStyleId, React.ComponentType<any>> = {
   "default": Input_default,
   "new-york": Input_new_york,
   "base-nova": Input_base_nova,
@@ -30,10 +30,10 @@ const INPUTS: Record<VisualStyleId, typeof Input_default> = {
   "base-rhea": Input_base_rhea,
 };
 
-function Input(props: React.ComponentProps<typeof Input_default>) {
+export function Input(props: React.ComponentProps<"input">) {
   const { style } = useStyle();
-  const Impl = INPUTS[style] ?? Input_default;
+  const Impl = (INPUTS[style] ?? Input_default) as React.ComponentType<
+    React.ComponentProps<"input">
+  >;
   return <Impl {...props} />;
 }
-
-export { Input };

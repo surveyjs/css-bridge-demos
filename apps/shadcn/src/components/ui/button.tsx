@@ -1,42 +1,57 @@
-"use client";
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
 
-// Dispatcher: renders the active visual style's vendored <Button> (one full
-// component set per style lives in ./styles/<id>/). Call sites import from here
-// unchanged. Selecting the set in JS means a cold-load flash for a persisted
-// non-default style (corners, via --radius, stay flash-free).
-import * as React from "react";
+import { cn } from "@/lib/utils"
 
-import { useStyle } from "@/components/StyleProvider";
-import type { VisualStyleId } from "@/lib/styles";
-import { Button as Button_default } from "./styles/default/button";
-import { Button as Button_new_york } from "./styles/new-york/button";
-import { Button as Button_base_nova } from "./styles/base-nova/button";
-import { Button as Button_base_vega } from "./styles/base-vega/button";
-import { Button as Button_base_maia } from "./styles/base-maia/button";
-import { Button as Button_base_lyra } from "./styles/base-lyra/button";
-import { Button as Button_base_mira } from "./styles/base-mira/button";
-import { Button as Button_base_luma } from "./styles/base-luma/button";
-import { Button as Button_base_sera } from "./styles/base-sera/button";
-import { Button as Button_base_rhea } from "./styles/base-rhea/button";
-export { buttonVariants } from "./styles/default/button";
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2",
+        sm: "h-8 rounded-md px-3 text-xs",
+        lg: "h-10 rounded-md px-8",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
 
-const BUTTONS: Record<VisualStyleId, typeof Button_default> = {
-  "default": Button_default,
-  "new-york": Button_new_york,
-  "base-nova": Button_base_nova,
-  "base-vega": Button_base_vega,
-  "base-maia": Button_base_maia,
-  "base-lyra": Button_base_lyra,
-  "base-mira": Button_base_mira,
-  "base-luma": Button_base_luma,
-  "base-sera": Button_base_sera,
-  "base-rhea": Button_base_rhea,
-};
-
-function Button(props: React.ComponentProps<typeof Button_default>) {
-  const { style } = useStyle();
-  const Impl = BUTTONS[style] ?? Button_default;
-  return <Impl {...props} />;
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
 }
 
-export { Button };
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }

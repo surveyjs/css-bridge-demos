@@ -1,201 +1,95 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+// Generates the per-style shadcn component sets using the SHADCN CLI, then writes
+// the minimal switching glue (shadcn has no runtime style switch).
+//
+//   node scripts/gen-ui.mjs --cli   → (re)generate components via `npx shadcn add`
+//   node scripts/gen-ui.mjs         → just rewrite the glue from existing files
+//
+// Components per style live in src/components/ui/styles/<id>/ (input.tsx, button.tsx)
+// and are the EXACT files `shadcn add` writes (base-* use @base-ui/react; default/
+// new-york are Radix). The chrome <Button> (src/components/ui/button.tsx) is shadcn
+// new-york (Radix, supports asChild for Sheet/DropdownMenu/Dialog triggers).
+import { readFileSync, writeFileSync } from "node:fs";
+import { execSync } from "node:child_process";
 import { join } from "node:path";
 
-const UI = "C:/survey.js/Examples/css-bridge-demos/apps/shadcn/src/components/ui";
+const ROOT = "C:/survey.js/Examples/css-bridge-demos/apps/shadcn";
+const UI = join(ROOT, "src/components/ui");
+const REG = "https://ui.shadcn.com/r/styles";
+const ids = ["default","new-york","base-nova","base-vega","base-maia","base-lyra","base-mira","base-luma","base-sera","base-rhea"];
 
-// Per-style geometry, DERIVED FROM the survey-core shadcn adapters
-// (--sjs2-shadcn-input-height N → Tailwind h-N; flat = adapter's flat formbox).
-const STYLES = {
-  "default":   { h: "h-10", flat: false },
-  "new-york":  { h: "h-9",  flat: false },
-  "base-nova": { h: "h-8",  flat: false },
-  "base-vega": { h: "h-9",  flat: false },
-  "base-maia": { h: "h-9",  flat: false },
-  "base-lyra": { h: "h-8",  flat: true  },
-  "base-mira": { h: "h-7",  flat: false },
-  "base-luma": { h: "h-9",  flat: false },
-  "base-sera": { h: "h-10", flat: true  },
-  "base-rhea": { h: "h-8",  flat: false },
+if (process.argv.includes("--cli")) {
+  for (const id of ids) {
+    execSync(`npx --yes shadcn@latest add "${REG}/${id}/input.json" "${REG}/${id}/button.json" --path src/components/ui/styles/${id} --overwrite --yes --silent`, { cwd: ROOT, stdio: "inherit" });
+  }
+  // Chrome button: shadcn new-york (Radix / asChild) at src/components/ui/button.tsx
+  execSync(`npx --yes shadcn@latest add "${REG}/new-york/button.json" --path src/components/ui --overwrite --yes --silent`, { cwd: ROOT, stdio: "inherit" });
+}
+
+// ── Glue (the only hand-written code) ────────────────────────────────────────
+const slug = (id) => id.replace(/-/g, "_");
+const importLines = (Comp) => ids.map((id) => `import { ${Comp} as ${Comp}_${slug(id)} } from "./styles/${id}/${Comp.toLowerCase()}";`).join("\n");
+const mapLines = (Comp) => ids.map((id) => `  "${id}": ${Comp}_${slug(id)},`).join("\n");
+
+// Per-style input className (for the native <select>, which can't be a vendored <Input>).
+const inputClass = (id) => {
+  const m = readFileSync(join(UI, "styles", id, "input.tsx"), "utf8").match(/cn\(\s*"([^"]+)"/);
+  return m ? m[1] : "";
 };
+writeFileSync(join(UI, "styles", "style-input-class.ts"),
+`import type { VisualStyleId } from "@/lib/styles";
 
-// Components that DON'T vary per style (geometry rides the shared --radius);
-// each style folder re-exports them so the folder is a complete ui surface.
-const SHARED = ["badge","card","dialog","dropdown-menu","label","separator","sheet","switch","table","textarea"];
-
-const sh = (flat, cls) => flat ? cls.replaceAll("shadow-xs", "shadow-none") : cls;
-
-const buttonTpl = (id, { h, flat }) => `// AUTO-GENERATED per-style component set (visual style: ${id}).
-// Source of truth: scripts/gen-ui.mjs — geometry from the survey-core shadcn
-// adapter for "${id}". Vendored like shadcn: edit freely to customize THIS style.
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
-
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-  {
-    variants: {
-      variant: {
-        default:
-          "${sh(flat, "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90")}",
-        destructive:
-          "${sh(flat, "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60")}",
-        outline:
-          "${sh(flat, "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50")}",
-        secondary:
-          "${sh(flat, "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80")}",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        // "${id}" default-size height (sm/lg/icon keep fixed sizes).
-        default: "${h} px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  },
-);
-
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : "button";
-
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
-}
-
-export { Button, buttonVariants };
-`;
-
-const inputTpl = (id, { h, flat }) => `// AUTO-GENERATED per-style component set (visual style: ${id}).
-// Source of truth: scripts/gen-ui.mjs. Vendored like shadcn: edit freely.
-import * as React from "react";
-
-import { cn } from "@/lib/utils";
-
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
-  return (
-    <input
-      type={type}
-      data-slot="input"
-      className={cn(
-        "${sh(flat, "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex " + h + " w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm")}",
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
-export { Input };
-`;
-
-const indexTpl = (id) => `// Complete ui surface for visual style "${id}": this style's own
-// Button/Input plus the style-invariant primitives (geometry rides --radius).
-export { Button, buttonVariants } from "./button";
-export { Input } from "./input";
-${SHARED.map((c) => `export * from "@/components/ui/${c}";`).join("\n")}
-`;
-
-const ids = Object.keys(STYLES);
-
-// Per-style folders
-for (const id of ids) {
-  const dir = join(UI, "styles", id);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "button.tsx"), buttonTpl(id, STYLES[id]));
-  writeFileSync(join(dir, "input.tsx"), inputTpl(id, STYLES[id]));
-  writeFileSync(join(dir, "index.ts"), indexTpl(id));
-}
-
-// geometry.ts — for raw elements that aren't React components (native <select>)
-const geom = `import type { VisualStyleId } from "@/lib/styles";
-
-/** Per-style control geometry for raw elements (the native <select>) that can't
- *  use the vendored component sets. Mirrors styles/<id>/input.tsx. */
-export const STYLE_GEOMETRY: Record<VisualStyleId, { control: string }> = {
-${ids.map((id) => `  "${id}": { control: "${STYLES[id].h}${STYLES[id].flat ? " shadow-none" : ""}" },`).join("\n")}
+// shadcn's real per-style input className (extracted from the CLI-generated
+// styles/<id>/input.tsx) for the native <select> in NativeControls.
+export const STYLE_INPUT_CLASS: Record<VisualStyleId, string> = {
+${ids.map((id) => `  "${id}": "${inputClass(id)}",`).join("\n")}
 };
-`;
-writeFileSync(join(UI, "styles", "geometry.ts"), geom);
+`);
 
-// Dispatchers — public ui/button.tsx & ui/input.tsx select the active style's set.
-const importLines = (comp) => ids.map((id) => `import { ${comp} as ${comp}_${id.replace(/-/g, "_")} } from "./styles/${id}/${comp.toLowerCase()}";`).join("\n");
-const mapLines = (comp) => ids.map((id) => `  "${id}": ${comp}_${id.replace(/-/g, "_")},`).join("\n");
+writeFileSync(join(UI, "input.tsx"),
+`"use client";
 
-const buttonDispatcher = `"use client";
-
-// Dispatcher: renders the active visual style's vendored <Button> (one full
-// component set per style lives in ./styles/<id>/). Call sites import from here
-// unchanged. Selecting the set in JS means a cold-load flash for a persisted
-// non-default style (corners, via --radius, stay flash-free).
+// GLUE (not a shadcn component): renders the active visual style's CLI-generated
+// <Input> from styles/<id>/. shadcn has no runtime style switch, so this selector
+// is hand-written. Re-run scripts/gen-ui.mjs to regenerate.
 import * as React from "react";
-
-import { useStyle } from "@/components/StyleProvider";
-import type { VisualStyleId } from "@/lib/styles";
-${importLines("Button")}
-export { buttonVariants } from "./styles/default/button";
-
-const BUTTONS: Record<VisualStyleId, typeof Button_default> = {
-${mapLines("Button")}
-};
-
-function Button(props: React.ComponentProps<typeof Button_default>) {
-  const { style } = useStyle();
-  const Impl = BUTTONS[style] ?? Button_default;
-  return <Impl {...props} />;
-}
-
-export { Button };
-`;
-writeFileSync(join(UI, "button.tsx"), buttonDispatcher);
-
-const inputDispatcher = `"use client";
-
-// Dispatcher: renders the active visual style's vendored <Input>
-// (one set per style in ./styles/<id>/). See ui/button.tsx for the rationale.
-import * as React from "react";
-
 import { useStyle } from "@/components/StyleProvider";
 import type { VisualStyleId } from "@/lib/styles";
 ${importLines("Input")}
 
-const INPUTS: Record<VisualStyleId, typeof Input_default> = {
+const INPUTS: Record<VisualStyleId, React.ComponentType<any>> = {
 ${mapLines("Input")}
 };
 
-function Input(props: React.ComponentProps<typeof Input_default>) {
+export function Input(props: React.ComponentProps<"input">) {
   const { style } = useStyle();
-  const Impl = INPUTS[style] ?? Input_default;
+  const Impl = (INPUTS[style] ?? Input_default) as React.ComponentType<
+    React.ComponentProps<"input">
+  >;
   return <Impl {...props} />;
 }
+`);
 
-export { Input };
-`;
-writeFileSync(join(UI, "input.tsx"), inputDispatcher);
+writeFileSync(join(UI, "styled-button.tsx"),
+`"use client";
 
-console.log("Generated", ids.length, "per-style ui sets + dispatchers + geometry.ts");
+// GLUE: per-style <Button> for the comparison column (StyledButton). base-* buttons
+// are @base-ui/react (no asChild) — chrome keeps the Radix <Button> from ./button.
+import * as React from "react";
+import { useStyle } from "@/components/StyleProvider";
+import type { VisualStyleId } from "@/lib/styles";
+${importLines("Button")}
+
+const BUTTONS: Record<VisualStyleId, React.ComponentType<any>> = {
+${mapLines("Button")}
+};
+
+type Props = React.ComponentProps<"button"> & { variant?: string; size?: string };
+
+export function StyledButton(props: Props) {
+  const { style } = useStyle();
+  const Impl = (BUTTONS[style] ?? Button_default) as React.ComponentType<Props>;
+  return <Impl {...props} />;
+}
+`);
+
+console.log("Glue written (input dispatcher, styled-button dispatcher, select class map).");

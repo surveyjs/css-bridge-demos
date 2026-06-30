@@ -10,10 +10,11 @@ import type { SchemaDefinition, SurveyJSON } from "../types";
  * Representative V3 JSON — drop-in replaceable with a real patient-intake schema.
  */
 export const medicalFormJson: SurveyJSON = {
+  headerView: "advanced",
   title: "Patient Intake (SurveyJS)",
   description: "Tell us about you and your insurance coverage.",
   showProgressBar: true,
-  progressBarLocation: "aboveHeader",
+  progressBarLocation: "belowHeader",
   progressBarType: "pages",
   progressBarShowPageTitles: true,
   progressBarShowPageNumbers: true,

@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { checkoutSchema } from "@adapter/schemas";
+import { checkoutSchema, checkoutSample } from "@adapter/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
 
 /**
@@ -16,7 +16,7 @@ export default function CheckoutPage() {
         maxWidth: { xs: "100%", xl: 760 },
       }}
     >
-      <SurveyForm schema={checkoutSchema} />
+      <SurveyForm schema={checkoutSchema} prefillData={checkoutSample} />
     </Box>
   );
 }

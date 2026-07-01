@@ -1,4 +1,4 @@
-import { checkoutSchema } from "@adapter/schemas";
+import { checkoutSchema, checkoutSample } from "@adapter/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
 
 /**
@@ -10,7 +10,7 @@ import { SurveyForm } from "@/components/SurveyForm";
 export default function CheckoutPage() {
   return (
     <div className="mx-auto w-full max-w-3xl">
-      <SurveyForm schema={checkoutSchema} />
+      <SurveyForm schema={checkoutSchema} prefillData={checkoutSample} />
     </div>
   );
 }

@@ -25,6 +25,7 @@ export {
   type ClaimRecord,
 } from "./data/insurance-claim-seed";
 export { medicalFormSample } from "./data/medical-form-seed";
+export { checkoutSample } from "./data/checkout-seed";
 
 // Model factory
 export {

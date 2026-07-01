@@ -9,16 +9,15 @@
     "apps/*"
   ],
   "scripts": {
-    "sync:deps": "node scripts/sync-deps.mjs",
-    "install:all": "node scripts/sync-deps.mjs && npm install --workspaces --include-workspace-root",
-    "install:bootstrap": "node scripts/sync-deps.mjs && npm install --workspace @bridge/bootstrap",
-    "install:shadcn": "node scripts/sync-deps.mjs && npm install --workspace @bridge/shadcn",
-    "install:mui": "node scripts/sync-deps.mjs && npm install --workspace @bridge/mui",
+    "install:all": "npm install --workspaces --include-workspace-root",
+    "install:bootstrap": "npm install --workspace @bridge/bootstrap",
+    "install:shadcn": "npm install --workspace @bridge/shadcn",
+    "install:mui": "npm install --workspace @bridge/mui",
     "dev": "turbo run dev",
-    "dev:bootstrap": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/bootstrap\"",
-    "dev:bootstrap:creator": "concurrently -k -n core,react-ui,creator-core,creator-react,demo -c blue,magenta,cyan,yellow,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run watch:dev --prefix ../../LibV3/survey-creator/packages/survey-creator-core\" \"npm run watch:dev --prefix ../../LibV3/survey-creator/packages/survey-creator-react\" \"npm run dev --workspace @bridge/bootstrap\"",
-    "dev:mui": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/mui\"",
-    "dev:shadcn": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../../LibV3/survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/shadcn\"",
+    "dev:bootstrap": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/bootstrap\"",
+    "dev:bootstrap:creator": "concurrently -k -n core,react-ui,creator-core,creator-react,demo -c blue,magenta,cyan,yellow,green \"npm run watch:dev --prefix ../survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../survey-library/packages/survey-react-ui\" \"npm run watch:dev --prefix ../survey-creator/packages/survey-creator-core\" \"npm run watch:dev --prefix ../survey-creator/packages/survey-creator-react\" \"npm run dev --workspace @bridge/bootstrap\"",
+    "dev:mui": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/mui\"",
+    "dev:shadcn": "concurrently -k -n core,react-ui,demo -c blue,magenta,green \"npm run watch:dev --prefix ../survey-library/packages/survey-core\" \"npm run watch:dev --prefix ../survey-library/packages/survey-react-ui\" \"npm run dev --workspace @bridge/shadcn\"",
     "build": "turbo run build",
     "build:bootstrap": "turbo run build --filter=@bridge/bootstrap",
     "build:shadcn": "turbo run build --filter=@bridge/shadcn",
@@ -31,8 +30,21 @@
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean"
   },
+  "dependencies": {
+    "next": "^15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "survey-core": "next",
+    "survey-react-ui": "next",
+    "survey-creator-core": "next",
+    "survey-creator-react": "next"
+  },
   "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "concurrently": "^9.1.2",
+    "rimraf": "^6.0.1",
     "turbo": "^2.5.0",
     "typescript": "^5.6.3"
   },

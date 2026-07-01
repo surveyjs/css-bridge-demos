@@ -24,7 +24,11 @@ import "survey-core/survey-core.min.css";
  */
 export function AllQuestionsGallery() {
   // Build the model exactly once for the component's lifetime.
-  const model = useMemo(() => createSurveyModel(allQuestionsSchema), []);
+  const model = useMemo(() => {
+    const m = createSurveyModel(allQuestionsSchema);
+    m.showCompleteButton = false;
+    return m;
+  }, []);
 
   // The switch lives in the header; its state arrives via context.
   const { readOnly } = useAllQuestionsMode();

@@ -17,20 +17,6 @@
     "@bridge/schemas": "*",
     "bootstrap": "^5.3.3",
     "bootswatch": "^5.3.3",
-    "next": "^15.3.0",
-    "react-bootstrap": "^2.10.5",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "survey-core": "file:C:/survey.js/LibV3/survey-library/packages/survey-core/build",
-    "survey-react-ui": "file:C:/survey.js/LibV3/survey-library/packages/survey-react-ui/build",
-    "survey-creator-core": "file:C:/survey.js/LibV3/survey-creator/packages/survey-creator-core/build",
-    "survey-creator-react": "file:C:/survey.js/LibV3/survey-creator/packages/survey-creator-react/build"
-  },
-  "devDependencies": {
-    "@types/node": "^20.14.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "rimraf": "^6.0.1",
-    "typescript": "^5.6.3"
+    "react-bootstrap": "^2.10.5"
   }
 }

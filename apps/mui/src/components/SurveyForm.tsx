@@ -111,16 +111,11 @@ export function SurveyForm({
     setCompleted(false);
   };
 
-  // SurveyJS renders against the browser `environment` (the DOM root), which is
-  // absent during Next's server prerender. Render the form only after mount so
-  // the bridge stays CSS-only — no SSR shim or renderer override.
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) {
-    return <div aria-busy="true" style={{ minHeight: "60vh" }} />;
-  }
-
+  // The form is server-rendered (SSR) and hydrated on the client — there is NO
+  // mount gate. survey-core guards every DOM/`environment` access (see
+  // DomDocumentHelper), so the model builds and the stock <Survey> renders to
+  // HTML during Next's prerender. Only the Creator (Builder route) stays
+  // client-only, because its constructor touches `navigator` at build time.
   if (completed) {
     return <FormCompleted message={completedMessage} onEdit={handleEdit} />;
   }

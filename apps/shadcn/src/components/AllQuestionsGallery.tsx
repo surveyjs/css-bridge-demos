@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Survey } from "survey-react-ui";
 import { allQuestionsSchema, createSurveyModel } from "@bridge/schemas";
 import { useAllQuestionsMode } from "./AllQuestionsMode";
@@ -41,14 +41,8 @@ export function AllQuestionsGallery() {
     model.isCompact = borderless;
   }, [model, borderless]);
 
-  // SurveyJS renders against the DOM root, absent during Next's prerender;
-  // render only after mount so the bridge stays CSS-only.
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  return mounted ? (
-    <Survey model={model} />
-  ) : (
-    <div aria-busy="true" style={{ minHeight: "60vh" }} />
-  );
+  // Server-rendered and hydrated — no mount gate. survey-core guards all DOM
+  // access, so the model builds and <Survey> renders to HTML during Next's
+  // prerender (unlike the Creator, which stays client-only).
+  return <Survey model={model} />;
 }

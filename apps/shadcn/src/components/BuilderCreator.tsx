@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { slk } from "survey-core";
 import { SurveyCreator, SurveyCreatorComponent } from "survey-creator-react";
 import type { SurveyJSON } from "@bridge/schemas";
 
@@ -23,6 +24,11 @@ import type { SurveyJSON } from "@bridge/schemas";
 // the light/dark toggle and the visual-style switcher.
 import "survey-core/survey-core.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
+
+// Register the SurveyJS commercial license so the Creator runs without the
+// unlicensed nag/watermark. Set once at module load — before any Creator is
+// constructed — and shared verbatim across all bridge apps.
+slk("ZG9tYWluczpzdXJ2ZXlqcy5pbyxzdXJ2ZXlqc25leHQsbG9jYWxob3N0OzE9MjAzNi0wMy0yNywyPTIwMzYtMDMtMjcsND0yMDM2LTAzLTI3LDg9MjAzNi0wMy0yNw==");
 
 /**
  * Mounts the SurveyJS V3 Creator on the Builder route, seeded with a shared

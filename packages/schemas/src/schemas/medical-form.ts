@@ -18,7 +18,6 @@ export const medicalFormJson: SurveyJSON = {
   progressBarType: "pages",
   progressBarShowPageTitles: true,
   progressBarShowPageNumbers: true,
-  showQuestionNumbers: "off",
   widthMode: "responsive",
   questionErrorLocation: "bottom",
   pages: [

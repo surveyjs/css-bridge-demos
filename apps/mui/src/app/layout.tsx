@@ -11,7 +11,7 @@ import { AdminShell } from "@/components/AdminShell";
 
 export const metadata: Metadata = {
   title: "SurveyJS Bridge — MUI",
-  description: "SurveyJS V3 CSS bridge demo (MUI).",
+  description: "SurveyJS V3 theme adapter demo (MUI).",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

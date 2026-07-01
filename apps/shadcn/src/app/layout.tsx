@@ -8,7 +8,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "SurveyJS Bridge — shadcn/ui",
-  description: "SurveyJS V3 CSS bridge demo (shadcn/ui).",
+  description: "SurveyJS V3 theme adapter demo (shadcn/ui).",
 };
 
 // Pre-paint theming bootstrap. Runs before React hydrates and before paint:

@@ -23,7 +23,7 @@ import "survey-core/survey-core.min.css";
 import "survey-core/themes/adapters/mui.min.css";
 
 /**
- * Renders a SurveyJS V3 model with the MUI CSS bridge applied.
+ * Renders a SurveyJS V3 model with the MUI theme adapter applied.
  *
  * CSS-only: it imports the bridge stylesheet and renders the headless model from
  * `@bridge/schemas` through the stock `survey-react-ui` <Survey> — no component

@@ -9,7 +9,7 @@ import { themeBootstrapScript } from "@/lib/themes";
 
 export const metadata: Metadata = {
   title: "SurveyJS Bridge — Bootstrap",
-  description: "SurveyJS V3 CSS bridge demo (Bootstrap).",
+  description: "SurveyJS V3 theme adapter demo (Bootstrap).",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

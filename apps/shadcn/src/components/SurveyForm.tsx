@@ -20,7 +20,7 @@ import { FormCompleted } from "./FormCompleted";
 import "survey-core/survey-core.min.css";
 
 /**
- * Renders a SurveyJS V3 model with the shadcn CSS bridge applied.
+ * Renders a SurveyJS V3 model with the shadcn theme adapter applied.
  *
  * CSS-only: it imports the bridge stylesheets and renders the headless model
  * from `@bridge/schemas` through the stock `survey-react-ui` <Survey> — no

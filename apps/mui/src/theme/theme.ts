@@ -9,7 +9,7 @@ import { palettes, type PalettePreset, type SchemeMode } from "./palettes";
  * `cssVariables: true` is MANDATORY and load-bearing: it makes MUI emit its
  * tokens (`--mui-palette-*`, `--mui-shape-*`, `--mui-shadows-*`, …) as real CSS
  * custom properties on the document. The shell renders from those today, and the
- * eventual SurveyJS CSS bridge maps onto the exact same variables — so the form
+ * eventual SurveyJS theme adapter maps onto the exact same variables — so the form
  * will re-theme for free when the chrome does. (Validated in the Prompt 0 spike.)
  *
  * `colorSchemeSelector: "class"` pairs with `<InitColorSchemeScript attribute="class">`

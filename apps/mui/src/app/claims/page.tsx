@@ -6,7 +6,7 @@ import { FormMetricsFooter } from "@/components/FormMetricsFooter";
 
 /**
  * First (and, for this stage, only) route wired to SurveyJS — the proof point
- * for the MUI CSS bridge. The medical/insurance schema comes from
+ * for the MUI theme adapter. The medical/insurance schema comes from
  * `@bridge/schemas` unchanged; styling is CSS-only via survey-core/themes/adapters.
  *
  * The native-controls column sits beside the form (equal width) so the bridge's

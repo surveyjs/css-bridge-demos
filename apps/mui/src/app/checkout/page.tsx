@@ -5,7 +5,7 @@ import { SurveyForm } from "@/components/SurveyForm";
 /**
  * Checkout — the clean parity page. A single SurveyJS multi-page wizard
  * (per-page validation + masked card/expiry inputs) rendered straight through
- * the MUI CSS bridge. The schema comes from `@bridge/schemas` unchanged; there
+ * the MUI theme adapter. The schema comes from `@bridge/schemas` unchanged; there
  * is nothing app-specific here beyond the MUI chrome around the form.
  */
 export default function CheckoutPage() {

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "packageManager": "npm@11.12.1",
-  "description": "SurveyJS V3 CSS bridge demos (Bootstrap, shadcn, MUI) over a single shared schema package.",
+  "description": "SurveyJS V3 theme adapter demos (Bootstrap, shadcn, MUI) over a single shared schema package.",
   "workspaces": [
     "packages/*",
     "apps/*"

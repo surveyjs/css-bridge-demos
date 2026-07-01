@@ -3,7 +3,7 @@
  * "radius"; see https://ui.shadcn.com/create). Each entry overrides ONLY the
  * `--radius` token on <html> via the `data-shadcn-radius` attribute (see
  * src/app/globals.css); the whole `--radius-sm…4xl` scale derives from it, so
- * the chrome AND the survey bridge (which reads `--radius` through `var()`)
+ * the chrome AND the survey adapter (which reads `--radius` through `var()`)
  * re-round together. It composes with style × base color: those set the
  * palette + geometry presets, an explicit radius here overrides just the corner
  * rounding. Mirrors src/lib/styles.ts / src/lib/baseColors.ts.

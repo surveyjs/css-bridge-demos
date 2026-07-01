@@ -2,7 +2,7 @@
  * App-local theme catalog for the Bootstrap shell chrome.
  *
  * This is host chrome config (an allowed per-app concern), not shared model
- * state, so it lives in the app rather than `@bridge/schemas`.
+ * state, so it lives in the app rather than `@adapter/schemas`.
  *
  * Two independent axes:
  *  - `mode`  — light / dark, applied via `data-bs-theme` on <html>.
@@ -33,8 +33,8 @@ export const colorThemes: readonly ColorTheme[] = [
 export const DEFAULT_THEME: ColorThemeId = "default";
 export const DEFAULT_MODE: ColorMode = "light";
 
-export const THEME_STORAGE_KEY = "bridge:theme";
-export const MODE_STORAGE_KEY = "bridge:mode";
+export const THEME_STORAGE_KEY = "adapter:theme";
+export const MODE_STORAGE_KEY = "adapter:mode";
 
 const themeIds = colorThemes.map((t) => t.id);
 
@@ -50,7 +50,7 @@ export function themeHref(id: ColorThemeId): string {
   return `/themes/${id}.css`;
 }
 
-export const THEME_LINK_ID = "bridge-theme-css";
+export const THEME_LINK_ID = "adapter-theme-css";
 
 /**
  * Inline script (runs before paint, before React hydrates) that reads the

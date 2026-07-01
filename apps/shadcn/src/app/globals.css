@@ -134,7 +134,7 @@
    `[data-shadcn-style="x"].dark` (next-themes puts `.dark` on the SAME <html>
    element, so the compound selector out-specifies the bare `.dark` block).
 
-   Every token a style overrides here is one the Prompt-2 survey bridge reads
+   Every token a style overrides here is one the Prompt-2 survey adapter reads
    back through `var(--…)` (--radius, --primary, --ring, …), keeping the chrome
    and the SurveyJS form paired across styles. "default" needs no block — it IS
    the neutral base above.
@@ -143,7 +143,7 @@
 /* Visual-style CORNER tokens. Each style is a vendored component set under
    src/components/ui/styles/<id>/ (its own Button/Input with baked control
    heights), but corner radius stays a shared CSS variable — the component sets'
-   rounded-* utilities AND the survey bridge both derive from --radius, so corners
+   rounded-* utilities AND the survey adapter both derive from --radius, so corners
    match across the two columns and are flash-free (the pre-paint inline script
    sets data-shadcn-style before paint). Control DENSITY lives in the vendored
    sets (height N = the style's survey adapter --sjs2-shadcn-input-height). Radius
@@ -198,7 +198,7 @@
 /* ──────────────────────────────────────────────────────────────────────────
    Base-color presets — the SECOND, independent theming axis (native shadcn
    "base color": https://ui.shadcn.com/docs/theming). PURE COLOR: each block
-   overrides only the palette tokens the Prompt-2 survey bridge already reads
+   overrides only the palette tokens the Prompt-2 survey adapter already reads
    through `var(--…)` — it sets NO geometry (`--radius` stays the visual-style
    axis's job), so style × base color compose freely. Scoped under the
    `data-shadcn-base-color` attribute on <html>; light values sit on
@@ -486,7 +486,7 @@
    Theme (accent) presets — the FOURTH, independent theming axis (the chromatic
    "themes" from shadcn's customizer: https://ui.shadcn.com/themes). Where the
    base-color axis above swaps the NEUTRAL surfaces, each block here overrides
-   ONLY the ACCENT tokens the Prompt-2 survey bridge reads through `var(--…)`:
+   ONLY the ACCENT tokens the Prompt-2 survey adapter reads through `var(--…)`:
    `--primary` / `--primary-foreground` / `--ring` and their `--sidebar-*` twins.
    It sets NO surfaces and NO geometry, so base color × theme compose — base
    color picks the greys, theme tints the accent on top.
@@ -630,7 +630,7 @@
    Radius presets — the THIRD, independent theming axis (native shadcn
    "radius": https://ui.shadcn.com/create). Each block overrides ONLY `--radius`
    — the corner-rounding token the whole `--radius-sm…4xl` scale above (and the
-   Prompt-2 survey bridge) derive from. Scoped under the `data-shadcn-radius`
+   Prompt-2 survey adapter) derive from. Scoped under the `data-shadcn-radius`
    attribute on <html> and placed AFTER the visual-style block on purpose: an
    explicit radius ties the style selectors on specificity, so source order lets
    it WIN and override the style's own --radius. Mode-independent (radius does

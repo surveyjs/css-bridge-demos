@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { slk } from "survey-core";
 import { SurveyCreator, SurveyCreatorComponent } from "survey-creator-react";
-import type { SurveyJSON } from "@bridge/schemas";
+import type { SurveyJSON } from "@adapter/schemas";
 
 // Layering, bottom → top, mirrors SurveyForm:
 //   1. survey-core base      — the headless library's V3 stylesheet
@@ -13,11 +13,11 @@ import type { SurveyJSON } from "@bridge/schemas";
 //   3. the shadcn adapter    — loaded from survey-core/themes/adapters by
 //                              <ShadcnSurveyAdapterStyles /> (ThemeProvider).
 //
-// KEY INSIGHT (prompt 4): there is intentionally NO separate Creator bridge.
+// KEY INSIGHT (prompt 4): there is intentionally NO separate Creator adapter.
 // The Creator emits the same `.sjs-theme-overrides` theme root the form does, so
-// the existing form bridge's variable overrides cascade into the Creator chrome
+// the existing form adapter's variable overrides cascade into the Creator chrome
 // (toolbar, tabs, toolbox, property grid, designer surface) automatically. This
-// file authors zero new bridge CSS. The shadcn tokens the bridge reads
+// file authors zero new adapter CSS. The shadcn tokens the adapter reads
 // (--background, --primary, --border, --ring, --radius, …) live on <html> under
 // `.dark` and `[data-shadcn-style="…"]`, and the Creator renders in that same
 // subtree (ThemeProvider → AdminShell), so it re-themes in lockstep with both
@@ -27,15 +27,15 @@ import "survey-creator-core/survey-creator-core.min.css";
 
 // Register the SurveyJS commercial license so the Creator runs without the
 // unlicensed nag/watermark. Set once at module load — before any Creator is
-// constructed — and shared verbatim across all bridge apps.
+// constructed — and shared verbatim across all adapter apps.
 slk("ZG9tYWluczpzdXJ2ZXlqcy5pbyxzdXJ2ZXlqc25leHQsbG9jYWxob3N0OzE9MjAzNi0wMy0yNywyPTIwMzYtMDMtMjcsND0yMDM2LTAzLTI3LDg9MjAzNi0wMy0yNw==");
 
 /**
  * Mounts the SurveyJS V3 Creator on the Builder route, seeded with a shared
- * schema from `@bridge/schemas` so the builder edits the very same definition
+ * schema from `@adapter/schemas` so the builder edits the very same definition
  * the other routes render.
  *
- * CSS-only, like the rest of the shadcn bridge: it renders the stock
+ * CSS-only, like the rest of the shadcn adapter: it renders the stock
  * `survey-creator-react` component with no renderer/component overrides and no
  * Creator-specific theme code. Re-theming rides entirely on the shared
  * `--sjs2-*` overrides resolving against the active shadcn tokens.
@@ -54,7 +54,7 @@ export function BuilderCreator({ json }: { json: SurveyJSON }) {
       showJSONEditorTab: true,
       showLogicTab: true,
       showTranslationTab: true,
-      // Persisting is out of scope for the bridge proof — no save handler.
+      // Persisting is out of scope for the adapter proof — no save handler.
       isAutoSave: false,
     });
     instance.JSON = json;

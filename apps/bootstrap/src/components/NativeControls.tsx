@@ -2,12 +2,12 @@
 
 import { useRef, useState, type ChangeEvent, type FormEvent, type PointerEvent } from "react";
 import { Alert, Button, Card, Col, Form, ProgressBar, Row, Table } from "react-bootstrap";
-import { medicalFormJson, medicalFormSample } from "@bridge/schemas";
+import { medicalFormJson, medicalFormSample } from "@adapter/schemas";
 import { FormCompleted } from "./FormCompleted";
 
 /**
  * Hand-built react-bootstrap twin of the SurveyJS medical-intake form
- * (`medicalFormJson` in @bridge/schemas), grouped into the SAME four sections —
+ * (`medicalFormJson` in @adapter/schemas), grouped into the SAME four sections —
  * Patient, Insurance, History, Consent — and PAGED into them as a wizard to
  * match the SurveyJS form's `showProgressBar` / `progressBarType: "pages"`.
  *

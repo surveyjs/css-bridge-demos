@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { Survey } from "survey-react-ui";
-import { allQuestionsSchema, createSurveyModel } from "@bridge/schemas";
+import { allQuestionsSchema, createSurveyModel } from "@adapter/schemas";
 import { useAllQuestionsMode } from "./AllQuestionsMode";
 import { useBorderlessMode } from "./BorderlessMode";
 
@@ -11,10 +11,10 @@ import { useBorderlessMode } from "./BorderlessMode";
 import "survey-core/survey-core.min.css";
 
 /**
- * All-questions gallery — the bridge's widest fidelity sweep. Builds ONE
+ * All-questions gallery — the adapter's widest fidelity sweep. Builds ONE
  * survey-core model from the shared `all-questions` schema (showTOC is in the
  * JSON) and renders it through the stock `survey-react-ui` <Survey>, styled by
- * the existing shadcn bridge. No component swaps, no custom renderers.
+ * the existing shadcn adapter. No component swaps, no custom renderers.
  *
  * The read-only ⇄ editable switch is host chrome (a native shadcn/ui <Switch>)
  * that lives in the top menu (AllQuestionsToggle), shared with this page through

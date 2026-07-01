@@ -1,5 +1,5 @@
 /**
- * @bridge/schemas — single source of truth for SurveyJS V3 across all bridge demos.
+ * @adapter/schemas — single source of truth for SurveyJS V3 across all adapter demos.
  *
  * Renderer-agnostic: depends on `survey-core` only. Apps consume these exports
  * and never copy or redefine schemas.

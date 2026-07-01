@@ -4,7 +4,7 @@
  *
  * Each entry is a PURE-COLOR token preset applied to <html> via the
  * `data-shadcn-base-color` attribute (see src/app/globals.css). It only changes
- * the palette tokens the survey bridge already reads through `var()` — it sets
+ * the palette tokens the survey adapter already reads through `var()` — it sets
  * NO geometry (`--radius` stays the visual-style axis's job), so the two axes
  * compose: style sets geometry, base color sets the palette. Mirrors
  * src/lib/styles.ts. "neutral" is the default (the :root/.dark base palette).

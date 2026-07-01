@@ -6,11 +6,11 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { navItems } from "@bridge/schemas";
+import { navItems } from "@adapter/schemas";
 
 /**
  * Landing page. A native-MUI dashboard of cards, one per shared IA route.
- * Cards are driven by `navItems` from @bridge/schemas (no local route list).
+ * Cards are driven by `navItems` from @adapter/schemas (no local route list).
  */
 export default function HomePage() {
   return (

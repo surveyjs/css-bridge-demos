@@ -8,12 +8,12 @@ import {
   type SchemaInput,
   type SurveyData,
   type SurveyMode,
-} from "@bridge/schemas";
+} from "@adapter/schemas";
 import { useBorderlessMode } from "./BorderlessMode";
 import { FormCompleted } from "./FormCompleted";
 
 // Base V3 CSS FIRST, then the shadcn adapter from survey-core ON TOP so the
-// bridge's `--sjs2-*` overrides win by source order. The active visual-style
+// adapter's `--sjs2-*` overrides win by source order. The active visual-style
 // bundle is loaded by <ShadcnSurveyAdapterStyles /> (see ThemeProvider) and
 // tracks `data-shadcn-style` on <html>; light/dark flips shadcn tokens via
 // `.dark` on the same root.
@@ -22,8 +22,8 @@ import "survey-core/survey-core.min.css";
 /**
  * Renders a SurveyJS V3 model with the shadcn theme adapter applied.
  *
- * CSS-only: it imports the bridge stylesheets and renders the headless model
- * from `@bridge/schemas` through the stock `survey-react-ui` <Survey> — no
+ * CSS-only: it imports the adapter stylesheets and renders the headless model
+ * from `@adapter/schemas` through the stock `survey-react-ui` <Survey> — no
  * component swaps, no custom renderer registration.
  */
 export function SurveyForm({
@@ -59,7 +59,7 @@ export function SurveyForm({
   // Optional "Prefill demo data" custom button. Added to the survey's OWN
   // navigation bar through the public `addNavigationItem` API (it renders a
   // stock `sv-nav-btn` — host-level use of the model API, NOT a renderer/
-  // component override, so the bridge stays CSS-only). One click fills every
+  // component override, so the adapter stays CSS-only). One click fills every
   // page's answers so the end-user can page straight through without typing;
   // `mergeData` keeps anything already entered and fills the rest. Re-added if
   // the model is rebuilt (schema/data/mode change).
@@ -88,7 +88,7 @@ export function SurveyForm({
   // On completion, hide the SurveyJS widget and show our own success screen
   // (matching the native column's submitted state) instead of the model's
   // default completed page. This is host-level React reacting to a model
-  // event — NOT a SurveyJS renderer/component override, so the bridge stays
+  // event — NOT a SurveyJS renderer/component override, so the adapter stays
   // CSS-only. Reset when the model is rebuilt (schema/data/mode change).
   const [completed, setCompleted] = useState(false);
   useEffect(() => setCompleted(false), [model]);

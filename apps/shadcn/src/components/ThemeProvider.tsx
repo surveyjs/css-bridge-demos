@@ -18,7 +18,7 @@ import { ShadcnSurveyAdapterStyles } from "./ShadcnSurveyAdapterStyles";
  *
  * The axes are non-overlapping (geometry vs. neutral surfaces vs. accent hue vs.
  * corner radius), so they compose freely. No SurveyJS-specific code lives here —
- * it's pure host chrome. The Prompt-2 bridge re-themes the survey through these
+ * it's pure host chrome. The Prompt-2 adapter re-themes the survey through these
  * same variables for free.
  */
 export function ThemeProvider({ children }: { children: ReactNode }) {

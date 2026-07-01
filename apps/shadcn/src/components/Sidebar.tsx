@@ -10,12 +10,12 @@ import {
   LayoutGridIcon,
   type LucideIcon,
 } from "lucide-react";
-import { navItems, type NavId } from "@bridge/schemas";
+import { navItems, type NavId } from "@adapter/schemas";
 import { cn } from "@/lib/utils";
 
 /**
  * Sidebar navigation. The item list comes straight from the shared IA
- * (`navItems` in @bridge/schemas) — no local copy, identical order — so the
+ * (`navItems` in @adapter/schemas) — no local copy, identical order — so the
  * Bootstrap, shadcn, and MUI shells expose the identical routes. Only the icon
  * mapping (pure host chrome) is app-local.
  */

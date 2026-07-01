@@ -70,9 +70,9 @@ const BUILD_DIRS = {
   "survey-creator-react": resolve(base, "survey-creator/packages/survey-creator-react/build"),
 };
 
-// Watch node_modules only for our linked survey-* builds + @bridge/schemas.
+// Watch node_modules only for our linked survey-* builds + @adapter/schemas.
 const IGNORE_NODE_MODULES_EXCEPT_LINKED =
-  /[\\/]node_modules[\\/](?!(survey-core|survey-react-ui|survey-creator-core|survey-creator-react)([\\/]|$)|@bridge[\\/]schemas([\\/]|$))/;
+  /[\\/]node_modules[\\/](?!(survey-core|survey-react-ui|survey-creator-core|survey-creator-react)([\\/]|$)|@adapter[\\/]schemas([\\/]|$))/;
 
 /** Build dirs from BUILD_DIRS that don't exist on disk. */
 function missingSurveyBuilds() {

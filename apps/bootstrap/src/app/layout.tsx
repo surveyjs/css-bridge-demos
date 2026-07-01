@@ -8,7 +8,7 @@ import { BorderlessModeProvider } from "@/components/BorderlessMode";
 import { themeBootstrapScript } from "@/lib/themes";
 
 export const metadata: Metadata = {
-  title: "SurveyJS Bridge — Bootstrap",
+  title: "SurveyJS Adapter — Bootstrap",
   description: "SurveyJS V3 theme adapter demo (Bootstrap).",
 };
 
@@ -20,13 +20,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         {/*
           No-flash theme bootstrap. Runs before hydration and IMPERATIVELY creates
-          the swappable theme stylesheet <link> (id="bridge-theme-css") + sets
+          the swappable theme stylesheet <link> (id="adapter-theme-css") + sets
           light/dark. The stylesheet is owned outside React (ThemeProvider mutates
           the same element), so nothing theme-related is server-rendered into
           <head> — avoiding hydration mismatches with Next's injected meta tags.
           react-bootstrap ships no CSS; that stylesheet IS the Bootstrap layer.
         */}
-        <Script id="bridge-theme-bootstrap" strategy="beforeInteractive">
+        <Script id="adapter-theme-bootstrap" strategy="beforeInteractive">
           {themeBootstrapScript()}
         </Script>
         <ThemeProvider>

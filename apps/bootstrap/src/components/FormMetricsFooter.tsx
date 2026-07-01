@@ -15,7 +15,7 @@
  * invariant.
  *
  * Copy (row text, summary, caption) is shared across all apps via
- * `@bridge/schemas`; this component owns only the Bootstrap markup.
+ * `@adapter/schemas`; this component owns only the Bootstrap markup.
  */
 
 import {
@@ -24,7 +24,7 @@ import {
   FORM_METRICS_SUMMARY,
   FORM_METRICS_SURVEYJS_LABEL,
   type FormMetricsInput,
-} from "@bridge/schemas";
+} from "@adapter/schemas";
 
 export function FormMetricsFooter(props: FormMetricsInput) {
   const rows = buildFormMetricsRows(props);

@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Nav } from "react-bootstrap";
-import { navItems } from "@bridge/schemas";
+import { navItems } from "@adapter/schemas";
 
 /**
  * Sidebar navigation. The item list comes straight from the shared IA
- * (`navItems` in @bridge/schemas) — no local copy — so the Bootstrap, shadcn,
+ * (`navItems` in @adapter/schemas) — no local copy — so the Bootstrap, shadcn,
  * and MUI shells all expose the identical routes.
  */
 export function Sidebar() {

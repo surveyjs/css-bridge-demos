@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { routes } from "@bridge/schemas";
+import { routes } from "@adapter/schemas";
 import MenuIcon from "@mui/icons-material/Menu";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import AppBar from "@mui/material/AppBar";
@@ -42,7 +42,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
     <Toolbar sx={{ gap: 1 }}>
       <WidgetsIcon color="primary" />
       <Typography variant="h6" noWrap sx={{ fontWeight: 700, flexGrow: 1 }}>
-        SurveyJS Bridge
+        SurveyJS Adapter
       </Typography>
     </Toolbar>
   );
@@ -72,7 +72,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           </IconButton>
           <WidgetsIcon color="primary" sx={{ display: { xs: "none", md: "block" } }} />
           <Typography variant="h6" noWrap sx={{ fontWeight: 700 }}>
-            SurveyJS Bridge
+            SurveyJS Adapter
           </Typography>
           <Chip label="MUI" color="primary" size="small" sx={{ ml: 1 }} />
           <Box sx={{ flexGrow: 1 }} />

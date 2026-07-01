@@ -8,7 +8,7 @@ import type { SchemaDefinition, SurveyJSON } from "../types";
  *
  * Page `name`/`title` mirror the toolbox category titles verbatim (from
  * survey-creator-core's `toolboxCategories`); membership/order mirror its
- * `defaultCategories`. This is the widest the bridge ever gets exercised — a
+ * `defaultCategories`. This is the widest the adapter ever gets exercised — a
  * deliberate fidelity catalog, not a real form.
  *
  * Renderer-agnostic, like every schema here: these are plain `survey-core`
@@ -301,6 +301,6 @@ export const allQuestionsSchema: SchemaDefinition = {
   id: "all-questions",
   title: "All Questions Gallery",
   description:
-    "Every SurveyJS V3 question type, grouped into TOC pages that mirror the Creator toolbox categories — the broadest bridge-fidelity sweep.",
+    "Every SurveyJS V3 question type, grouped into TOC pages that mirror the Creator toolbox categories — the broadest adapter-fidelity sweep.",
   json: allQuestionsJson,
 };

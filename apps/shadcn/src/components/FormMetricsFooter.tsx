@@ -12,7 +12,7 @@ import {
   FORM_METRICS_SUMMARY,
   FORM_METRICS_SURVEYJS_LABEL,
   type FormMetricsInput,
-} from "@bridge/schemas";
+} from "@adapter/schemas";
 
 /**
  * "Code cost" comparison footer rendered ONCE below both /claims columns.
@@ -30,7 +30,7 @@ import {
  * per-route page header, so it does not violate the "no page header" invariant.
  *
  * Copy (row text, summary, caption) is shared across all apps via
- * `@bridge/schemas`; this component owns only the shadcn markup.
+ * `@adapter/schemas`; this component owns only the shadcn markup.
  */
 
 export function FormMetricsFooter(props: FormMetricsInput) {

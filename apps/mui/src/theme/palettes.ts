@@ -2,7 +2,7 @@
  * App-local palette catalog for the MUI shell chrome.
  *
  * This is host chrome config (an allowed per-app concern), not shared model
- * state, so it lives in the app rather than `@bridge/schemas`.
+ * state, so it lives in the app rather than `@adapter/schemas`.
  *
  * Two independent axes, both driven by MUI's NATIVE color-scheme system
  * (no hand-rolled data attributes):

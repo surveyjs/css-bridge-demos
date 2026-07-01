@@ -7,7 +7,7 @@ import { BorderlessModeProvider } from "@/components/BorderlessMode";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SurveyJS Bridge — shadcn/ui",
+  title: "SurveyJS Adapter — shadcn/ui",
   description: "SurveyJS V3 theme adapter demo (shadcn/ui).",
 };
 

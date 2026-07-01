@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { Form } from "react-bootstrap";
-import { routes } from "@bridge/schemas";
+import { routes } from "@adapter/schemas";
 import { useBorderlessMode } from "./BorderlessMode";
 
 /**

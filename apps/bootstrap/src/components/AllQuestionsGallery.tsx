@@ -2,20 +2,20 @@
 
 import { useEffect, useMemo } from "react";
 import { Survey } from "survey-react-ui";
-import { allQuestionsSchema, createSurveyModel } from "@bridge/schemas";
+import { allQuestionsSchema, createSurveyModel } from "@adapter/schemas";
 import { useAllQuestionsMode } from "./AllQuestionsMode";
 import { useBorderlessMode } from "./BorderlessMode";
 
-// Same import order as SurveyForm: base V3 CSS first, Bootstrap bridge on top.
-// This page adds NO bridge code — it reuses the existing stylesheet verbatim.
+// Same import order as SurveyForm: base V3 CSS first, Bootstrap adapter on top.
+// This page adds NO adapter code — it reuses the existing stylesheet verbatim.
 import "survey-core/survey-core.min.css";
 import "survey-core/themes/adapters/bootstrap.min.css";
 
 /**
- * All-questions gallery — the bridge's widest fidelity sweep. Builds ONE
+ * All-questions gallery — the adapter's widest fidelity sweep. Builds ONE
  * survey-core model from the shared `all-questions` schema (showTOC is in the
  * JSON) and renders it through the stock `survey-react-ui` <Survey>, styled by
- * the existing Bootstrap bridge. No component swaps, no custom renderers.
+ * the existing Bootstrap adapter. No component swaps, no custom renderers.
  *
  * The read-only ⇄ editable switch is host chrome (a native react-bootstrap
  * <Form.Switch>) that lives in the top menu (AllQuestionsToggle), shared with

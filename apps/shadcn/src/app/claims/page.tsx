@@ -1,4 +1,4 @@
-import { medicalFormJson, medicalFormSchema, medicalFormSample } from "@bridge/schemas";
+import { medicalFormJson, medicalFormSchema, medicalFormSample } from "@adapter/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
 import { NativeControls } from "@/components/NativeControls";
 import { FormMetricsFooter } from "@/components/FormMetricsFooter";
@@ -6,9 +6,9 @@ import { FormMetricsFooter } from "@/components/FormMetricsFooter";
 /**
  * First (and, for this stage, only) route wired to SurveyJS — the proof point
  * for the shadcn theme adapter. The medical/insurance schema comes from
- * `@bridge/schemas` unchanged; styling is CSS-only via survey-core/themes/adapters.
+ * `@adapter/schemas` unchanged; styling is CSS-only via survey-core/themes/adapters.
  *
- * The native-controls column sits beside the form (equal width) so the bridge's
+ * The native-controls column sits beside the form (equal width) so the adapter's
  * fidelity is verifiable by eye and re-themes in lockstep with the chrome. A
  * single "code cost" comparison footer below both columns makes the demo's
  * thesis measurable: SurveyJS reaches the form with a tiny, reusable renderer +

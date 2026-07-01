@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { routes } from "@bridge/schemas";
+import { routes } from "@adapter/schemas";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useAllQuestionsMode } from "./AllQuestionsMode";

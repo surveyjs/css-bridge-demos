@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { Card, Col, Row } from "react-bootstrap";
-import { navItems } from "@bridge/schemas";
+import { navItems } from "@adapter/schemas";
 
 /**
  * Landing page. A native-Bootstrap dashboard of cards, one per shared IA route.
- * Cards are driven by `navItems` from @bridge/schemas (no local route list).
+ * Cards are driven by `navItems` from @adapter/schemas (no local route list).
  */
 export default function HomePage() {
   return (

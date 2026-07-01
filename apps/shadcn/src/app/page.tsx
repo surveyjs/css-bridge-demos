@@ -9,11 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { navItems } from "@bridge/schemas";
+import { navItems } from "@adapter/schemas";
 
 /**
  * Landing page. A native-shadcn dashboard of cards, one per shared IA route.
- * Cards are driven by `navItems` from @bridge/schemas (no local route list).
+ * Cards are driven by `navItems` from @adapter/schemas (no local route list).
  */
 export default function HomePage() {
   return (

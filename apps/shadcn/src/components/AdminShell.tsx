@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { routes } from "@bridge/schemas";
+import { routes } from "@adapter/schemas";
 import { MenuIcon, LayersIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +34,7 @@ function Brand() {
       <span className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-md">
         <LayersIcon className="size-4" />
       </span>
-      <span className="text-sm font-semibold">SurveyJS Bridge</span>
+      <span className="text-sm font-semibold">SurveyJS Adapter</span>
       <span className="bg-secondary text-secondary-foreground rounded-full px-2 py-0.5 text-xs font-medium">
         shadcn
       </span>

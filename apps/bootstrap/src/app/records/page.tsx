@@ -7,7 +7,7 @@ import {
   insuranceClaimSeed,
   type ClaimRecord,
   type SurveyData,
-} from "@bridge/schemas";
+} from "@adapter/schemas";
 import { SurveyForm } from "@/components/SurveyForm";
 
 /** CRUD lifecycle off ONE schema: create / edit drive an edit-mode form,
@@ -47,8 +47,8 @@ function claimantName(data: SurveyData): string {
 /**
  * Records — CRUD over the insurance-claim entity. The list is a native
  * react-bootstrap `<Table>`; SurveyJS owns ONLY the form on the right, rendered
- * through the same Bootstrap bridge as every other page. Create/edit/delete
- * mutate the in-memory `records` state (seeded from `@bridge/schemas`), and all
+ * through the same Bootstrap adapter as every other page. Create/edit/delete
+ * mutate the in-memory `records` state (seeded from `@adapter/schemas`), and all
  * four lifecycle operations run off the single `insuranceClaimSchema`.
  */
 export default function RecordsPage() {

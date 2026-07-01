@@ -3,33 +3,33 @@
 import { useEffect, useState } from "react";
 import { slk } from "survey-core";
 import { SurveyCreator, SurveyCreatorComponent } from "survey-creator-react";
-import type { SurveyJSON } from "@bridge/schemas";
+import type { SurveyJSON } from "@adapter/schemas";
 
 // Layering, bottom → top, mirrors SurveyForm:
 //   1. survey-core base      — the headless library's V3 stylesheet
 //   2. survey-creator-core   — the Creator chrome, built ON TOP of (1) and
 //                              consuming the SAME `--sjs2-*` custom properties
-//   3. the Bootstrap bridge  — maps `--sjs2-* → --bs-*` on `.sjs-theme-overrides`
+//   3. the Bootstrap adapter  — maps `--sjs2-* → --bs-*` on `.sjs-theme-overrides`
 //
-// KEY INSIGHT (prompt 5): there is intentionally NO separate Creator bridge.
+// KEY INSIGHT (prompt 5): there is intentionally NO separate Creator adapter.
 // The Creator emits the same `.sd-theme-root` theme root the form does, so the
-// existing form bridge's variable overrides are expected to cascade into the
-// Creator chrome automatically. This file authors zero new bridge CSS.
+// existing form adapter's variable overrides are expected to cascade into the
+// Creator chrome automatically. This file authors zero new adapter CSS.
 import "survey-core/survey-core.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
 import "survey-core/themes/adapters/bootstrap.min.css";
 
 // Register the SurveyJS commercial license so the Creator runs without the
 // unlicensed nag/watermark. Set once at module load — before any Creator is
-// constructed — and shared verbatim across all bridge apps.
+// constructed — and shared verbatim across all adapter apps.
 slk("ZG9tYWluczpzdXJ2ZXlqcy5pbyxzdXJ2ZXlqc25leHQsbG9jYWxob3N0OzE9MjAzNi0wMy0yNywyPTIwMzYtMDMtMjcsND0yMDM2LTAzLTI3LDg9MjAzNi0wMy0yNw==");
 
 /**
  * Mounts the SurveyJS V3 Creator on the Builder route, seeded with a shared
- * schema from `@bridge/schemas` so the builder edits the very same definition
+ * schema from `@adapter/schemas` so the builder edits the very same definition
  * the other routes render.
  *
- * CSS-only, like the rest of the Bootstrap bridge: it renders the stock
+ * CSS-only, like the rest of the Bootstrap adapter: it renders the stock
  * `survey-creator-react` component with no renderer/component overrides and no
  * Creator-specific theme code. Re-theming rides entirely on the shared
  * `--sjs2-*` overrides changing with the Bootstrap theme.
@@ -48,7 +48,7 @@ export function BuilderCreator({ json }: { json: SurveyJSON }) {
       showJSONEditorTab: true,
       showLogicTab: true,
       showTranslationTab: true,
-      // Persisting is out of scope for the bridge proof — no save handler.
+      // Persisting is out of scope for the adapter proof — no save handler.
       isAutoSave: false,
     });
     instance.JSON = json;

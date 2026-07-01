@@ -8,13 +8,13 @@ import {
   type SchemaInput,
   type SurveyData,
   type SurveyMode,
-} from "@bridge/schemas";
+} from "@adapter/schemas";
 import { useBorderlessMode } from "./BorderlessMode";
 import { FormCompleted } from "./FormCompleted";
 
-// Base V3 CSS FIRST, then the MUI bridge ON TOP so the bridge's `--sjs2-*`
+// Base V3 CSS FIRST, then the MUI adapter ON TOP so the adapter's `--sjs2-*`
 // overrides (declared on the same `.sjs-theme-overrides` root that survey-core
-// emits) win by source order. The bridge maps those variables onto MUI `--mui-*`
+// emits) win by source order. The adapter maps those variables onto MUI `--mui-*`
 // tokens — there is NO SurveyJS-specific theme code: the form re-skins
 // automatically whenever the active MUI scheme/palette changes. The `--mui-*`
 // variables it reads exist only because the app's theme was built with
@@ -25,8 +25,8 @@ import "survey-core/themes/adapters/mui.min.css";
 /**
  * Renders a SurveyJS V3 model with the MUI theme adapter applied.
  *
- * CSS-only: it imports the bridge stylesheet and renders the headless model from
- * `@bridge/schemas` through the stock `survey-react-ui` <Survey> — no component
+ * CSS-only: it imports the adapter stylesheet and renders the headless model from
+ * `@adapter/schemas` through the stock `survey-react-ui` <Survey> — no component
  * swaps, no custom renderer registration.
  */
 export function SurveyForm({
@@ -62,7 +62,7 @@ export function SurveyForm({
   // Optional "Prefill demo data" custom button. Added to the survey's OWN
   // navigation bar through the public `addNavigationItem` API (it renders a
   // stock `sv-nav-btn` — host-level use of the model API, NOT a renderer/
-  // component override, so the bridge stays CSS-only). One click fills every
+  // component override, so the adapter stays CSS-only). One click fills every
   // page's answers so the end-user can page straight through without typing;
   // `mergeData` keeps anything already entered and fills the rest. Re-added if
   // the model is rebuilt (schema/data/mode change).
@@ -91,7 +91,7 @@ export function SurveyForm({
   // On completion, hide the SurveyJS widget and show our own success screen
   // (matching the native column's submitted state) instead of the model's
   // default completed page. This is host-level React reacting to a model
-  // event — NOT a SurveyJS renderer/component override, so the bridge stays
+  // event — NOT a SurveyJS renderer/component override, so the adapter stays
   // CSS-only. Reset when the model is rebuilt (schema/data/mode change).
   const [completed, setCompleted] = useState(false);
   useEffect(() => setCompleted(false), [model]);

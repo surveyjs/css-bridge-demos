@@ -25,12 +25,12 @@ import {
 import { cn } from "@/lib/utils";
 import { useStyle } from "@/components/StyleProvider";
 import { STYLE_INPUT_CLASS } from "@/components/ui/styles/style-input-class";
-import { medicalFormJson, medicalFormSample } from "@bridge/schemas";
+import { medicalFormJson, medicalFormSample } from "@adapter/schemas";
 import { FormCompleted } from "./FormCompleted";
 
 /**
  * Hand-built shadcn/ui twin of the SurveyJS medical-intake form
- * (`medicalFormJson` in @bridge/schemas), grouped into the SAME four sections —
+ * (`medicalFormJson` in @adapter/schemas), grouped into the SAME four sections —
  * Patient, Insurance, History, Consent — and PAGED into them as a wizard to
  * match the SurveyJS form's `showProgressBar` / `progressBarType: "pages"`.
  *

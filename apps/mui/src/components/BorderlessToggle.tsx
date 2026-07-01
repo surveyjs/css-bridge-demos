@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { routes } from "@bridge/schemas";
+import { routes } from "@adapter/schemas";
 import { useBorderlessMode } from "./BorderlessMode";
 
 /**

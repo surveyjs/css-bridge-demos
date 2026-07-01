@@ -27,9 +27,7 @@ export function AllQuestionsToggle() {
         checked={readOnly}
         onCheckedChange={setReadOnly}
       />
-      <span className="hidden sm:inline">
-        {readOnly ? "Read-only" : "Editable"}
-      </span>
+      <span className="hidden sm:inline">Read-only</span>
     </Label>
   );
 }

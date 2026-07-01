@@ -29,7 +29,7 @@ export function AllQuestionsToggle() {
           onChange={(e) => setReadOnly(e.target.checked)}
         />
       }
-      label={readOnly ? "Read-only" : "Editable"}
+      label="Read-only"
     />
   );
 }

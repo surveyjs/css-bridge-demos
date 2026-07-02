@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Survey } from "survey-react-ui";
+import type { Question } from "survey-core";
 import { Card } from "@/components/ui/card";
 import {
   createSurveyModel,
@@ -45,7 +46,7 @@ export function SurveyForm({
   completedMessage?: string;
   /**
    * When provided, a custom "Prefill demo data" button is added to the survey's
-   * navigation bar that fills every page's answers in one click.
+   * navigation bar that fills the current page's answers in one click.
    */
   prefillData?: SurveyData;
   /** Label for the prefill button (see `prefillData`). */
@@ -59,17 +60,28 @@ export function SurveyForm({
   // Optional "Prefill demo data" custom button. Added to the survey's OWN
   // navigation bar through the public `addNavigationItem` API (it renders a
   // stock `sv-nav-btn` — host-level use of the model API, NOT a renderer/
-  // component override, so the adapter stays CSS-only). One click fills every
-  // page's answers so the end-user can page straight through without typing;
-  // `mergeData` keeps anything already entered and fills the rest. Re-added if
-  // the model is rebuilt (schema/data/mode change).
+  // component override, so the adapter stays CSS-only). One click fills the
+  // answers on the CURRENT page only, leaving the other pages untouched so the
+  // end-user prefills each step as they reach it; `mergeData` keeps anything
+  // already entered and fills the rest. Re-added if the model is rebuilt
+  // (schema/data/mode change).
   useEffect(() => {
     if (!prefillData) return;
     const id = "sv-prefill-demo";
     model.addNavigationItem({
       id,
       title: prefillLabel,
-      action: () => model.mergeData(prefillData),
+      // Narrow the shared prefill object to the fields whose questions live on
+      // the current page, then merge just those.
+      action: () => {
+        const names = new Set(
+          model.currentPage.questions.map((q: Question) => q.getValueName()),
+        );
+        const pageData = Object.fromEntries(
+          Object.entries(prefillData).filter(([key]) => names.has(key)),
+        );
+        model.mergeData(pageData);
+      },
     });
     return () => {
       model.navigationBar.removeActionById(id);

@@ -250,31 +250,42 @@ export function NativeControls() {
   }
 
   // "Prefill demo data" — the native twin of the SurveyJS column's custom
-  // navigation button. SurveyJS prefills its whole model from one shared object
-  // (medicalFormSample) in a single `mergeData` call; here the SAME object has
-  // to be unpacked field-by-field into every piece of controlled state by hand —
-  // another slice of the per-form code the metrics footer is measuring.
+  // navigation button. Like SurveyJS, it fills only the CURRENT page; but where
+  // SurveyJS narrows one shared object (medicalFormSample) to the page's fields
+  // in a couple of generic lines, here every page needs its own hand-written
+  // branch unpacking each field into its controlled state — another slice of the
+  // per-form code the metrics footer is measuring.
   function prefillForm() {
     const s = medicalFormSample;
-    setFirstName(s.firstName as string);
-    setLastName(s.lastName as string);
-    setDob(s.dob as string);
-    setSex(s.sex as Sex);
-    setPhone(s.phone as string);
-    setPreferredContact(s.preferredContact as string);
-    setCarrier(s.carrier as string);
-    setMemberId(s.memberId as string);
-    setGroupNumber(s.groupNumber as string);
-    setRelationship(s.relationshipToInsured as Relationship);
-    setHasSecondary(s.hasSecondary as boolean);
-    setCarrier2(s.carrier2 as string);
-    setMemberId2(s.memberId2 as string);
-    setHistory(s.medicalHistory as Record<string, HistoryAnswer>);
-    setAllergies(s.allergies as Allergy[]);
-    setCurrentMedications(s.currentMedications as string);
-    setConsentTreatment(s.consentTreatment as boolean);
-    setConsentPrivacy(s.consentPrivacy as boolean);
-    setSignedDate(s.signedDate as string);
+    switch (currentPage) {
+      case 0:
+        setFirstName(s.firstName as string);
+        setLastName(s.lastName as string);
+        setDob(s.dob as string);
+        setSex(s.sex as Sex);
+        setPhone(s.phone as string);
+        setPreferredContact(s.preferredContact as string);
+        break;
+      case 1:
+        setCarrier(s.carrier as string);
+        setMemberId(s.memberId as string);
+        setGroupNumber(s.groupNumber as string);
+        setRelationship(s.relationshipToInsured as Relationship);
+        setHasSecondary(s.hasSecondary as boolean);
+        setCarrier2(s.carrier2 as string);
+        setMemberId2(s.memberId2 as string);
+        break;
+      case 2:
+        setHistory(s.medicalHistory as Record<string, HistoryAnswer>);
+        setAllergies(s.allergies as Allergy[]);
+        setCurrentMedications(s.currentMedications as string);
+        break;
+      case 3:
+        setConsentTreatment(s.consentTreatment as boolean);
+        setConsentPrivacy(s.consentPrivacy as boolean);
+        setSignedDate(s.signedDate as string);
+        break;
+    }
   }
 
   if (submitted) {

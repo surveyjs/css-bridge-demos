@@ -14,7 +14,7 @@ export const medicalFormJson: SurveyJSON = {
   title: "Patient Intake (SurveyJS)",
   description: "Tell us about you and your insurance coverage.",
   showProgressBar: true,
-  progressBarLocation: "belowHeader",
+  progressBarLocation: "belowheader",
   progressBarType: "pages",
   progressBarShowPageTitles: true,
   progressBarShowPageNumbers: true,

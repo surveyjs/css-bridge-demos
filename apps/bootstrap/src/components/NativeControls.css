@@ -1,0 +1,77 @@
+/*
+ * Native-Bootstrap wizard stepper — the hand-built twin of the SurveyJS V3
+ * "pages" progress bar (and the structural match of the MUI column's
+ * <Stepper alternativeLabel>): a horizontal row of numbered circles joined by
+ * connector lines, with each page title centered below its circle. Completed
+ * steps show a check, the active step is filled, upcoming steps stay muted.
+ *
+ * Pure host chrome — plain Bootstrap CSS variables only, so it re-themes with
+ * the rest of the Bootstrap chrome (light/dark + Bootswatch) exactly like the
+ * SurveyJS progress bar does. No SurveyJS involvement.
+ */
+.native-stepper {
+  --native-step-size: 1.5rem;
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+}
+
+.native-stepper__step {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+/* Connector — a line from the previous circle's center to this one's, drawn
+   behind the circles (which sit at z-index 1). Hidden on the first step. */
+.native-stepper__step::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--native-step-size) / 2);
+  right: 50%;
+  left: -50%;
+  height: 1px;
+  background-color: var(--bs-border-color);
+}
+.native-stepper__step:first-child::before {
+  display: none;
+}
+.native-stepper__step[data-state="completed"]::before,
+.native-stepper__step[data-state="active"]::before {
+  background-color: var(--bs-primary);
+}
+
+.native-stepper__icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--native-step-size);
+  height: var(--native-step-size);
+  border-radius: 50%;
+  font-size: 0.75rem;
+  line-height: 1;
+  background-color: var(--bs-secondary-bg);
+  color: var(--bs-secondary-color);
+}
+.native-stepper__step[data-state="completed"] .native-stepper__icon,
+.native-stepper__step[data-state="active"] .native-stepper__icon {
+  background-color: var(--bs-primary);
+  color: #fff;
+}
+
+.native-stepper__label {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--bs-secondary-color);
+}
+.native-stepper__step[data-state="active"] .native-stepper__label {
+  color: var(--bs-body-color);
+  font-weight: 500;
+}

@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState, type ChangeEvent, type FormEvent, type PointerEvent } from "react";
-import { Alert, Button, Card, Col, Form, ProgressBar, Row, Table } from "react-bootstrap";
+import { Alert, Button, Card, Col, Form, Row, Table } from "react-bootstrap";
 import { medicalFormJson, medicalFormSample } from "@adapter/schemas";
 import { FormCompleted } from "./FormCompleted";
+import "./NativeControls.css";
 
 /**
  * Hand-built react-bootstrap twin of the SurveyJS medical-intake form
@@ -276,27 +277,28 @@ export function NativeControls() {
           {medicalFormJson.description as string}
         </p>
 
-        {/* ── Wizard progress (mirrors SurveyJS progressBarType: "pages") ── */}
-        <ProgressBar
-          now={((currentPage + 1) / PAGES.length) * 100}
-          className="mb-2"
-          style={{ height: "0.4rem" }}
-        />
-        <ol className="list-unstyled d-flex justify-content-between small mb-4">
-          {PAGES.map((title, i) => (
-            <li
-              key={title}
-              aria-current={i === currentPage ? "step" : undefined}
-              className={
-                i === currentPage
-                  ? "fw-semibold text-primary"
-                  : "text-body-secondary"
-              }
-            >
-              <span className="me-1">{i + 1}.</span>
-              {title}
-            </li>
-          ))}
+        {/* ── Wizard progress (mirrors SurveyJS progressBarType: "pages") ──
+            A numbered-circle stepper — the structural twin of the SurveyJS
+            "pages" progress bar and of the MUI column's <Stepper alternativeLabel>:
+            circles joined by connectors with each page title centered below. */}
+        <ol className="native-stepper">
+          {PAGES.map((title, i) => {
+            const state =
+              i < currentPage ? "completed" : i === currentPage ? "active" : "upcoming";
+            return (
+              <li
+                key={title}
+                className="native-stepper__step"
+                data-state={state}
+                aria-current={i === currentPage ? "step" : undefined}
+              >
+                <span className="native-stepper__icon">
+                  {state === "completed" ? "✓" : i + 1}
+                </span>
+                <span className="native-stepper__label">{title}</span>
+              </li>
+            );
+          })}
         </ol>
 
         {/* Per-page title — the SurveyJS pages each carry a title, so the

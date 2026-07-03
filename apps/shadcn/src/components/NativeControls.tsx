@@ -309,34 +309,46 @@ export function NativeControls() {
           </p>
         </div>
 
-        {/* ── Wizard progress (mirrors SurveyJS progressBarType: "pages") ── */}
-        <ol className="flex items-center gap-2">
+        {/* ── Wizard progress (mirrors SurveyJS progressBarType: "pages") ──
+            A numbered-circle stepper — the structural twin of the SurveyJS
+            "pages" progress bar and of the MUI column's <Stepper alternativeLabel>:
+            circles joined by connectors with each page title centered below.
+            Completed steps show a check, the active step is filled, upcoming
+            steps stay muted. The connector is a pseudo-element line running from
+            the previous circle's center to this one's, behind the circles. */}
+        <ol className="flex">
           {PAGES.map((title, index) => {
             const active = index === currentPage;
             const done = index < currentPage;
             return (
-              <li key={title} className="flex flex-1 items-center gap-2">
+              <li
+                key={title}
+                aria-current={active ? "step" : undefined}
+                className={cn(
+                  "relative flex flex-1 flex-col items-center text-center",
+                  "before:bg-border before:absolute before:top-3 before:right-1/2 before:-left-1/2 before:h-px",
+                  "first:before:hidden",
+                  (active || done) && "before:bg-primary",
+                )}
+              >
                 <span
                   className={cn(
-                    "flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-medium",
-                    active && "border-primary bg-primary text-primary-foreground",
-                    done && "border-primary bg-primary/10 text-primary",
-                    !active && !done && "text-muted-foreground",
+                    "relative z-10 flex size-6 items-center justify-center rounded-full text-xs font-medium",
+                    active || done
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground",
                   )}
                 >
-                  {index + 1}
+                  {done ? "✓" : index + 1}
                 </span>
                 <span
                   className={cn(
-                    "hidden text-xs font-medium sm:inline",
+                    "mt-2 text-xs font-medium",
                     active ? "text-foreground" : "text-muted-foreground",
                   )}
                 >
                   {title}
                 </span>
-                {index < LAST_PAGE && (
-                  <span className="bg-border ml-1 hidden h-px flex-1 sm:block" />
-                )}
               </li>
             );
           })}

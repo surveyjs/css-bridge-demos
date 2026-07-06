@@ -110,6 +110,7 @@ export const medicalFormJson: SurveyJSON = {
           name: "hasSecondary",
           title: "Do you have secondary insurance?",
           defaultValue: false,
+          displayMode: "switch",
         },
         {
           type: "panel",

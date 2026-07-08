@@ -110,6 +110,7 @@ export const medicalFormJson: SurveyJSON = {
           name: "hasSecondary",
           title: "Do you have secondary insurance?",
           defaultValue: false,
+          displayMode: "switch",
         },
         {
           type: "panel",
@@ -154,8 +155,9 @@ export const medicalFormJson: SurveyJSON = {
           name: "allergies",
           title: "Allergies",
           addRowText: "Add allergy",
-          columnColCount: 1,
           rowCount: 0,
+          hideColumnsIfEmpty: true,
+          noRowsText: "No allergies added.",
           columns: [
             { name: "allergen", title: "Allergen", cellType: "text", isRequired: true },
             {

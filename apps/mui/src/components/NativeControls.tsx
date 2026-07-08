@@ -331,6 +331,7 @@ export function NativeControls() {
             <Stack spacing={3}>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <TextField
+                  id="nf-first-name"
                   label="First name"
                   fullWidth
                   value={firstName}
@@ -340,6 +341,7 @@ export function NativeControls() {
                   required
                 />
                 <TextField
+                  id="nf-last-name"
                   label="Last name"
                   fullWidth
                   value={lastName}
@@ -352,6 +354,7 @@ export function NativeControls() {
 
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="flex-start">
                 <TextField
+                  id="nf-dob"
                   label="Date of birth"
                   type="date"
                   fullWidth
@@ -366,6 +369,7 @@ export function NativeControls() {
                   <FormLabel id="nf-sex-label">Sex assigned at birth</FormLabel>
                   <RadioGroup
                     row
+                    name="nf-sex"
                     aria-labelledby="nf-sex-label"
                     value={sex}
                     onChange={(e) => setSex(e.target.value as Sex)}
@@ -378,6 +382,7 @@ export function NativeControls() {
 
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <TextField
+                  id="nf-phone"
                   label="Mobile phone"
                   type="tel"
                   fullWidth

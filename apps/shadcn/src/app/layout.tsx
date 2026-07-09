@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { AdminShell } from "@/components/AdminShell";
 import { AllQuestionsModeProvider } from "@/components/AllQuestionsMode";
 import { BorderlessModeProvider } from "@/components/BorderlessMode";
+import { surveyAdapterBootstrapScript } from "@/lib/surveyAdapterCss";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,6 +29,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: STYLE_BOOTSTRAP }} />
+        {/*
+          Creates the SurveyJS adapter stylesheet <link> for the persisted visual
+          style. Runs while the document is still parsing, so the <link> it
+          appends is render-blocking and the adapter is in force at first paint.
+          (ShadcnSurveyAdapterStyles re-points the same element on style change.)
+        */}
+        <script dangerouslySetInnerHTML={{ __html: surveyAdapterBootstrapScript() }} />
       </head>
       <body>
         <ThemeProvider>

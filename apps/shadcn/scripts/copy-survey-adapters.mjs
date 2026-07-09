@@ -1,0 +1,113 @@
+/**
+ * Copies the shadcn SurveyJS adapter bundles the visual-style switcher swaps
+ * between into `public/survey-adapters/<id>.css`, so they can be loaded as plain
+ * <link> hrefs and set before paint by the no-flash inline script.
+ *
+ * Why a copy and not a webpack `import()`: the active style is only known on the
+ * client (localStorage), so the adapter has to be reachable at a STABLE URL that
+ * a render-blocking <link> in <head> can point at. Loading it through webpack
+ * meant the bundle could not arrive until after hydration — the survey painted
+ * with stock survey-core V3 styling and then re-skinned. Mirrors the Bootstrap
+ * app's scripts/copy-themes.mjs.
+ *
+ * Run automatically via the `predev` / `prebuild` npm scripts. Pass `--dev` to
+ * source the bundles from the local V3 build (what `next dev` aliases survey-*
+ * to); without it they are resolved from the published `survey-core` package,
+ * matching what `next build` compiles against. Pass `--watch` (dev only) to keep
+ * re-copying as you edit the adapters in the library checkout.
+ */
+import { createRequire } from "node:module";
+import { mkdirSync, copyFileSync, existsSync, watch } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { BUILD_DIRS } from "../../../scripts/webpack-surveyjs-dev.mjs";
+
+const require = createRequire(import.meta.url);
+const here = dirname(fileURLToPath(import.meta.url));
+const outDir = resolve(here, "..", "public", "survey-adapters");
+
+const dev = process.argv.includes("--dev");
+const watchMode = dev && process.argv.includes("--watch");
+
+// Keep in sync with VISUAL_STYLES in src/lib/styles.ts (a .mjs script can't
+// import the TS module).
+const styleIds = [
+  "default",
+  "new-york",
+  "base-nova",
+  "base-vega",
+  "base-maia",
+  "base-lyra",
+  "base-mira",
+  "base-luma",
+  "base-sera",
+  "base-rhea",
+];
+
+/**
+ * Root of the installed `survey-core`. Found by walking up from its main entry:
+ * the package's `exports` map gates `./package.json` and rewrites unknown
+ * subpaths to `.js`, so neither can be require.resolve'd directly.
+ */
+function surveyCoreRoot() {
+  let dir = dirname(require.resolve("survey-core"));
+  while (!existsSync(resolve(dir, "package.json"))) {
+    const parent = dirname(dir);
+    if (parent === dir) throw new Error("[survey-adapters] Cannot locate the survey-core package root.");
+    dir = parent;
+  }
+  return dir;
+}
+
+// In dev, source from the local V3 build — exactly what the webpack alias points
+// survey-* imports at, so you develop against your working copy. Otherwise take
+// the published package, matching what `next build` compiles against.
+const sourceDir = resolve(
+  dev ? BUILD_DIRS["survey-core"] : surveyCoreRoot(),
+  "themes/adapters"
+);
+
+/** Absolute path to a style's adapter bundle; missing files throw. */
+function sourceFor(id) {
+  const from = resolve(sourceDir, `shadcn-${id}.min.css`);
+  if (!existsSync(from)) {
+    throw new Error(
+      `[survey-adapters] No shadcn adapter for "${id}".\n` +
+        `Expected: ${from}\n` +
+        (dev
+          ? `Build the survey-library checkout (or unset SURVEYJS_LIBV3).`
+          : `The installed survey-core ships no themes/adapters — the apps' adapter ` +
+            `imports cannot resolve either. Install a survey-core that includes them.`)
+    );
+  }
+  return from;
+}
+
+function copyAll() {
+  mkdirSync(outDir, { recursive: true });
+  for (const id of styleIds) {
+    copyFileSync(sourceFor(id), resolve(outDir, `${id}.css`));
+  }
+  console.log(`survey-adapters: ${styleIds.length} bundles <- ${sourceDir}`);
+}
+
+copyAll();
+
+if (watchMode) {
+  let queued = false;
+  watch(sourceDir, (_event, file) => {
+    if (!file?.startsWith("shadcn-") || !file.endsWith(".min.css")) return;
+    // The library build rewrites all 10 files in a burst; coalesce into one copy.
+    if (queued) return;
+    queued = true;
+    setTimeout(() => {
+      queued = false;
+      try {
+        copyAll();
+      } catch (err) {
+        console.error(`survey-adapters: ${err.message}`);
+      }
+    }, 100);
+  });
+  console.log(`survey-adapters: watching ${sourceDir}`);
+}

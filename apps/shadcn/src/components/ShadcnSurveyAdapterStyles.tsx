@@ -1,56 +1,26 @@
 "use client";
 
 import { useEffect } from "react";
-import { SURVEY_ADAPTER_STYLE_LOADERS } from "@/lib/surveyAdapterCss";
-import type { VisualStyleId } from "@/lib/styles";
+import { SURVEY_ADAPTER_LINK_ID, surveyAdapterHref } from "@/lib/surveyAdapterCss";
 import { useStyle } from "./StyleProvider";
 
-const LOADED_LINKS = new Map<VisualStyleId, HTMLLinkElement>();
-
-function setActiveAdapterStyle(style: VisualStyleId) {
-  for (const [id, link] of LOADED_LINKS) {
-    link.disabled = id !== style;
-  }
-}
-
 /**
- * Loads exactly one shadcn survey adapter stylesheet from survey-core at a time.
- * Each adapter bundle is self-contained (base + style deltas), so switching the
- * visual style swaps which bundle is enabled.
+ * Points the survey adapter <link> at the active visual style's bundle. Each
+ * bundle is self-contained (base + style deltas), so switching the style is just
+ * an href swap.
+ *
+ * The <link> itself is created before paint by the inline script in the root
+ * layout — this only re-points it after a style change, so there is no window in
+ * which the survey renders unadapted.
  */
 export function ShadcnSurveyAdapterStyles() {
   const { style } = useStyle();
 
   useEffect(() => {
-    const cached = LOADED_LINKS.get(style);
-    if (cached) {
-      setActiveAdapterStyle(style);
-      return;
+    const link = document.getElementById(SURVEY_ADAPTER_LINK_ID);
+    if (link instanceof HTMLLinkElement) {
+      link.setAttribute("href", surveyAdapterHref(style));
     }
-
-    const knownLinks = new Set(
-      Array.from(document.querySelectorAll('link[rel="stylesheet"]')),
-    );
-
-    let cancelled = false;
-    void SURVEY_ADAPTER_STYLE_LOADERS[style]().then(() => {
-      if (cancelled) return;
-
-      const newLink = Array.from(
-        document.querySelectorAll('link[rel="stylesheet"]'),
-      ).find((link) => !knownLinks.has(link));
-
-      if (newLink instanceof HTMLLinkElement) {
-        newLink.dataset.shadcnSurveyAdapter = style;
-        LOADED_LINKS.set(style, newLink);
-      }
-
-      setActiveAdapterStyle(style);
-    });
-
-    return () => {
-      cancelled = true;
-    };
   }, [style]);
 
   return null;

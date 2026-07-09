@@ -63,7 +63,12 @@ const base = process.env.SURVEYJS_LIBV3
   ? resolve(repoRoot, process.env.SURVEYJS_LIBV3)
   : resolve(repoRoot, "..");
 
-const BUILD_DIRS = {
+/**
+ * The local V3 build folder each survey-* import is aliased to in dev. Exported
+ * so dev-time asset scripts (e.g. apps/shadcn/scripts/copy-survey-adapters.mjs)
+ * pull from the exact same place webpack does.
+ */
+export const BUILD_DIRS = {
   "survey-core": resolve(base, "survey-library/packages/survey-core/build"),
   "survey-react-ui": resolve(base, "survey-library/packages/survey-react-ui/build"),
   "survey-creator-core": resolve(base, "survey-creator/packages/survey-creator-core/build"),

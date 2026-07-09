@@ -53,15 +53,19 @@ export function themeHref(id: ColorThemeId): string {
 export const THEME_LINK_ID = "adapter-theme-css";
 
 /**
- * Inline script (runs before paint, before React hydrates) that reads the
- * persisted theme + mode from localStorage and applies them, preventing a flash
- * of the wrong theme.
+ * Inline script that reads the persisted theme + mode from localStorage and
+ * applies them, preventing a flash of the wrong theme.
  *
  * It *creates* the stylesheet <link> imperatively rather than having React render
  * it. The link is owned entirely outside React (the ThemeProvider mutates the
  * same element by id), so there is no SSR/client markup for React to diff — which
  * avoids hydration mismatches around Next's auto-injected <head> tags. Kept
  * dependency-free and defensive.
+ *
+ * MUST be emitted as a raw parser-blocking <script> in <head> (see layout.tsx),
+ * never via next/script: a <link> appended while the document is still loading is
+ * render-blocking, which is what keeps `--bs-*` defined at first paint — and the
+ * Bootstrap adapter is nothing but a mapping onto those tokens.
  */
 export function themeBootstrapScript(): string {
   return `(function(){try{

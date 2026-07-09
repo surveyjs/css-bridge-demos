@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Survey } from "survey-react-ui";
 import { allQuestionsSchema, createSurveyModel } from "@adapter/schemas";
 import { useAllQuestionsMode } from "./AllQuestionsMode";
@@ -26,24 +26,30 @@ import "./AllQuestionsGallery.css";
  * a rebuild or remount, preserving every answer.
  */
 export function AllQuestionsGallery() {
+  // Both switches live in the header; their state arrives via context.
+  // `borderless` maps onto survey-core's `isCompact` — a non-serializable runtime
+  // flag, never baked into the schema. The ref seeds it at CONSTRUCTION (below) so
+  // the first render, SSR included, already carries the compact classes; applying
+  // it only from the effect would paint the bordered default for a frame first,
+  // which reads as a blink on refresh.
+  const { readOnly } = useAllQuestionsMode();
+  const { borderless } = useBorderlessMode();
+  const borderlessRef = useRef(borderless);
+  borderlessRef.current = borderless;
+
   // Build the model exactly once for the component's lifetime.
   const model = useMemo(() => {
     const m = createSurveyModel(allQuestionsSchema);
     m.showCompleteButton = false;
+    m.isCompact = borderlessRef.current;
     return m;
   }, []);
 
-  // The switch lives in the header; its state arrives via context.
-  const { readOnly } = useAllQuestionsMode();
-
-  // Drive the live model's mode from the switch — no rebuild, no remount.
+  // Later flips of either switch drive the LIVE model — survey-core is reactive,
+  // so the gallery re-renders in place: no rebuild, no remount, answers preserved.
   useEffect(() => {
     model.mode = readOnly ? "display" : "edit";
   }, [model, readOnly]);
-
-  // "Borderless questions" switch (top menu) → survey-core's `isCompact`, set on
-  // the live model. Reactive, so the gallery re-renders in place.
-  const { borderless } = useBorderlessMode();
   useEffect(() => {
     model.isCompact = borderless;
   }, [model, borderless]);

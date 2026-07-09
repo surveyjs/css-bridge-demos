@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Survey } from "survey-react-ui";
 import type { Question } from "survey-core";
 import { Card } from "@/components/ui/card";
@@ -52,10 +52,28 @@ export function SurveyForm({
   /** Label for the prefill button (see `prefillData`). */
   prefillLabel?: string;
 }) {
-  const model = useMemo(
-    () => createSurveyModel(schema, { data, mode }),
-    [schema, data, mode],
-  );
+  // "Borderless questions" switch (top menu) → survey-core's `isCompact`. It is
+  // a non-serializable runtime flag, so it's set on the LIVE model rather than
+  // baked into the schema. The ref seeds it at CONSTRUCTION (below) so the first
+  // render — SSR included — already carries the compact classes; applying it only
+  // from the effect would paint the bordered default for a frame first, which
+  // reads as a blink on refresh. `borderless` stays out of the model's deps so
+  // toggling the switch never rebuilds the model.
+  const { borderless } = useBorderlessMode();
+  const borderlessRef = useRef(borderless);
+  borderlessRef.current = borderless;
+
+  const model = useMemo(() => {
+    const m = createSurveyModel(schema, { data, mode });
+    m.isCompact = borderlessRef.current;
+    return m;
+  }, [schema, data, mode]);
+
+  // Later flips of the switch: survey-core is reactive, so the form re-renders
+  // in place — no rebuild, no remount, answers preserved.
+  useEffect(() => {
+    model.isCompact = borderless;
+  }, [model, borderless]);
 
   // Optional "Prefill demo data" custom button. Added to the survey's OWN
   // navigation bar through the public `addNavigationItem` API (it renders a
@@ -87,15 +105,6 @@ export function SurveyForm({
       model.navigationBar.removeActionById(id);
     };
   }, [model, prefillData, prefillLabel]);
-
-  // "Borderless questions" switch (top menu) → survey-core's `isCompact`. It is
-  // a non-serializable runtime flag, so it's set on the LIVE model here rather
-  // than baked into the schema; survey-core is reactive, so the form re-renders
-  // in place. Re-applied if the model is rebuilt (schema/data/mode change).
-  const { borderless } = useBorderlessMode();
-  useEffect(() => {
-    model.isCompact = borderless;
-  }, [model, borderless]);
 
   // On completion, hide the SurveyJS widget and show our own success screen
   // (matching the native column's submitted state) instead of the model's

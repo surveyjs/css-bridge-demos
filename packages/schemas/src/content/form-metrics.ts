@@ -21,10 +21,13 @@ export const FORM_METRICS_SURVEYJS_LABEL = "SurveyJS";
 
 /** Italic caption rendered below the comparison table. */
 export const FORM_METRICS_CAPTION =
-  "SurveyJS reaches the same form with a fraction of the code — written once " +
-  "and reused for every form — plus a JSON schema a non-developer can build " +
-  "visually. The native column must be hand-written, and re-written, by a " +
-  "developer for each new form.";
+  "With SurveyJS, developers build a reusable form runtime once with just a " +
+  "few lines of code. After that, each new form or variation is just another " +
+  "JSON schema, not another block of hardcoded UI. Unlike a native " +
+  "implementation, where each form variation requires repeated code changes, " +
+  "rebuilds, and redeployments, SurveyJS keeps form changes in a JSON " +
+  "configuration object that business teams can create and update visually " +
+  "without redeployment.";
 
 /** One comparison row: a label and the SurveyJS vs native cell text. */
 export interface FormMetricsRow {

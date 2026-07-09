@@ -111,6 +111,7 @@ export const medicalFormJson: SurveyJSON = {
           title: "Do you have secondary insurance?",
           defaultValue: false,
           displayMode: "switch",
+          "titleLocation": "hidden",
         },
         {
           type: "panel",
@@ -192,12 +193,16 @@ export const medicalFormJson: SurveyJSON = {
           type: "boolean",
           name: "consentTreatment",
           title: "I consent to treatment",
+          displayMode: "checkbox",
+          titleLocation: "hidden",
           isRequired: true,
         },
         {
           type: "boolean",
           name: "consentPrivacy",
           title: "I acknowledge the privacy practices (HIPAA)",
+          displayMode: "checkbox",
+          titleLocation: "hidden",
           isRequired: true,
         },
         {

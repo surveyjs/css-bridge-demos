@@ -471,7 +471,7 @@ export function NativeControls() {
               </Card>
 
               <Form.Check
-                type="checkbox"
+                type="switch"
                 id="nf-has-secondary"
                 className="mb-3"
                 label="Do you have secondary insurance?"

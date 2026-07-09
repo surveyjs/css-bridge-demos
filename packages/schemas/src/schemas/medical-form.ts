@@ -156,17 +156,24 @@ export const medicalFormJson: SurveyJSON = {
           title: "Allergies",
           addRowText: "Add allergy",
           rowCount: 0,
-          hideColumnsIfEmpty: true,
+          showHeader: false,
           noRowsText: "No allergies added.",
           columns: [
-            { name: "allergen", title: "Allergen", cellType: "text", isRequired: true },
+            { 
+              name: "allergen",
+              title: "Allergen",
+              cellType: "text",
+              isRequired: true,
+              placeholder: "Allergen *"
+            },
             {
               name: "severity",
               title: "Severity",
               cellType: "dropdown",
               choices: ["Mild", "Moderate", "Severe"],
+              placeholder: "Severity..."
             },
-            { name: "reaction", title: "Reaction", cellType: "text" },
+            { name: "reaction", title: "Reaction", cellType: "text", placeholder: "Reaction" },
           ],
         },
         {

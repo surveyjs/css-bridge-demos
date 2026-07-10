@@ -7,8 +7,8 @@ import { BorderlessModeProvider } from "@/components/BorderlessMode";
 import { themeBootstrapScript } from "@/lib/themes";
 
 export const metadata: Metadata = {
-  title: "SurveyJS Adapter — Bootstrap",
-  description: "SurveyJS V3 theme adapter demo (Bootstrap).",
+  title: "SurveyJS Theme Adapter for Bootstrap",
+  description: "SurveyJS theme adapter demo for Bootstrap.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

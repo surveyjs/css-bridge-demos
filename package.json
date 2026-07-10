@@ -1,9 +1,9 @@
 {
-  "name": "surveyjs-adapter-demos",
+  "name": "surveyjs-theme-adapter-demos",
   "version": "0.0.0",
   "private": true,
   "packageManager": "npm@11.12.1",
-  "description": "SurveyJS V3 theme adapter demos (Bootstrap, shadcn, MUI) over a single shared schema package.",
+  "description": "SurveyJS theme adapter demos for popular CSS frameworks (Bootstrap, shadcn/ui, MUI)",
   "workspaces": [
     "packages/*",
     "apps/*"

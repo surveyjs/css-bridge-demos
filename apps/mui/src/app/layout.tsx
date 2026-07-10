@@ -10,8 +10,8 @@ import { Providers } from "@/components/Providers";
 import { AdminShell } from "@/components/AdminShell";
 
 export const metadata: Metadata = {
-  title: "SurveyJS Adapter — MUI",
-  description: "SurveyJS V3 theme adapter demo (MUI).",
+  title: "SurveyJS Theme Adapter for MUI",
+  description: "SurveyJS theme adapter demo for MUI.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

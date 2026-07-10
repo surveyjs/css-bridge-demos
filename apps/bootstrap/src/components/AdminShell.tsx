@@ -38,7 +38,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         />
         <Navbar.Brand className="fw-bold d-flex align-items-center gap-2">
           <span aria-hidden>🧩</span>
-          SurveyJS Adapter
+          SurveyJS Theme Adapter
           <span className="badge text-bg-primary fw-normal">Bootstrap</span>
         </Navbar.Brand>
         <div className="ms-auto d-flex align-items-center gap-3">

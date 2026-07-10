@@ -8,8 +8,8 @@ import { surveyAdapterBootstrapScript } from "@/lib/surveyAdapterCss";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SurveyJS Adapter — shadcn/ui",
-  description: "SurveyJS V3 theme adapter demo (shadcn/ui).",
+  title: "SurveyJS Theme Adapter for shadcn/ui",
+  description: "SurveyJS theme adapter demo for shadcn/ui.",
 };
 
 // Pre-paint theming bootstrap. Runs before React hydrates and before paint:
@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: STYLE_BOOTSTRAP }} />
         {/*
-          Creates the SurveyJS adapter stylesheet <link> for the persisted visual
+          Creates the SurveyJS theme adapter stylesheet <link> for the persisted visual
           style. Runs while the document is still parsing, so the <link> it
           appends is render-blocking and the adapter is in force at first paint.
           (ShadcnSurveyAdapterStyles re-points the same element on style change.)

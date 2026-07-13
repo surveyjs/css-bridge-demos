@@ -9,9 +9,34 @@ import {
 // Comparison column shows the active style's REAL shadcn button (per-style,
 // CLI-generated). Aliased to Button so every form button below picks it up.
 import { StyledButton as Button } from "@/components/ui/styled-button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ButtonGroup } from "@/components/ui/button-group";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -22,11 +47,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import { useStyle } from "@/components/StyleProvider";
-import { STYLE_INPUT_CLASS } from "@/components/ui/styles/style-input-class";
 import { medicalFormJson, medicalFormSample } from "@adapter/schemas";
 import { FormCompleted } from "./FormCompleted";
+import { WizardStepper } from "./WizardStepper";
 
 /**
  * Hand-built shadcn/ui twin of the SurveyJS medical-intake form
@@ -43,8 +66,7 @@ import { FormCompleted } from "./FormCompleted";
  * This column is deliberately UNBRIDGED: it is the "what you'd hand-write per
  * form" baseline the comparison footer measures against (see FormMetricsFooter).
  * SurveyJS pages from the JSON for free; here every step is wired by hand — that
- * gap is the point. Pure host chrome — shadcn/ui primitives + Tailwind-styled
- * native elements (shadcn ships no select/radio/checkbox), zero SurveyJS
+ * gap is the point. Pure host chrome — shadcn/ui primitives, zero SurveyJS
  * involvement (the imported `medicalFormJson` is read only for its description
  * string, so the two columns share the exact same wording).
  *
@@ -69,9 +91,8 @@ const HISTORY_ROWS = [
   { value: "heart", text: "Heart disease" },
 ] as const;
 
-// shadcn ships no <Select>, so this raw element can't use the vendored per-style
-// <Input> — it applies the same active-style className (STYLE_INPUT_CLASS) so the
-// native dropdown matches the styled inputs (see fieldClass below).
+const CONTACT_METHODS = ["Phone", "Email", "Text message"] as const;
+const SEVERITY_OPTIONS = ["Mild", "Moderate", "Severe"] as const;
 
 /** Mask a raw phone string into the +1 (999) 999-9999 pattern. */
 function maskPhone(raw: string): string {
@@ -88,9 +109,6 @@ function maskPhone(raw: string): string {
 }
 
 export function NativeControls() {
-  // Native <select> wears the active style's shadcn input className, like <Input>.
-  const { style } = useStyle();
-  const fieldClass = STYLE_INPUT_CLASS[style];
   // Wizard paging — render ONE section at a time (Patient → … → Consent).
   const [currentPage, setCurrentPage] = useState(0);
   const [attempted, setAttempted] = useState([false, false, false, false]);
@@ -298,73 +316,24 @@ export function NativeControls() {
 
   return (
     <Card>
-      <CardContent className="flex flex-col gap-6">
-        {/* Survey title + description — mirrors the SurveyJS column's header,
-            sharing the schema's exact description so only the "(…)" suffix
-            differs between the two forms. */}
-        <div>
-          <h2 className="text-2xl font-semibold">Patient Intake (Native shadcn)</h2>
-          <p className="text-muted-foreground mt-1">
-            {medicalFormJson.description as string}
-          </p>
-        </div>
+      <CardHeader>
+        <CardTitle>Patient Intake (Native shadcn)</CardTitle>
+        <CardDescription>{medicalFormJson.description as string}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <FieldGroup>
+          <WizardStepper pages={PAGES} currentPage={currentPage} />
 
-        {/* ── Wizard progress (mirrors SurveyJS progressBarType: "pages") ──
-            A numbered-circle stepper — the structural twin of the SurveyJS
-            "pages" progress bar and of the MUI column's <Stepper alternativeLabel>:
-            circles joined by connectors with each page title centered below.
-            Completed steps show a check, the active step is filled, upcoming
-            steps stay muted. The connector is a pseudo-element line running from
-            the previous circle's center to this one's, behind the circles. */}
-        <ol className="flex">
-          {PAGES.map((title, index) => {
-            const active = index === currentPage;
-            const done = index < currentPage;
-            return (
-              <li
-                key={title}
-                aria-current={active ? "step" : undefined}
-                className={cn(
-                  "relative flex flex-1 flex-col items-center text-center",
-                  "before:bg-border before:absolute before:top-3 before:right-1/2 before:-left-1/2 before:h-px",
-                  "first:before:hidden",
-                  (active || done) && "before:bg-primary",
-                )}
-              >
-                <span
-                  className={cn(
-                    "relative z-10 flex size-6 items-center justify-center rounded-full text-xs font-medium",
-                    active || done
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground",
-                  )}
-                >
-                  {done ? "✓" : index + 1}
-                </span>
-                <span
-                  className={cn(
-                    "mt-2 text-xs font-medium",
-                    active ? "text-foreground" : "text-muted-foreground",
-                  )}
-                >
-                  {title}
-                </span>
-              </li>
-            );
-          })}
-        </ol>
+          <CardTitle>{PAGES[currentPage]}</CardTitle>
 
-        {/* Per-page title — the SurveyJS pages each carry a title, so the
-            native wizard shows the active page's title too. */}
-        <h3 className="text-lg font-semibold">{PAGES[currentPage]}</h3>
-
-        <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <form noValidate onSubmit={handleSubmit}>
+          <FieldGroup>
           {/* ── Patient ───────────────────────────────────────────── */}
           {currentPage === 0 && (
-            <div className="flex flex-col gap-5">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="nf-first">First name</Label>
+            <FieldGroup>
+              <FieldGroup className="grid gap-4 sm:grid-cols-2">
+                <Field data-invalid={showErrors && errors.firstName}>
+                  <FieldLabel htmlFor="nf-first">First name</FieldLabel>
                   <Input
                     id="nf-first"
                     value={firstName}
@@ -372,11 +341,11 @@ export function NativeControls() {
                     aria-invalid={showErrors && errors.firstName}
                   />
                   {showErrors && errors.firstName && (
-                    <p className="text-destructive text-sm">First name is required.</p>
+                    <FieldError>First name is required.</FieldError>
                   )}
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="nf-last">Last name</Label>
+                </Field>
+                <Field data-invalid={showErrors && errors.lastName}>
+                  <FieldLabel htmlFor="nf-last">Last name</FieldLabel>
                   <Input
                     id="nf-last"
                     value={lastName}
@@ -384,14 +353,14 @@ export function NativeControls() {
                     aria-invalid={showErrors && errors.lastName}
                   />
                   {showErrors && errors.lastName && (
-                    <p className="text-destructive text-sm">Last name is required.</p>
+                    <FieldError>Last name is required.</FieldError>
                   )}
-                </div>
-              </div>
+                </Field>
+              </FieldGroup>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="nf-dob">Date of birth</Label>
+              <FieldGroup className="grid gap-4 sm:grid-cols-2">
+                <Field data-invalid={showErrors && errors.dob}>
+                  <FieldLabel htmlFor="nf-dob">Date of birth</FieldLabel>
                   <Input
                     id="nf-dob"
                     type="date"
@@ -400,41 +369,31 @@ export function NativeControls() {
                     aria-invalid={showErrors && errors.dob}
                   />
                   {showErrors && errors.dob && (
-                    <p className="text-destructive text-sm">Date of birth is required.</p>
+                    <FieldError>Date of birth is required.</FieldError>
                   )}
-                </div>
-                <fieldset className="flex flex-col gap-2">
-                  <legend className="mb-2 text-sm font-medium">
-                    Sex assigned at birth
-                  </legend>
-                  <div className="flex gap-6">
-                    <Label className="font-normal">
-                      <input
-                        type="radio"
-                        name="nf-sex"
-                        checked={sex === "f"}
-                        onChange={() => setSex("f")}
-                        className="accent-primary size-4"
-                      />
-                      Female
-                    </Label>
-                    <Label className="font-normal">
-                      <input
-                        type="radio"
-                        name="nf-sex"
-                        checked={sex === "m"}
-                        onChange={() => setSex("m")}
-                        className="accent-primary size-4"
-                      />
-                      Male
-                    </Label>
-                  </div>
-                </fieldset>
-              </div>
+                </Field>
+                <Field>
+                  <FieldLabel>Sex assigned at birth</FieldLabel>
+                  <RadioGroup
+                    value={sex}
+                    onValueChange={(value) => setSex(value as Sex)}
+                    className="flex flex-row gap-6"
+                  >
+                    <Field orientation="horizontal">
+                      <RadioGroupItem value="f" id="nf-sex-f" />
+                      <FieldLabel htmlFor="nf-sex-f">Female</FieldLabel>
+                    </Field>
+                    <Field orientation="horizontal">
+                      <RadioGroupItem value="m" id="nf-sex-m" />
+                      <FieldLabel htmlFor="nf-sex-m">Male</FieldLabel>
+                    </Field>
+                  </RadioGroup>
+                </Field>
+              </FieldGroup>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="nf-phone">Mobile phone</Label>
+              <FieldGroup className="grid gap-4 sm:grid-cols-2">
+                <Field>
+                  <FieldLabel htmlFor="nf-phone">Mobile phone</FieldLabel>
                   <Input
                     id="nf-phone"
                     type="tel"
@@ -442,320 +401,377 @@ export function NativeControls() {
                     value={phone}
                     onChange={(e) => setPhone(maskPhone(e.target.value))}
                   />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="nf-contact">Preferred contact method</Label>
-                  <select
-                    id="nf-contact"
-                    className={fieldClass}
-                    value={preferredContact}
-                    onChange={(e) => setPreferredContact(e.target.value)}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="nf-contact">Preferred contact method</FieldLabel>
+                  <Combobox
+                    items={CONTACT_METHODS}
+                    value={preferredContact || null}
+                    onValueChange={(value) => setPreferredContact(value ?? "")}
                   >
-                    <option value="" disabled>
-                      Select an option…
-                    </option>
-                    <option value="Phone">Phone</option>
-                    <option value="Email">Email</option>
-                    <option value="Text message">Text message</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+                    <ComboboxInput
+                      id="nf-contact"
+                      placeholder="Select an option…"
+                    />
+                    <ComboboxContent>
+                      <ComboboxEmpty>No items found.</ComboboxEmpty>
+                      <ComboboxList>
+                        {(item) => (
+                          <ComboboxItem key={item} value={item}>
+                            {item}
+                          </ComboboxItem>
+                        )}
+                      </ComboboxList>
+                    </ComboboxContent>
+                  </Combobox>
+                </Field>
+              </FieldGroup>
+            </FieldGroup>
           )}
 
           {/* ── Insurance ─────────────────────────────────────────── */}
           {currentPage === 1 && (
-            <div className="flex flex-col gap-5">
-              <fieldset className="bg-muted/40 flex flex-col gap-4 rounded-lg border p-4">
-                <legend className="px-1 text-sm font-medium">Primary insurance</legend>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex flex-col gap-2">
-                    <Label htmlFor="nf-carrier">Insurance carrier</Label>
-                    <Input
-                      id="nf-carrier"
-                      value={carrier}
-                      onChange={(e) => setCarrier(e.target.value)}
-                      aria-invalid={showErrors && errors.carrier}
-                    />
-                    {showErrors && errors.carrier && (
-                      <p className="text-destructive text-sm">Insurance carrier is required.</p>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Label htmlFor="nf-member">Member ID</Label>
-                    <Input
-                      id="nf-member"
-                      value={memberId}
-                      onChange={(e) => setMemberId(e.target.value)}
-                      aria-invalid={showErrors && errors.memberId}
-                    />
-                    {showErrors && errors.memberId && (
-                      <p className="text-destructive text-sm">Member ID is required.</p>
-                    )}
-                  </div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex flex-col gap-2">
-                    <Label htmlFor="nf-group">Group number</Label>
-                    <Input
-                      id="nf-group"
-                      value={groupNumber}
-                      onChange={(e) => setGroupNumber(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <fieldset className="flex flex-col gap-2">
-                  <legend className="mb-2 text-sm font-medium">Patient is the…</legend>
-                  <div className="flex flex-wrap gap-6">
-                    {(
-                      [
-                        { value: "self", text: "Policyholder" },
-                        { value: "spouse", text: "Spouse" },
-                        { value: "dependent", text: "Dependent" },
-                      ] as const
-                    ).map((opt) => (
-                      <Label key={opt.value} className="font-normal">
-                        <input
-                          type="radio"
-                          name="nf-rel"
-                          checked={relationship === opt.value}
-                          onChange={() => setRelationship(opt.value)}
-                          className="accent-primary size-4"
+            <FieldGroup>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Primary insurance</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <FieldGroup>
+                    <FieldGroup className="grid gap-4 sm:grid-cols-2">
+                      <Field data-invalid={showErrors && errors.carrier}>
+                        <FieldLabel htmlFor="nf-carrier">Insurance carrier</FieldLabel>
+                        <Input
+                          id="nf-carrier"
+                          value={carrier}
+                          onChange={(e) => setCarrier(e.target.value)}
+                          aria-invalid={showErrors && errors.carrier}
                         />
-                        {opt.text}
-                      </Label>
-                    ))}
-                  </div>
-                </fieldset>
-              </fieldset>
+                        {showErrors && errors.carrier && (
+                          <FieldError>Insurance carrier is required.</FieldError>
+                        )}
+                      </Field>
+                      <Field data-invalid={showErrors && errors.memberId}>
+                        <FieldLabel htmlFor="nf-member">Member ID</FieldLabel>
+                        <Input
+                          id="nf-member"
+                          value={memberId}
+                          onChange={(e) => setMemberId(e.target.value)}
+                          aria-invalid={showErrors && errors.memberId}
+                        />
+                        {showErrors && errors.memberId && (
+                          <FieldError>Member ID is required.</FieldError>
+                        )}
+                      </Field>
+                    </FieldGroup>
+                    <FieldGroup className="grid gap-4 sm:grid-cols-2">
+                      <Field>
+                        <FieldLabel htmlFor="nf-group">Group number</FieldLabel>
+                        <Input
+                          id="nf-group"
+                          value={groupNumber}
+                          onChange={(e) => setGroupNumber(e.target.value)}
+                        />
+                      </Field>
+                    </FieldGroup>
+                    <Field>
+                      <FieldLabel>Patient is the…</FieldLabel>
+                      <RadioGroup
+                        value={relationship}
+                        onValueChange={(value) => setRelationship(value as Relationship)}
+                        className="flex flex-wrap gap-6"
+                      >
+                        {(
+                          [
+                            { value: "self", text: "Policyholder" },
+                            { value: "spouse", text: "Spouse" },
+                            { value: "dependent", text: "Dependent" },
+                          ] as const
+                        ).map((opt) => (
+                          <Field key={opt.value} orientation="horizontal">
+                            <RadioGroupItem value={opt.value} id={`nf-rel-${opt.value}`} />
+                            <FieldLabel htmlFor={`nf-rel-${opt.value}`}>
+                              {opt.text}
+                            </FieldLabel>
+                          </Field>
+                        ))}
+                      </RadioGroup>
+                    </Field>
+                  </FieldGroup>
+                </CardContent>
+              </Card>
 
-              <Label className="font-normal">
-                <Switch checked={hasSecondary} onCheckedChange={setHasSecondary} />
-                Do you have secondary insurance?
-              </Label>
+              <Field orientation="horizontal">
+                <Switch
+                  id="nf-secondary"
+                  checked={hasSecondary}
+                  onCheckedChange={setHasSecondary}
+                />
+                <FieldLabel htmlFor="nf-secondary">
+                  Do you have secondary insurance?
+                </FieldLabel>
+              </Field>
 
               {hasSecondary && (
-                <fieldset className="bg-muted/40 flex flex-col gap-4 rounded-lg border p-4">
-                  <legend className="px-1 text-sm font-medium">Secondary insurance</legend>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="flex flex-col gap-2">
-                      <Label htmlFor="nf-carrier2">Insurance carrier</Label>
-                      <Input
-                        id="nf-carrier2"
-                        value={carrier2}
-                        onChange={(e) => setCarrier2(e.target.value)}
-                        aria-invalid={showErrors && errors.carrier2}
-                      />
-                      {showErrors && errors.carrier2 && (
-                        <p className="text-destructive text-sm">Insurance carrier is required.</p>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label htmlFor="nf-member2">Member ID</Label>
-                      <Input
-                        id="nf-member2"
-                        value={memberId2}
-                        onChange={(e) => setMemberId2(e.target.value)}
-                        aria-invalid={showErrors && errors.memberId2}
-                      />
-                      {showErrors && errors.memberId2 && (
-                        <p className="text-destructive text-sm">Member ID is required.</p>
-                      )}
-                    </div>
-                  </div>
-                </fieldset>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Secondary insurance</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <FieldGroup className="grid gap-4 sm:grid-cols-2">
+                      <Field data-invalid={showErrors && errors.carrier2}>
+                        <FieldLabel htmlFor="nf-carrier2">Insurance carrier</FieldLabel>
+                        <Input
+                          id="nf-carrier2"
+                          value={carrier2}
+                          onChange={(e) => setCarrier2(e.target.value)}
+                          aria-invalid={showErrors && errors.carrier2}
+                        />
+                        {showErrors && errors.carrier2 && (
+                          <FieldError>Insurance carrier is required.</FieldError>
+                        )}
+                      </Field>
+                      <Field data-invalid={showErrors && errors.memberId2}>
+                        <FieldLabel htmlFor="nf-member2">Member ID</FieldLabel>
+                        <Input
+                          id="nf-member2"
+                          value={memberId2}
+                          onChange={(e) => setMemberId2(e.target.value)}
+                          aria-invalid={showErrors && errors.memberId2}
+                        />
+                        {showErrors && errors.memberId2 && (
+                          <FieldError>Member ID is required.</FieldError>
+                        )}
+                      </Field>
+                    </FieldGroup>
+                  </CardContent>
+                </Card>
               )}
-            </div>
+            </FieldGroup>
           )}
 
           {/* ── History ───────────────────────────────────────────── */}
           {currentPage === 2 && (
-            <div className="flex flex-col gap-5">
-              <fieldset className="flex flex-col gap-2">
-                <legend className="mb-1 text-sm font-medium">
-                  Have you ever been diagnosed with any of the following?
-                </legend>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead />
-                      <TableHead className="text-center">Yes</TableHead>
-                      <TableHead className="text-center">No</TableHead>
-                      <TableHead className="text-center">Unsure</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {HISTORY_ROWS.map((row) => (
-                      <TableRow key={row.value}>
-                        <TableCell className="font-medium whitespace-normal">
-                          {row.text}
-                        </TableCell>
-                        {(["yes", "no", "unsure"] as const).map((answer) => (
-                          <TableCell key={answer} className="text-center">
-                            <input
-                              type="radio"
-                              name={`nf-history-${row.value}`}
-                              aria-label={`${row.text}: ${answer}`}
-                              checked={history[row.value] === answer}
-                              onChange={() =>
-                                setHistory((h) => ({ ...h, [row.value]: answer }))
-                              }
-                              className="accent-primary size-4"
-                            />
-                          </TableCell>
-                        ))}
+            <FieldGroup>
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    Have you ever been diagnosed with any of the following?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead />
+                        <TableHead align="center">Yes</TableHead>
+                        <TableHead align="center">No</TableHead>
+                        <TableHead align="center">Unsure</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </fieldset>
+                    </TableHeader>
+                    <TableBody>
+                      {HISTORY_ROWS.map((row) => (
+                        <TableRow key={row.value}>
+                          <TableCell>{row.text}</TableCell>
+                          <RadioGroup
+                            value={history[row.value]}
+                            onValueChange={(value) =>
+                              setHistory((h) => ({
+                                ...h,
+                                [row.value]: value as HistoryAnswer,
+                              }))
+                            }
+                            className="contents"
+                          >
+                            {(["yes", "no", "unsure"] as const).map((answer) => (
+                              <TableCell key={answer} align="center">
+                                <RadioGroupItem
+                                  value={answer}
+                                  aria-label={`${row.text}: ${answer}`}
+                                />
+                              </TableCell>
+                            ))}
+                          </RadioGroup>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
 
-              <div className="flex flex-col gap-2">
-                <Label>Allergies</Label>
+              <Field>
+                <FieldLabel>Allergies</FieldLabel>
                 {allergies.length === 0 && (
-                  <p className="text-muted-foreground text-sm">No allergies added.</p>
+                  <FieldDescription>No allergies added.</FieldDescription>
                 )}
                 {allergies.map((allergy, index) => (
-                  <div
+                  <FieldGroup
                     key={index}
                     className="flex flex-col gap-2 sm:flex-row sm:items-start"
                   >
-                    <div className="flex flex-1 flex-col gap-1">
+                    <Field
+                      className="flex-1"
+                      data-invalid={showErrors && errors.allergens[index]}
+                    >
+                      <FieldLabel htmlFor={`nf-allergen-${index}`}>Allergen</FieldLabel>
                       <Input
-                        aria-label="Allergen"
+                        id={`nf-allergen-${index}`}
                         placeholder="Allergen"
                         value={allergy.allergen}
                         onChange={(e) => updateAllergy(index, "allergen", e.target.value)}
                         aria-invalid={showErrors && errors.allergens[index]}
                       />
                       {showErrors && errors.allergens[index] && (
-                        <p className="text-destructive text-sm">Allergen is required.</p>
+                        <FieldError>Allergen is required.</FieldError>
                       )}
-                    </div>
-                    <select
-                      aria-label="Severity"
-                      className={cn(fieldClass, "sm:w-32")}
-                      value={allergy.severity}
-                      onChange={(e) => updateAllergy(index, "severity", e.target.value)}
-                    >
-                      <option value="" disabled>
-                        Severity…
-                      </option>
-                      <option value="Mild">Mild</option>
-                      <option value="Moderate">Moderate</option>
-                      <option value="Severe">Severe</option>
-                    </select>
-                    <Input
-                      aria-label="Reaction"
-                      placeholder="Reaction"
-                      className="flex-1"
-                      value={allergy.reaction}
-                      onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
-                    />
+                    </Field>
+                    <Field className="sm:w-32">
+                      <FieldLabel htmlFor={`nf-severity-${index}`}>Severity</FieldLabel>
+                      <Combobox
+                        items={SEVERITY_OPTIONS}
+                        value={allergy.severity || null}
+                        onValueChange={(value) =>
+                          updateAllergy(index, "severity", value ?? "")
+                        }
+                      >
+                        <ComboboxInput
+                          id={`nf-severity-${index}`}
+                          className="w-full"
+                          placeholder="Severity…"
+                        />
+                        <ComboboxContent>
+                          <ComboboxEmpty>No items found.</ComboboxEmpty>
+                          <ComboboxList>
+                            {(item) => (
+                              <ComboboxItem key={item} value={item}>
+                                {item}
+                              </ComboboxItem>
+                            )}
+                          </ComboboxList>
+                        </ComboboxContent>
+                      </Combobox>
+                    </Field>
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor={`nf-reaction-${index}`}>Reaction</FieldLabel>
+                      <Input
+                        id={`nf-reaction-${index}`}
+                        placeholder="Reaction"
+                        value={allergy.reaction}
+                        onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
+                      />
+                    </Field>
                     <Button
                       type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="text-destructive"
+                      variant="destructive"
+                      size="sm"
                       aria-label={`Remove allergy ${index + 1}`}
                       onClick={() => removeAllergy(index)}
                     >
-                      ✕
+                      Remove
                     </Button>
-                  </div>
+                  </FieldGroup>
                 ))}
-                <div>
-                  <Button type="button" variant="outline" size="sm" onClick={addAllergy}>
-                    Add allergy
-                  </Button>
-                </div>
-              </div>
+                <Button type="button" variant="outline" size="sm" onClick={addAllergy}>
+                  Add allergy
+                </Button>
+              </Field>
 
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="nf-meds">Current medications</Label>
+              <Field>
+                <FieldLabel htmlFor="nf-meds">Current medications</FieldLabel>
                 <Textarea
                   id="nf-meds"
                   rows={3}
                   value={currentMedications}
                   onChange={(e) => setCurrentMedications(e.target.value)}
                 />
-              </div>
-            </div>
+              </Field>
+            </FieldGroup>
           )}
 
           {/* ── Consent ───────────────────────────────────────────── */}
           {currentPage === 3 && (
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1">
-                <Label className="font-normal">
-                  <input
-                    type="checkbox"
-                    checked={consentTreatment}
-                    onChange={(e) => setConsentTreatment(e.target.checked)}
-                    className="accent-primary size-4"
-                  />
-                  I consent to treatment
-                </Label>
-                {showErrors && errors.consentTreatment && (
-                  <p className="text-destructive text-sm">Consent to treatment is required.</p>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <Label className="font-normal">
-                  <input
-                    type="checkbox"
-                    checked={consentPrivacy}
-                    onChange={(e) => setConsentPrivacy(e.target.checked)}
-                    className="accent-primary size-4"
-                  />
-                  I acknowledge the privacy practices (HIPAA)
-                </Label>
-                {showErrors && errors.consentPrivacy && (
-                  <p className="text-destructive text-sm">Acknowledgement is required.</p>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <Label>Signature</Label>
-                <canvas
-                  ref={canvasRef}
-                  width={400}
-                  height={140}
-                  className="border-input bg-background text-foreground w-full max-w-full cursor-crosshair touch-none rounded-md border"
-                  onPointerDown={startStroke}
-                  onPointerMove={moveStroke}
-                  onPointerUp={endStroke}
-                  onPointerLeave={endStroke}
+            <FieldGroup>
+              <Field
+                orientation="horizontal"
+                data-invalid={showErrors && errors.consentTreatment}
+              >
+                <Checkbox
+                  id="nf-consent-treatment"
+                  checked={consentTreatment}
+                  onCheckedChange={(checked) => setConsentTreatment(checked === true)}
                 />
-                <div>
-                  <Button type="button" variant="link" size="sm" className="px-0" onClick={clearSignature}>
-                    Clear signature
-                  </Button>
-                </div>
-              </div>
+                <FieldContent>
+                  <FieldLabel htmlFor="nf-consent-treatment">
+                    I consent to treatment
+                  </FieldLabel>
+                  {showErrors && errors.consentTreatment && (
+                    <FieldError>Consent to treatment is required.</FieldError>
+                  )}
+                </FieldContent>
+              </Field>
 
-              <div className="flex flex-col gap-2 sm:max-w-[calc(50%-0.5rem)]">
-                <Label htmlFor="nf-signed">Date</Label>
+              <Field
+                orientation="horizontal"
+                data-invalid={showErrors && errors.consentPrivacy}
+              >
+                <Checkbox
+                  id="nf-consent-privacy"
+                  checked={consentPrivacy}
+                  onCheckedChange={(checked) => setConsentPrivacy(checked === true)}
+                />
+                <FieldContent>
+                  <FieldLabel htmlFor="nf-consent-privacy">
+                    I acknowledge the privacy practices (HIPAA)
+                  </FieldLabel>
+                  {showErrors && errors.consentPrivacy && (
+                    <FieldError>Acknowledgement is required.</FieldError>
+                  )}
+                </FieldContent>
+              </Field>
+
+              <Field>
+                <FieldLabel>Signature</FieldLabel>
+                <Card>
+                  <CardContent>
+                    <canvas
+                      ref={canvasRef}
+                      width={400}
+                      height={140}
+                      style={{ touchAction: "none", cursor: "crosshair", display: "block", width: "100%" }}
+                      onPointerDown={startStroke}
+                      onPointerMove={moveStroke}
+                      onPointerUp={endStroke}
+                      onPointerLeave={endStroke}
+                    />
+                  </CardContent>
+                </Card>
+                <Button type="button" variant="link" size="sm" onClick={clearSignature}>
+                  Clear signature
+                </Button>
+              </Field>
+
+              <Field className="sm:max-w-[calc(50%-0.5rem)]">
+                <FieldLabel htmlFor="nf-signed">Date</FieldLabel>
                 <Input
                   id="nf-signed"
                   type="date"
                   value={signedDate}
                   onChange={(e) => setSignedDate(e.target.value)}
                 />
-              </div>
-            </div>
+              </Field>
+            </FieldGroup>
           )}
 
           {showErrors && !isPageValid(currentPage) && (
-            <p className="border-destructive/30 bg-destructive/10 text-destructive rounded-md border px-3 py-2 text-sm">
-              Please fix the highlighted fields before continuing.
-            </p>
+            <Alert variant="destructive">
+              <AlertDescription>
+                Please fix the highlighted fields before continuing.
+              </AlertDescription>
+            </Alert>
           )}
 
-          {/* ── Wizard navigation ─────────────────────────────────── */}
-          <div className="flex justify-between">
-            <div className="flex gap-2">
+          <Field orientation="horizontal">
+            <ButtonGroup>
               <Button
                 type="button"
                 variant="outline"
@@ -764,11 +780,10 @@ export function NativeControls() {
               >
                 Previous
               </Button>
-              {/* Native twin of the SurveyJS custom "Prefill demo data" button. */}
               <Button type="button" variant="outline" onClick={prefillForm}>
                 Prefill demo data
               </Button>
-            </div>
+            </ButtonGroup>
             {currentPage < LAST_PAGE ? (
               <Button type="button" onClick={goNext}>
                 Next
@@ -776,8 +791,10 @@ export function NativeControls() {
             ) : (
               <Button type="submit">Complete</Button>
             )}
-          </div>
+          </Field>
+          </FieldGroup>
         </form>
+        </FieldGroup>
       </CardContent>
     </Card>
   );

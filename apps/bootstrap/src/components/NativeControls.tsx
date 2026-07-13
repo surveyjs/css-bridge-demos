@@ -697,23 +697,14 @@ export function NativeControls() {
           )}
 
           {/* ── Wizard navigation ─────────────────────────────────── */}
-          <div className="d-flex justify-content-between mt-4">
-            <div className="d-flex gap-2">
-              <Button
-                variant="outline-secondary"
-                type="button"
-                onClick={goBack}
-                disabled={currentPage === 0}
-              >
+          <div className="d-flex gap-2 mt-4">
+            {currentPage > 0 && (
+              <Button variant="outline-primary" type="button" onClick={goBack}>
                 Previous
               </Button>
-              {/* Native twin of the SurveyJS custom "Prefill demo data" button. */}
-              <Button variant="outline-primary" type="button" onClick={prefillForm}>
-                Prefill demo data
-              </Button>
-            </div>
+            )}
             {currentPage < LAST_PAGE ? (
-              <Button variant="primary" onClick={goNext}>
+              <Button variant="outline-primary" onClick={goNext}>
                 Next
               </Button>
             ) : (
@@ -721,6 +712,10 @@ export function NativeControls() {
                 Complete
               </Button>
             )}
+            {/* Native twin of the SurveyJS custom "Prefill demo data" button. */}
+            <Button variant="outline-primary" type="button" onClick={prefillForm}>
+              Prefill demo data
+            </Button>
           </div>
         </Form>
       </Card.Body>

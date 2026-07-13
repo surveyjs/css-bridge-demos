@@ -696,23 +696,14 @@ export function NativeControls() {
           )}
 
           {/* ── Wizard navigation ─────────────────────────────────── */}
-          <Stack direction="row" justifyContent="space-between" sx={{ mt: 3 }}>
-            <Stack direction="row" spacing={1}>
-              <Button
-                variant="outlined"
-                type="button"
-                onClick={goBack}
-                disabled={currentPage === 0}
-              >
+          <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
+            {currentPage > 0 && (
+              <Button variant="outlined" type="button" onClick={goBack}>
                 Previous
               </Button>
-              {/* Native twin of the SurveyJS custom "Prefill demo data" button. */}
-              <Button variant="outlined" type="button" onClick={prefillForm}>
-                Prefill demo data
-              </Button>
-            </Stack>
+            )}
             {currentPage < LAST_PAGE ? (
-              <Button variant="contained" onClick={goNext}>
+              <Button variant="outlined" onClick={goNext}>
                 Next
               </Button>
             ) : (
@@ -720,6 +711,10 @@ export function NativeControls() {
                 Complete
               </Button>
             )}
+            {/* Native twin of the SurveyJS custom "Prefill demo data" button. */}
+            <Button variant="outlined" type="button" onClick={prefillForm}>
+              Prefill demo data
+            </Button>
           </Stack>
         </Box>
       </CardContent>

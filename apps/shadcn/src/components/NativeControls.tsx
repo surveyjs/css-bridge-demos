@@ -729,6 +729,7 @@ export function NativeControls() {
                 </FieldContent>
               </Field>
 
+              <FieldGroup className="grid gap-4 sm:grid-cols-2">
               <Field>
                 <FieldLabel>Signature</FieldLabel>
                 <Card>
@@ -750,7 +751,7 @@ export function NativeControls() {
                 </Button>
               </Field>
 
-              <Field className="sm:max-w-[calc(50%-0.5rem)]">
+              <Field>
                 <FieldLabel htmlFor="nf-signed">Date</FieldLabel>
                 <Input
                   id="nf-signed"
@@ -759,6 +760,7 @@ export function NativeControls() {
                   onChange={(e) => setSignedDate(e.target.value)}
                 />
               </Field>
+              </FieldGroup>
             </FieldGroup>
           )}
 
@@ -771,7 +773,7 @@ export function NativeControls() {
           )}
 
           {/* ── Wizard navigation ─────────────────────────────────── */}
-          <div className="flex gap-2">
+          <Field orientation="horizontal">
             {currentPage > 0 && (
               <Button type="button" variant="outline" onClick={goBack}>
                 Previous
@@ -788,7 +790,7 @@ export function NativeControls() {
             <Button type="button" variant="outline" onClick={prefillForm}>
               Prefill demo data
             </Button>
-          </div>
+          </Field>
           </FieldGroup>
         </form>
         </FieldGroup>

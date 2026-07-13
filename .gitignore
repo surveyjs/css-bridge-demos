@@ -1,5 +1,15 @@
 node_modules/
 .next/
+
+# shadcn registry components — installed via `npm run install:ui` in apps/shadcn
+apps/shadcn/src/components/ui/styles/*/
+apps/shadcn/src/components/ui/badge.tsx
+apps/shadcn/src/components/ui/button.tsx
+apps/shadcn/src/components/ui/dialog.tsx
+apps/shadcn/src/components/ui/dropdown-menu.tsx
+apps/shadcn/src/components/ui/input-group.tsx
+apps/shadcn/src/components/ui/separator.tsx
+apps/shadcn/src/components/ui/sheet.tsx
 dist/
 .turbo/
 *.tsbuildinfo

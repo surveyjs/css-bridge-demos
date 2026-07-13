@@ -3,6 +3,7 @@
 import {
   useRef,
   useState,
+  type ChangeEvent,
   type FormEvent,
   type PointerEvent,
 } from "react";
@@ -401,7 +402,7 @@ export function NativeControls() {
                   <FieldLabel>Sex assigned at birth</FieldLabel>
                   <RadioGroup
                     value={sex}
-                    onValueChange={(value) => setSex(value as Sex)}
+                    onValueChange={(value: string) => setSex(value as Sex)}
                     className="flex flex-row gap-6"
                   >
                     <Field orientation="horizontal">
@@ -432,7 +433,7 @@ export function NativeControls() {
                   <Combobox
                     items={CONTACT_METHODS}
                     value={preferredContact || null}
-                    onValueChange={(value) => setPreferredContact(value ?? "")}
+                    onValueChange={(value: string | null) => setPreferredContact(value ?? "")}
                   >
                     <ComboboxInput
                       id="nf-contact"
@@ -441,7 +442,7 @@ export function NativeControls() {
                     <ComboboxContent>
                       <ComboboxEmpty>No items found.</ComboboxEmpty>
                       <ComboboxList>
-                        {(item) => (
+                        {(item: string) => (
                           <ComboboxItem key={item} value={item}>
                             {item}
                           </ComboboxItem>
@@ -503,7 +504,7 @@ export function NativeControls() {
                       <FieldLabel>Patient is the…</FieldLabel>
                       <RadioGroup
                         value={relationship}
-                        onValueChange={(value) => setRelationship(value as Relationship)}
+                        onValueChange={(value: string) => setRelationship(value as Relationship)}
                         className="flex flex-wrap gap-6"
                       >
                         {(
@@ -600,7 +601,7 @@ export function NativeControls() {
                           <TableCell>{row.text}</TableCell>
                           <RadioGroup
                             value={history[row.value]}
-                            onValueChange={(value) =>
+                            onValueChange={(value: string) =>
                               setHistory((h) => ({
                                 ...h,
                                 [row.value]: value as HistoryAnswer,
@@ -655,7 +656,7 @@ export function NativeControls() {
                       <Combobox
                         items={SEVERITY_OPTIONS}
                         value={allergy.severity || null}
-                        onValueChange={(value) =>
+                        onValueChange={(value: string | null) =>
                           updateAllergy(index, "severity", value ?? "")
                         }
                       >
@@ -667,7 +668,7 @@ export function NativeControls() {
                         <ComboboxContent>
                           <ComboboxEmpty>No items found.</ComboboxEmpty>
                           <ComboboxList>
-                            {(item) => (
+                            {(item: string) => (
                               <ComboboxItem key={item} value={item}>
                                 {item}
                               </ComboboxItem>
@@ -707,7 +708,7 @@ export function NativeControls() {
                   id="nf-meds"
                   rows={3}
                   value={currentMedications}
-                  onChange={(e) => setCurrentMedications(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setCurrentMedications(e.target.value)}
                 />
               </Field>
             </FieldGroup>
@@ -723,7 +724,7 @@ export function NativeControls() {
                 <Checkbox
                   id="nf-consent-treatment"
                   checked={consentTreatment}
-                  onCheckedChange={(checked) => setConsentTreatment(checked === true)}
+                  onCheckedChange={(checked: boolean | "indeterminate") => setConsentTreatment(checked === true)}
                 />
                 <FieldContent>
                   <FieldLabel htmlFor="nf-consent-treatment">
@@ -742,7 +743,7 @@ export function NativeControls() {
                 <Checkbox
                   id="nf-consent-privacy"
                   checked={consentPrivacy}
-                  onCheckedChange={(checked) => setConsentPrivacy(checked === true)}
+                  onCheckedChange={(checked: boolean | "indeterminate") => setConsentPrivacy(checked === true)}
                 />
                 <FieldContent>
                   <FieldLabel htmlFor="nf-consent-privacy">

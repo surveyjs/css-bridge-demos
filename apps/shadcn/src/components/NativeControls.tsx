@@ -770,28 +770,25 @@ export function NativeControls() {
             </Alert>
           )}
 
-          <Field orientation="horizontal">
-            <ButtonGroup>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={goBack}
-                disabled={currentPage === 0}
-              >
+          {/* ── Wizard navigation ─────────────────────────────────── */}
+          <div className="flex gap-2">
+            {currentPage > 0 && (
+              <Button type="button" variant="outline" onClick={goBack}>
                 Previous
               </Button>
-              <Button type="button" variant="outline" onClick={prefillForm}>
-                Prefill demo data
-              </Button>
-            </ButtonGroup>
+            )}
             {currentPage < LAST_PAGE ? (
-              <Button type="button" onClick={goNext}>
+              <Button type="button" variant="outline" onClick={goNext}>
                 Next
               </Button>
             ) : (
               <Button type="submit">Complete</Button>
             )}
-          </Field>
+            {/* Native twin of the SurveyJS custom "Prefill demo data" button. */}
+            <Button type="button" variant="outline" onClick={prefillForm}>
+              Prefill demo data
+            </Button>
+          </div>
           </FieldGroup>
         </form>
         </FieldGroup>

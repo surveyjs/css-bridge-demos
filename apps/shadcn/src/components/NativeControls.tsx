@@ -48,8 +48,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { medicalFormJson, medicalFormSample } from "@adapter/schemas";
+import {
+  Stepper,
+  StepperIndicator,
+  StepperItem,
+  StepperLabel,
+  StepperList,
+  StepperSeparator,
+} from "@/components/ui/stepper";
 import { FormCompleted } from "./FormCompleted";
-import { WizardStepper } from "./WizardStepper";
 
 /**
  * Hand-built shadcn/ui twin of the SurveyJS medical-intake form
@@ -322,7 +329,25 @@ export function NativeControls() {
       </CardHeader>
       <CardContent>
         <FieldGroup>
-          <WizardStepper pages={PAGES} currentPage={currentPage} />
+          <Stepper value={String(currentPage)}>
+            <StepperList aria-label="Form steps" className="gap-3">
+              {PAGES.map((title, index) => (
+                <StepperItem
+                  key={title}
+                  value={String(index)}
+                  completed={index < currentPage}
+                  defaultTrigger={false}
+                  separator={false}
+                >
+                  <div className="inline-flex min-h-10 w-full min-w-0 flex-col items-center gap-2 text-center text-sm font-medium text-muted-foreground">
+                    <StepperIndicator />
+                    <StepperLabel>{title}</StepperLabel>
+                  </div>
+                  <StepperSeparator />
+                </StepperItem>
+              ))}
+            </StepperList>
+          </Stepper>
 
           <CardTitle>{PAGES[currentPage]}</CardTitle>
 

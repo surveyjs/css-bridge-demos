@@ -25,7 +25,7 @@ import {
   mkdirSync,
 } from "node:fs";
 import { execSync } from "node:child_process";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -121,10 +121,17 @@ function shadcnAdd(components, path) {
 }
 
 function rewriteStyleImports(styleDir) {
+  const styleId = basename(styleDir);
   for (const file of readdirSync(styleDir).filter((f) => f.endsWith(".tsx"))) {
     let content = readFileSync(join(styleDir, file), "utf8");
     for (const comp of STYLE_COMPONENTS) {
       content = content.replaceAll(`@/components/ui/${comp}`, `./${comp}`);
+      // shadcn CLI with --path emits style-scoped paths, e.g.
+      // @/components/ui/styles/base-lyra/button instead of @/components/ui/button.
+      content = content.replaceAll(
+        `@/components/ui/styles/${styleId}/${comp}`,
+        `./${comp}`,
+      );
     }
     writeFileSync(join(styleDir, file), content);
   }
@@ -331,6 +338,10 @@ if (glueOnly) {
   if (!stylesInstalled()) {
     console.log("Per-style shadcn components missing — running full install…");
     installRegistry();
+  } else {
+    for (const id of styleIds()) {
+      rewriteStyleImports(join(UI, "styles", id));
+    }
   }
   generateGlue();
 } else {

@@ -5,9 +5,10 @@
  *   node scripts/install-ui.mjs --glue-only → regenerate glue from existing files
  *
  * Per-style shadcn configs live in scripts/ui-configs/<id>/components.json (committed).
- * Per-style registry components live in src/components/ui/styles/<id>/ (gitignored).
+ * Per-style registry components live in src/components/ui/styles/<id>/ (committed).
  * Chrome-only new-york components (button, sheet, dialog, dropdown-menu, badge)
- * live in src/components/ui/ (gitignored). Dispatchers and stepper.tsx stay in git.
+ * live in src/components/ui/. Wiped and reinstalled on every `install:ui` run.
+ * Dispatchers and stepper.tsx stay in git (glue only).
  *
  * Palette (base color) and accent (theme) are NOT baked into installed components.
  * Every style config keeps baseColor: "neutral" + cssVariables: true so controls
@@ -20,6 +21,8 @@ import {
   readdirSync,
   existsSync,
   unlinkSync,
+  rmSync,
+  mkdirSync,
 } from "node:fs";
 import { execSync } from "node:child_process";
 import { dirname, join } from "node:path";
@@ -279,7 +282,27 @@ function generateGlue() {
   }
 }
 
+function cleanRegistry() {
+  console.log("Cleaning registry components…");
+  const stylesDir = join(UI, "styles");
+  if (existsSync(stylesDir)) {
+    for (const entry of readdirSync(stylesDir, { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        rmSync(join(stylesDir, entry.name), { recursive: true, force: true });
+      }
+    }
+  } else {
+    mkdirSync(stylesDir, { recursive: true });
+  }
+  for (const comp of CHROME_COMPONENTS) {
+    const file = join(UI, `${comp}.tsx`);
+    if (existsSync(file)) unlinkSync(file);
+  }
+}
+
 function installRegistry() {
+  cleanRegistry();
+
   console.log("Installing per-style shadcn components…");
   for (const id of styleIds()) {
     console.log(`  ${id}`);

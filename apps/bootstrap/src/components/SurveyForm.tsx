@@ -1,5 +1,6 @@
 "use client";
 
+import "@/lib/survey-ssr-environment";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Card } from "react-bootstrap";
 import { Survey } from "survey-react-ui";
@@ -131,10 +132,11 @@ export function SurveyForm({
   };
 
   // The form is server-rendered (SSR) and hydrated on the client — there is NO
-  // mount gate. survey-core guards every DOM/`environment` access (see
-  // DomDocumentHelper), so the model builds and the stock <Survey> renders to
-  // HTML during Next's prerender. Only the Creator (Builder route) stays
-  // client-only, because its constructor touches `navigator` at build time.
+  // mount gate. `@/lib/survey-ssr-environment` stubs `settings.environment` for
+  // SSR; survey-core guards other DOM access (see DomDocumentHelper), so the model
+  // builds and the stock <Survey> renders to HTML during Next's prerender. Only
+  // the Creator (Builder route) stays client-only, because its constructor
+  // touches `navigator` at build time.
   if (completed) {
     return <FormCompleted message={completedMessage} onEdit={handleEdit} />;
   }

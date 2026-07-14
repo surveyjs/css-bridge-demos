@@ -1,5 +1,6 @@
 "use client";
 
+import "@/lib/survey-ssr-environment";
 import { useEffect, useMemo, useRef } from "react";
 import { Survey } from "survey-react-ui";
 import { allQuestionsSchema, createSurveyModel } from "@adapter/schemas";
@@ -53,8 +54,7 @@ export function AllQuestionsGallery() {
     model.isCompact = borderless;
   }, [model, borderless]);
 
-  // Server-rendered and hydrated — no mount gate. survey-core guards all DOM
-  // access, so the model builds and <Survey> renders to HTML during Next's
-  // prerender (unlike the Creator, which stays client-only).
+  // Server-rendered and hydrated — no mount gate. `@/lib/survey-ssr-environment`
+  // stubs `settings.environment` for SSR; survey-core guards other DOM access.
   return <Survey model={model} />;
 }

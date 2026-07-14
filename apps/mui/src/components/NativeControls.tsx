@@ -410,7 +410,7 @@ export function NativeControls() {
           {/* ── Insurance ─────────────────────────────────────────── */}
           {currentPage === 1 && (
             <Stack spacing={3}>
-              <Card variant="outlined" sx={{ bgcolor: "action.hover" }}>
+              <Card variant="outlined">
                 <CardContent>
                   <Typography variant="subtitle2" sx={{ mb: 2 }}>
                     Primary insurance
@@ -448,7 +448,6 @@ export function NativeControls() {
                     <FormControl>
                       <FormLabel id="nf-rel-label">Patient is the…</FormLabel>
                       <RadioGroup
-                        row
                         aria-labelledby="nf-rel-label"
                         value={relationship}
                         onChange={(e) => setRelationship(e.target.value as Relationship)}
@@ -473,7 +472,7 @@ export function NativeControls() {
               />
 
               {hasSecondary && (
-                <Card variant="outlined" sx={{ bgcolor: "action.hover" }}>
+                <Card variant="outlined">
                   <CardContent>
                     <Typography variant="subtitle2" sx={{ mb: 2 }}>
                       Secondary insurance

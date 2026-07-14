@@ -407,7 +407,7 @@ export function NativeControls() {
           {/* ── Insurance ─────────────────────────────────────────── */}
           {currentPage === 1 && (
             <>
-              <Card body className="mb-3 bg-body-tertiary">
+              <Card body className="mb-3">
                 <p className="fw-semibold small mb-3">Primary insurance</p>
                 <Row className="g-3 mb-3">
                   <Form.Group as={Col} md={6} controlId="nf-carrier">
@@ -457,7 +457,6 @@ export function NativeControls() {
                     ] as const
                   ).map(([value, label]) => (
                     <Form.Check
-                      inline
                       key={value}
                       type="radio"
                       name="nf-relationship"
@@ -482,7 +481,7 @@ export function NativeControls() {
               />
 
               {hasSecondary && (
-                <Card body className="bg-body-tertiary">
+                <Card body>
                   <p className="fw-semibold small mb-3">Secondary insurance</p>
                   <Row className="g-3">
                     <Form.Group as={Col} md={6} controlId="nf-carrier2">

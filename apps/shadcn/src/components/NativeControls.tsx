@@ -506,7 +506,6 @@ export function NativeControls() {
                       <RadioGroup
                         value={relationship}
                         onValueChange={(value: string) => setRelationship(value as Relationship)}
-                        className="flex flex-wrap gap-6"
                       >
                         {(
                           [

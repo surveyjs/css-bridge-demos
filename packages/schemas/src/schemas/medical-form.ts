@@ -96,7 +96,6 @@ export const medicalFormJson: SurveyJSON = {
               type: "radiogroup",
               name: "relationshipToInsured",
               title: "Patient is the…",
-              colCount: 0,
               defaultValue: "self",
               choices: [
                 { value: "self", text: "Policyholder" },

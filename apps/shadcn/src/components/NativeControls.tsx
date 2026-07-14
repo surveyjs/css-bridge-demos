@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -407,11 +408,11 @@ export function NativeControls() {
                   >
                     <Field orientation="horizontal">
                       <RadioGroupItem value="f" id="nf-sex-f" />
-                      <FieldLabel htmlFor="nf-sex-f">Female</FieldLabel>
+                      <Label htmlFor="nf-sex-f">Female</Label>
                     </Field>
                     <Field orientation="horizontal">
                       <RadioGroupItem value="m" id="nf-sex-m" />
-                      <FieldLabel htmlFor="nf-sex-m">Male</FieldLabel>
+                      <Label htmlFor="nf-sex-m">Male</Label>
                     </Field>
                   </RadioGroup>
                 </Field>
@@ -516,9 +517,9 @@ export function NativeControls() {
                         ).map((opt) => (
                           <Field key={opt.value} orientation="horizontal">
                             <RadioGroupItem value={opt.value} id={`nf-rel-${opt.value}`} />
-                            <FieldLabel htmlFor={`nf-rel-${opt.value}`}>
+                            <Label htmlFor={`nf-rel-${opt.value}`}>
                               {opt.text}
-                            </FieldLabel>
+                            </Label>
                           </Field>
                         ))}
                       </RadioGroup>

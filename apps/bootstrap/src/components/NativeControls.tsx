@@ -273,7 +273,7 @@ export function NativeControls() {
         {/* Survey title + description — mirrors the SurveyJS column's header,
             sharing the schema's exact description so only the "(…)" suffix
             differs between the two forms. */}
-        <h2 className="h4 mb-1">Patient Intake (Native Bootstrap)</h2>
+        <h2 className="mb-1">Patient Intake (Native Bootstrap)</h2>
         <p className="text-body-secondary mb-4">
           {medicalFormJson.description as string}
         </p>
@@ -302,7 +302,7 @@ export function NativeControls() {
 
         {/* Per-page title — the SurveyJS pages each carry a title, so the
             native wizard shows the active page's title too. */}
-        <h3 className="h5 mb-3">{PAGES[currentPage]}</h3>
+        <h3 className="mb-3">{PAGES[currentPage]}</h3>
 
         <Form noValidate onSubmit={handleSubmit}>
           {/* ── Patient ───────────────────────────────────────────── */}

@@ -405,7 +405,7 @@ export function NativeControls() {
                   <RadioGroup
                     value={sex}
                     onValueChange={(value: string) => setSex(value as Sex)}
-                    className="flex flex-row gap-6"
+                    className="flex !w-fit flex-row gap-6"
                   >
                     <Field orientation="horizontal">
                       <RadioGroupItem value="f" id="nf-sex-f" />

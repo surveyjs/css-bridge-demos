@@ -407,7 +407,7 @@ export function NativeControls() {
           {currentPage === 1 && (
             <>
               <Card body className="mb-3">
-                <p className="fw-semibold small mb-3">Primary insurance</p>
+                <Card.Title>Primary insurance</Card.Title>
                 <Row className="g-3 mb-3">
                   <Form.Group as={Col} md={6} controlId="nf-carrier">
                     <Form.Label>Insurance carrier</Form.Label>
@@ -481,7 +481,7 @@ export function NativeControls() {
 
               {hasSecondary && (
                 <Card body>
-                  <p className="fw-semibold small mb-3">Secondary insurance</p>
+                  <Card.Title>Secondary insurance</Card.Title>
                   <Row className="g-3">
                     <Form.Group as={Col} md={6} controlId="nf-carrier2">
                       <Form.Label>Insurance carrier</Form.Label>

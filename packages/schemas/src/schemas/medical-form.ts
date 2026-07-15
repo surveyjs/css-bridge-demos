@@ -157,7 +157,7 @@ export const medicalFormJson: SurveyJSON = {
           title: "Allergies",
           addRowText: "Add allergy",
           rowCount: 0,
-          showHeader: false,
+          hideColumnsIfEmpty: true,
           noRowsText: "No allergies added.",
           columns: [
             { 

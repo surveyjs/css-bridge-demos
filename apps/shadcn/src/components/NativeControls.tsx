@@ -49,6 +49,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TrashIcon } from "lucide-react";
 import { medicalFormJson, medicalFormSample } from "@adapter/schemas";
 import {
   Stepper,
@@ -625,82 +626,90 @@ export function NativeControls() {
                 </CardContent>
               </Card>
 
+              <Card>
+              <CardContent>
               <Field>
                 <FieldLabel>Allergies</FieldLabel>
                 {allergies.length === 0 && (
                   <FieldDescription>No allergies added.</FieldDescription>
                 )}
-                {allergies.map((allergy, index) => (
-                  <FieldGroup
-                    key={index}
-                    className="flex flex-col gap-2 sm:flex-row sm:items-start"
-                  >
-                    <Field
-                      className="flex-1"
-                      data-invalid={showErrors && errors.allergens[index]}
-                    >
-                      <FieldLabel htmlFor={`nf-allergen-${index}`}>Allergen</FieldLabel>
-                      <Input
-                        id={`nf-allergen-${index}`}
-                        placeholder="Allergen"
-                        value={allergy.allergen}
-                        onChange={(e) => updateAllergy(index, "allergen", e.target.value)}
-                        aria-invalid={showErrors && errors.allergens[index]}
-                      />
-                      {showErrors && errors.allergens[index] && (
-                        <FieldError>Allergen is required.</FieldError>
-                      )}
-                    </Field>
-                    <Field className="sm:w-32">
-                      <FieldLabel htmlFor={`nf-severity-${index}`}>Severity</FieldLabel>
-                      <Combobox
-                        items={SEVERITY_OPTIONS}
-                        value={allergy.severity || null}
-                        onValueChange={(value: string | null) =>
-                          updateAllergy(index, "severity", value ?? "")
-                        }
-                      >
-                        <ComboboxInput
-                          id={`nf-severity-${index}`}
-                          className="w-full"
-                          placeholder="Severity…"
-                        />
-                        <ComboboxContent>
-                          <ComboboxEmpty>No items found.</ComboboxEmpty>
-                          <ComboboxList>
-                            {(item: string) => (
-                              <ComboboxItem key={item} value={item}>
-                                {item}
-                              </ComboboxItem>
+                {allergies.length > 0 && (
+                  <Table className="border-separate border-spacing-y-2 p-0">
+                    <TableBody>
+                      {allergies.map((allergy, index) => (
+                        <TableRow key={index} className="border-0 hover:bg-transparent">
+                          <TableCell className="p-0">
+                            <Input
+                              id={`nf-allergen-${index}`}
+                              placeholder="Allergen"
+                              aria-label="Allergen"
+                              value={allergy.allergen}
+                              onChange={(e) => updateAllergy(index, "allergen", e.target.value)}
+                              aria-invalid={showErrors && errors.allergens[index]}
+                            />
+                            {showErrors && errors.allergens[index] && (
+                              <FieldError>Allergen is required.</FieldError>
                             )}
-                          </ComboboxList>
-                        </ComboboxContent>
-                      </Combobox>
-                    </Field>
-                    <Field className="flex-1">
-                      <FieldLabel htmlFor={`nf-reaction-${index}`}>Reaction</FieldLabel>
-                      <Input
-                        id={`nf-reaction-${index}`}
-                        placeholder="Reaction"
-                        value={allergy.reaction}
-                        onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
-                      />
-                    </Field>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      aria-label={`Remove allergy ${index + 1}`}
-                      onClick={() => removeAllergy(index)}
-                    >
-                      Remove
-                    </Button>
-                  </FieldGroup>
-                ))}
-                <Button type="button" variant="outline" size="sm" onClick={addAllergy}>
-                  Add allergy
-                </Button>
+                          </TableCell>
+                          <TableCell className="py-0">
+                            <Combobox
+                              items={SEVERITY_OPTIONS}
+                              value={allergy.severity || null}
+                              onValueChange={(value: string | null) =>
+                                updateAllergy(index, "severity", value ?? "")
+                              }
+                            >
+                              <ComboboxInput
+                                id={`nf-severity-${index}`}
+                                className="w-full"
+                                placeholder="Severity…"
+                                aria-label="Severity"
+                              />
+                              <ComboboxContent>
+                                <ComboboxEmpty>No items found.</ComboboxEmpty>
+                                <ComboboxList>
+                                  {(item: string) => (
+                                    <ComboboxItem key={item} value={item}>
+                                      {item}
+                                    </ComboboxItem>
+                                  )}
+                                </ComboboxList>
+                              </ComboboxContent>
+                            </Combobox>
+                          </TableCell>
+                          <TableCell className="p-0">
+                            <Input
+                              id={`nf-reaction-${index}`}
+                              placeholder="Reaction"
+                              aria-label="Reaction"
+                              value={allergy.reaction}
+                              onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
+                            />
+                          </TableCell>
+                          <TableCell className="py-0">
+                            <Button
+                              type="button"
+                              variant="light"
+                              size="icon-sm"
+                              aria-label={`Remove allergy ${index + 1}`}
+                              onClick={() => removeAllergy(index)}
+                            >
+                              <TrashIcon />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+                <Field orientation="horizontal">
+                  <Button type="button" variant="secondary" size="sm" onClick={addAllergy}>
+                    Add allergy
+                  </Button>
+                </Field>
               </Field>
+              </CardContent>
+              </Card>
 
               <Field>
                 <FieldLabel htmlFor="nf-meds">Current medications</FieldLabel>

@@ -3,6 +3,7 @@
 import { useRef, useState, type ChangeEvent, type FormEvent, type PointerEvent } from "react";
 import { Alert, Button, Card, Col, Form, Row, Table } from "react-bootstrap";
 import { medicalFormJson, medicalFormSample } from "@adapter/schemas";
+import { Trash } from 'react-bootstrap-icons';
 import { FormCompleted } from "./FormCompleted";
 import "./NativeControls.css";
 
@@ -519,10 +520,11 @@ export function NativeControls() {
           {/* ── History ───────────────────────────────────────────── */}
           {currentPage === 2 && (
             <>
+            <Card body className="mb-3">
               <Form.Label className="d-block">
                 Have you ever been diagnosed with any of the following?
               </Form.Label>
-              <Table bordered size="sm" className="mb-4 align-middle">
+              <Table size="sm" className="mb-4 align-middle">
                 <thead>
                   <tr>
                     <th scope="col" />
@@ -553,7 +555,8 @@ export function NativeControls() {
                   ))}
                 </tbody>
               </Table>
-
+              </Card>
+              <Card body className="mb-3">
               <Form.Label className="d-block">Allergies</Form.Label>
               {allergies.length === 0 && (
                 <p className="text-body-secondary small">No allergies added.</p>
@@ -597,27 +600,26 @@ export function NativeControls() {
                       onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
                     />
                   </Col>
-                  <Col xs={12} md={1} className="d-grid">
+                  <Col xs={12} md={1}>
                     <Button
-                      variant="outline-danger"
-                      size="sm"
+                      variant="light"
                       onClick={() => removeAllergy(index)}
                       aria-label={`Remove allergy ${index + 1}`}
                     >
-                      ✕
+                      <Trash />
                     </Button>
                   </Col>
                 </Row>
               ))}
               <Button
-                variant="outline-secondary"
+                variant="light"
                 size="sm"
                 className="mb-4"
                 onClick={addAllergy}
               >
                 Add allergy
               </Button>
-
+              </Card>
               <Form.Group controlId="nf-medications">
                 <Form.Label>Current medications</Form.Label>
                 <Form.Control
@@ -627,6 +629,7 @@ export function NativeControls() {
                   onChange={(e) => setCurrentMedications(e.target.value)}
                 />
               </Form.Group>
+
             </>
           )}
 

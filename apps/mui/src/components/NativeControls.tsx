@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
+import DeleteIcon from "@mui/icons-material/Delete";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -506,7 +507,8 @@ export function NativeControls() {
           {/* ── History ───────────────────────────────────────────── */}
           {currentPage === 2 && (
             <Stack spacing={3}>
-              <FormControl component="fieldset">
+              <Card variant="outlined">
+                <CardContent>
                 <FormLabel component="legend" sx={{ mb: 1 }}>
                   Have you ever been diagnosed with any of the following?
                 </FormLabel>
@@ -541,67 +543,100 @@ export function NativeControls() {
                     ))}
                   </TableBody>
                 </Table>
-              </FormControl>
+              </CardContent>
+              </Card>
 
-              <Box>
+              <Card variant="outlined">
+              <CardContent>
                 <FormLabel sx={{ display: "block", mb: 1 }}>Allergies</FormLabel>
                 {allergies.length === 0 && (
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                     No allergies added.
                   </Typography>
                 )}
-                <Stack spacing={2}>
-                  {allergies.map((allergy, index) => (
-                    <Stack
-                      key={index}
-                      direction={{ xs: "column", sm: "row" }}
-                      spacing={1}
-                      alignItems="flex-start"
-                    >
-                      <TextField
-                        label="Allergen"
-                        size="small"
-                        fullWidth
-                        value={allergy.allergen}
-                        onChange={(e) => updateAllergy(index, "allergen", e.target.value)}
-                        error={showErrors && errors.allergens[index]}
-                        helperText={showErrors && errors.allergens[index] ? "Allergen is required." : " "}
-                        required
-                      />
-                      <FormControl size="small" fullWidth>
-                        <InputLabel id={`nf-severity-${index}`}>Severity</InputLabel>
-                        <Select
-                          labelId={`nf-severity-${index}`}
-                          label="Severity"
-                          value={allergy.severity}
-                          onChange={(e) => updateAllergy(index, "severity", e.target.value)}
-                        >
-                          <MenuItem value="Mild">Mild</MenuItem>
-                          <MenuItem value="Moderate">Moderate</MenuItem>
-                          <MenuItem value="Severe">Severe</MenuItem>
-                        </Select>
-                      </FormControl>
-                      <TextField
-                        label="Reaction"
-                        size="small"
-                        fullWidth
-                        value={allergy.reaction}
-                        onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
-                      />
-                      <IconButton
-                        color="error"
-                        onClick={() => removeAllergy(index)}
-                        aria-label={`Remove allergy ${index + 1}`}
-                      >
-                        ✕
-                      </IconButton>
-                    </Stack>
-                  ))}
-                </Stack>
-                <Button variant="outlined" size="small" sx={{ mt: 1 }} onClick={addAllergy}>
+                {allergies.length > 0 && (
+                  <Table
+                    size="small"
+                    sx={{
+                      mb: 1,
+                      "& .MuiTableCell-root": { borderBottom: "none" },
+                    }}
+                  >
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Allergen</TableCell>
+                        <TableCell sx={{ width: 140 }}>Severity</TableCell>
+                        <TableCell>Reaction</TableCell>
+                        <TableCell sx={{ width: 48 }} />
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {allergies.map((allergy, index) => (
+                        <TableRow key={index}>
+                          <TableCell padding="none" sx={{ verticalAlign: "top", pr: 1, pb: 1 }}>
+                            <TextField
+                              size="small"
+                              fullWidth
+                              placeholder="Allergen *"
+                              aria-label="Allergen"
+                              value={allergy.allergen}
+                              onChange={(e) => updateAllergy(index, "allergen", e.target.value)}
+                              error={showErrors && errors.allergens[index]}
+                              helperText={
+                                showErrors && errors.allergens[index]
+                                  ? "Allergen is required."
+                                  : undefined
+                              }
+                              required
+                            />
+                          </TableCell>
+                          <TableCell padding="none" sx={{ verticalAlign: "top", pr: 1, pb: 1 }}>
+                            <Select
+                              size="small"
+                              fullWidth
+                              displayEmpty
+                              value={allergy.severity}
+                              onChange={(e) => updateAllergy(index, "severity", e.target.value)}
+                              aria-label="Severity"
+                              renderValue={(value) => value || "Severity…"}
+                            >
+                              <MenuItem value="" disabled>
+                                Severity…
+                              </MenuItem>
+                              <MenuItem value="Mild">Mild</MenuItem>
+                              <MenuItem value="Moderate">Moderate</MenuItem>
+                              <MenuItem value="Severe">Severe</MenuItem>
+                            </Select>
+                          </TableCell>
+                          <TableCell padding="none" sx={{ verticalAlign: "top", pr: 1, pb: 1 }}>
+                            <TextField
+                              size="small"
+                              fullWidth
+                              placeholder="Reaction"
+                              aria-label="Reaction"
+                              value={allergy.reaction}
+                              onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
+                            />
+                          </TableCell>
+                          <TableCell padding="none" sx={{ verticalAlign: "top" }}>
+                            <IconButton
+                              size="small"
+                              onClick={() => removeAllergy(index)}
+                              aria-label={`Remove allergy ${index + 1}`}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+                <Button size="small" onClick={addAllergy}>
                   Add allergy
                 </Button>
-              </Box>
+              </CardContent>
+              </Card>
 
               <TextField
                 label="Current medications"

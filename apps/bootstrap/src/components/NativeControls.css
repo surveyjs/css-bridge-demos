@@ -3,7 +3,8 @@
  * "pages" progress bar (and the structural match of the MUI column's
  * <Stepper alternativeLabel>): a horizontal row of numbered circles joined by
  * connector lines, with each page title centered below its circle. Completed
- * steps show a check, the active step is filled, upcoming steps stay muted.
+ * steps show a filled circle with a white number, the active step is a white
+ * circle with a primary outline, upcoming steps stay muted.
  *
  * Pure host chrome — plain Bootstrap CSS variables only, so it re-themes with
  * the rest of the Bootstrap chrome (light/dark + Bootswatch) exactly like the
@@ -49,29 +50,34 @@
 .native-stepper__icon {
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   width: var(--native-step-size);
   height: var(--native-step-size);
+  border: 2px solid transparent;
   border-radius: 50%;
   font-size: 0.75rem;
+  font-weight: 400;
   line-height: 1;
   background-color: var(--bs-secondary-bg);
   color: var(--bs-secondary-color);
 }
-.native-stepper__step[data-state="completed"] .native-stepper__icon,
-.native-stepper__step[data-state="active"] .native-stepper__icon {
+.native-stepper__step[data-state="completed"] .native-stepper__icon {
+  border-color: var(--bs-primary);
   background-color: var(--bs-primary);
   color: #fff;
+}
+.native-stepper__step[data-state="active"] .native-stepper__icon {
+  border-color: var(--bs-primary);
+  background-color: var(--bs-body-bg);
+  color: var(--bs-secondary-color);
 }
 
 .native-stepper__label {
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  color: var(--bs-secondary-color);
-}
-.native-stepper__step[data-state="active"] .native-stepper__label {
-  color: var(--bs-body-color);
   font-weight: 500;
+  color: var(--bs-body-color);
 }

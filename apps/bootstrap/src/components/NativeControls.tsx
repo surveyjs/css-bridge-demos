@@ -293,9 +293,7 @@ export function NativeControls() {
                 data-state={state}
                 aria-current={i === currentPage ? "step" : undefined}
               >
-                <span className="native-stepper__icon">
-                  {state === "completed" ? "✓" : i + 1}
-                </span>
+                <span className="native-stepper__icon">{i + 1}</span>
                 <span className="native-stepper__label">{title}</span>
               </li>
             );

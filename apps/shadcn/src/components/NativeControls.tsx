@@ -591,9 +591,9 @@ export function NativeControls() {
                     <TableHeader>
                       <TableRow>
                         <TableHead />
-                        <TableHead align="center">Yes</TableHead>
-                        <TableHead align="center">No</TableHead>
-                        <TableHead align="center">Unsure</TableHead>
+                        <TableHead className="text-center">Yes</TableHead>
+                        <TableHead className="text-center">No</TableHead>
+                        <TableHead className="text-center">Unsure</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>

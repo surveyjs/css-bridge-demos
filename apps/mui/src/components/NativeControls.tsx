@@ -509,10 +509,10 @@ export function NativeControls() {
             <Stack spacing={3}>
               <Card variant="outlined">
                 <CardContent>
-                <FormLabel component="legend" sx={{ mb: 1 }}>
+                <FormLabel sx={{ mb: 1 }}>
                   Have you ever been diagnosed with any of the following?
                 </FormLabel>
-                <Table size="small">
+                <Table>
                   <TableHead>
                     <TableRow>
                       <TableCell />

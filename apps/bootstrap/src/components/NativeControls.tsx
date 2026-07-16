@@ -522,7 +522,7 @@ export function NativeControls() {
               <Form.Label className="d-block">
                 Have you ever been diagnosed with any of the following?
               </Form.Label>
-              <Table size="sm" className="mb-4 align-middle">
+              <Table className="mb-4 align-middle">
                 <thead>
                   <tr>
                     <th scope="col" />

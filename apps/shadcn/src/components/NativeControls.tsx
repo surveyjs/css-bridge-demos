@@ -599,7 +599,7 @@ export function NativeControls() {
                     <TableBody>
                       {HISTORY_ROWS.map((row) => (
                         <TableRow key={row.value}>
-                          <TableCell>{row.text}</TableCell>
+                          <TableHead>{row.text}</TableHead>
                           <RadioGroup
                             value={history[row.value]}
                             onValueChange={(value: string) =>

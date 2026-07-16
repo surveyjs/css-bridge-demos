@@ -413,7 +413,7 @@ export function NativeControls() {
             <Stack spacing={3}>
               <Card variant="outlined">
                 <CardContent>
-                  <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                  <Typography variant="h6" sx={{ mb: 2 }}>
                     Primary insurance
                   </Typography>
                   <Stack spacing={2}>
@@ -475,7 +475,7 @@ export function NativeControls() {
               {hasSecondary && (
                 <Card variant="outlined">
                   <CardContent>
-                    <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                    <Typography variant="h6" sx={{ mb: 2 }}>
                       Secondary insurance
                     </Typography>
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
@@ -550,32 +550,25 @@ export function NativeControls() {
               <CardContent>
                 <FormLabel sx={{ display: "block", mb: 1 }}>Allergies</FormLabel>
                 {allergies.length === 0 && (
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  <Typography color="text.secondary" sx={{ mb: 1 }}>
                     No allergies added.
                   </Typography>
                 )}
                 {allergies.length > 0 && (
-                  <Table
-                    size="small"
-                    sx={{
-                      mb: 1,
-                      "& .MuiTableCell-root": { borderBottom: "none" },
-                    }}
-                  >
+                  <Table sx={{ mb: 1 }}>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Allergen</TableCell>
-                        <TableCell sx={{ width: 140 }}>Severity</TableCell>
-                        <TableCell>Reaction</TableCell>
+                        <TableCell  align="center">Allergen</TableCell>
+                        <TableCell sx={{ width: 140 }} align="center">Severity</TableCell>
+                        <TableCell align="center">Reaction</TableCell>
                         <TableCell sx={{ width: 48 }} />
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {allergies.map((allergy, index) => (
                         <TableRow key={index}>
-                          <TableCell padding="none" sx={{ verticalAlign: "top", pr: 1, pb: 1 }}>
+                          <TableCell>
                             <TextField
-                              size="small"
                               fullWidth
                               placeholder="Allergen *"
                               aria-label="Allergen"
@@ -590,9 +583,8 @@ export function NativeControls() {
                               required
                             />
                           </TableCell>
-                          <TableCell padding="none" sx={{ verticalAlign: "top", pr: 1, pb: 1 }}>
+                          <TableCell>
                             <Select
-                              size="small"
                               fullWidth
                               displayEmpty
                               value={allergy.severity}
@@ -608,9 +600,8 @@ export function NativeControls() {
                               <MenuItem value="Severe">Severe</MenuItem>
                             </Select>
                           </TableCell>
-                          <TableCell padding="none" sx={{ verticalAlign: "top", pr: 1, pb: 1 }}>
+                          <TableCell>
                             <TextField
-                              size="small"
                               fullWidth
                               placeholder="Reaction"
                               aria-label="Reaction"
@@ -618,9 +609,8 @@ export function NativeControls() {
                               onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
                             />
                           </TableCell>
-                          <TableCell padding="none" sx={{ verticalAlign: "top" }}>
+                          <TableCell>
                             <IconButton
-                              size="small"
                               onClick={() => removeAllergy(index)}
                               aria-label={`Remove allergy ${index + 1}`}
                             >

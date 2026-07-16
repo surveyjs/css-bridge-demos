@@ -582,9 +582,9 @@ export function NativeControls() {
             <FieldGroup>
               <Card>
                 <CardHeader>
-                  <CardTitle>
+                  <FieldLabel>
                     Have you ever been diagnosed with any of the following?
-                  </CardTitle>
+                  </FieldLabel>
                 </CardHeader>
                 <CardContent>
                   <Table>
@@ -634,11 +634,19 @@ export function NativeControls() {
                   <FieldDescription>No allergies added.</FieldDescription>
                 )}
                 {allergies.length > 0 && (
-                  <Table className="border-separate border-spacing-y-2 p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-center">Allergen</TableHead>
+                        <TableHead className="text-center">Severity</TableHead>
+                        <TableHead className="text-center">Reaction</TableHead>
+                        <TableHead />
+                      </TableRow>
+                    </TableHeader>
                     <TableBody>
                       {allergies.map((allergy, index) => (
-                        <TableRow key={index} className="border-0 hover:bg-transparent">
-                          <TableCell className="p-0">
+                        <TableRow key={index}>
+                          <TableCell>
                             <Input
                               id={`nf-allergen-${index}`}
                               placeholder="Allergen"
@@ -651,7 +659,7 @@ export function NativeControls() {
                               <FieldError>Allergen is required.</FieldError>
                             )}
                           </TableCell>
-                          <TableCell className="py-0">
+                          <TableCell>
                             <Combobox
                               items={SEVERITY_OPTIONS}
                               value={allergy.severity || null}
@@ -677,7 +685,7 @@ export function NativeControls() {
                               </ComboboxContent>
                             </Combobox>
                           </TableCell>
-                          <TableCell className="p-0">
+                          <TableCell>
                             <Input
                               id={`nf-reaction-${index}`}
                               placeholder="Reaction"
@@ -686,7 +694,7 @@ export function NativeControls() {
                               onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
                             />
                           </TableCell>
-                          <TableCell className="py-0">
+                          <TableCell>
                             <Button
                               type="button"
                               variant="light"

@@ -557,58 +557,74 @@ export function NativeControls() {
               <Card body className="mb-3">
               <Form.Label className="d-block">Allergies</Form.Label>
               {allergies.length === 0 && (
-                <p className="text-body-secondary small">No allergies added.</p>
+                <p className="text-body-secondary">No allergies added.</p>
               )}
-              {allergies.map((allergy, index) => (
-                <Row className="g-2 mb-2 align-items-start" key={index}>
-                  <Col xs={12} md={4}>
-                    <Form.Control
-                      type="text"
-                      placeholder="Allergen"
-                      aria-label="Allergen"
-                      value={allergy.allergen}
-                      onChange={(e) => updateAllergy(index, "allergen", e.target.value)}
-                      isInvalid={showErrors && errors.allergens[index]}
-                      required
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Allergen is required.
-                    </Form.Control.Feedback>
-                  </Col>
-                  <Col xs={7} md={4}>
-                    <Form.Select
-                      aria-label="Severity"
-                      value={allergy.severity}
-                      onChange={(e) => updateAllergy(index, "severity", e.target.value)}
-                    >
-                      <option value="" disabled>
-                        Severity…
-                      </option>
-                      <option>Mild</option>
-                      <option>Moderate</option>
-                      <option>Severe</option>
-                    </Form.Select>
-                  </Col>
-                  <Col xs={5} md={3}>
-                    <Form.Control
-                      type="text"
-                      placeholder="Reaction"
-                      aria-label="Reaction"
-                      value={allergy.reaction}
-                      onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
-                    />
-                  </Col>
-                  <Col xs={12} md={1}>
-                    <Button
-                      variant="light"
-                      onClick={() => removeAllergy(index)}
-                      aria-label={`Remove allergy ${index + 1}`}
-                    >
-                      <Trash />
-                    </Button>
-                  </Col>
-                </Row>
-              ))}
+              {allergies.length > 0 && (
+                <Table className="mb-2 align-middle">
+                  <thead>
+                    <tr>
+                      <th scope="col" className="text-center fw-normal">Allergen</th>
+                      <th scope="col" className="text-center fw-normal" style={{ width: 140 }}>
+                        Severity
+                      </th>
+                      <th scope="col" className="text-center fw-normal">Reaction</th>
+                      <th scope="col" style={{ width: 48 }} />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allergies.map((allergy, index) => (
+                      <tr key={index}>
+                        <td>
+                          <Form.Control
+                            type="text"
+                            placeholder="Allergen"
+                            aria-label="Allergen"
+                            value={allergy.allergen}
+                            onChange={(e) => updateAllergy(index, "allergen", e.target.value)}
+                            isInvalid={showErrors && errors.allergens[index]}
+                            required
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            Allergen is required.
+                          </Form.Control.Feedback>
+                        </td>
+                        <td>
+                          <Form.Select
+                            aria-label="Severity"
+                            value={allergy.severity}
+                            onChange={(e) => updateAllergy(index, "severity", e.target.value)}
+                          >
+                            <option value="" disabled>
+                              Severity…
+                            </option>
+                            <option>Mild</option>
+                            <option>Moderate</option>
+                            <option>Severe</option>
+                          </Form.Select>
+                        </td>
+                        <td>
+                          <Form.Control
+                            type="text"
+                            placeholder="Reaction"
+                            aria-label="Reaction"
+                            value={allergy.reaction}
+                            onChange={(e) => updateAllergy(index, "reaction", e.target.value)}
+                          />
+                        </td>
+                        <td>
+                          <Button
+                            variant="light"
+                            onClick={() => removeAllergy(index)}
+                            aria-label={`Remove allergy ${index + 1}`}
+                          >
+                            <Trash />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              )}
               <Button
                 variant="light"
                 size="sm"

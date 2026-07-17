@@ -14,13 +14,12 @@ import {
 import { useBorderlessMode } from "./BorderlessMode";
 import { FormCompleted } from "./FormCompleted";
 
-// Base V3 CSS FIRST, then the Bootstrap adapter ON TOP so the adapter's
-// `--sjs2-*` overrides (declared on the same `.sjs-theme-overrides` root that
-// survey-core emits) win by source order. The adapter maps those variables onto
-// Bootstrap `--bs-*` tokens — there is NO SurveyJS-specific theme code: the form
-// re-skins automatically whenever the active Bootstrap theme/mode changes.
+// Base V3 CSS only. The per-theme Bootstrap adapter (`bootstrap-<id>`) is loaded
+// as a swappable <link> by the pre-paint script + ThemeProvider (keyed to the
+// active theme), so it re-skins the form automatically whenever the theme/mode
+// changes. Its `--sjs2-* → --bs-*` overrides live on the `.sjs-theme-overrides`
+// root — there is NO SurveyJS-specific theme code here.
 import "survey-core/survey-core.min.css";
-import "survey-core/themes/adapters/bootstrap.min.css";
 
 /**
  * Renders a SurveyJS V3 model with the Bootstrap theme adapter applied.

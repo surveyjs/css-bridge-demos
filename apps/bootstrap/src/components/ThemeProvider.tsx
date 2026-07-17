@@ -12,8 +12,10 @@ import {
   DEFAULT_MODE,
   DEFAULT_THEME,
   MODE_STORAGE_KEY,
+  SURVEY_ADAPTER_LINK_ID,
   THEME_LINK_ID,
   THEME_STORAGE_KEY,
+  surveyAdapterHref,
   themeHref,
   type ColorMode,
   type ColorThemeId,
@@ -51,8 +53,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setTheme = useCallback((next: ColorThemeId) => {
     setThemeState(next);
-    const link = document.getElementById(THEME_LINK_ID) as HTMLLinkElement | null;
-    if (link) link.setAttribute("href", themeHref(next));
+    // Swap BOTH the Bootswatch chrome sheet and the paired survey adapter, keyed
+    // to the same id — they are created before paint by the inline script.
+    const themeLink = document.getElementById(THEME_LINK_ID) as HTMLLinkElement | null;
+    if (themeLink) themeLink.setAttribute("href", themeHref(next));
+    const adapterLink = document.getElementById(SURVEY_ADAPTER_LINK_ID) as HTMLLinkElement | null;
+    if (adapterLink) adapterLink.setAttribute("href", surveyAdapterHref(next));
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch {

@@ -7,10 +7,10 @@ import { allQuestionsSchema, createSurveyModel } from "@adapter/schemas";
 import { useAllQuestionsMode } from "./AllQuestionsMode";
 import { useBorderlessMode } from "./BorderlessMode";
 
-// Same import order as SurveyForm: base V3 CSS first, Bootstrap adapter on top.
-// This page adds NO adapter code — it reuses the existing stylesheet verbatim.
+// Same as SurveyForm: base V3 CSS only. The per-theme Bootstrap adapter is a
+// swappable <link> loaded by the pre-paint script + ThemeProvider — this page
+// adds NO adapter code.
 import "survey-core/survey-core.min.css";
-import "survey-core/themes/adapters/bootstrap.min.css";
 // Host-chrome sticky-TOC fix for the window-scrolled shell (see the CSS file).
 import "./AllQuestionsGallery.css";
 

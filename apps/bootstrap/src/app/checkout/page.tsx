@@ -10,9 +10,7 @@ import { SurveyForm } from "@/components/SurveyForm";
 export default function CheckoutPage() {
   return (
     <div className="row justify-content-center">
-      <div className="col-12 col-xl-9 col-xxl-7">
-        <SurveyForm schema={checkoutSchema} prefillData={checkoutSample} />
-      </div>
+      <SurveyForm schema={checkoutSchema} prefillData={checkoutSample} />
     </div>
   );
 }

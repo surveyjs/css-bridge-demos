@@ -9,7 +9,9 @@ import type { SurveyJSON } from "@adapter/schemas";
 //   1. survey-core base      — the headless library's V3 stylesheet
 //   2. survey-creator-core   — the Creator chrome, built ON TOP of (1) and
 //                              consuming the SAME `--sjs2-*` custom properties
-//   3. the Bootstrap adapter  — maps `--sjs2-* → --bs-*` on `.sjs-theme-overrides`
+//   3. the per-theme Bootstrap adapter — maps `--sjs2-* → --bs-*` on
+//      `.sjs-theme-overrides`, loaded as a swappable <link> by the pre-paint
+//      script + ThemeProvider (keyed to the active theme), not imported here.
 //
 // KEY INSIGHT (prompt 5): there is intentionally NO separate Creator adapter.
 // The Creator emits the same `.sd-theme-root` theme root the form does, so the
@@ -17,7 +19,6 @@ import type { SurveyJSON } from "@adapter/schemas";
 // Creator chrome automatically. This file authors zero new adapter CSS.
 import "survey-core/survey-core.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
-import "survey-core/themes/adapters/bootstrap.min.css";
 
 // Register the SurveyJS commercial license so the Creator runs without the
 // unlicensed nag/watermark. Set once at module load — before any Creator is

@@ -57,8 +57,7 @@ export const checkoutJson: SurveyJSON = {
               type: "text",
               name: "city",
               title: "City",
-              isRequired: true,
-              startWithNewLine: false,
+              isRequired: true
             },
             {
               type: "dropdown",

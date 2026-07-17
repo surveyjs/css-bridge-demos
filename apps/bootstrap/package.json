@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "copy-themes": "node scripts/copy-themes.mjs",
-    "predev": "node scripts/copy-themes.mjs",
+    "copy-survey-adapters": "node scripts/copy-survey-adapters.mjs --dev",
+    "watch-survey-adapters": "node scripts/copy-survey-adapters.mjs --dev --watch",
+    "predev": "node scripts/copy-themes.mjs && node scripts/copy-survey-adapters.mjs --dev",
     "dev": "next dev -p 3000",
-    "prebuild": "node scripts/copy-themes.mjs",
+    "prebuild": "node scripts/copy-themes.mjs && node scripts/copy-survey-adapters.mjs",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",

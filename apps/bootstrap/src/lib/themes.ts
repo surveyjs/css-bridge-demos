@@ -10,10 +10,23 @@
  *              (vanilla Bootstrap or a Bootswatch theme). All ship `data-bs-theme=dark`
  *              variants, so a color theme and light/dark compose cleanly.
  *
- * Stylesheets are emitted to /public/themes/<id>.css by scripts/copy-themes.mjs.
+ * Each theme is paired with a dedicated SurveyJS adapter bundle (`bootstrap-<id>`),
+ * mirroring the shadcn app: swapping the theme swaps BOTH the Bootswatch chrome
+ * stylesheet AND the matching survey adapter, keyed to the same id.
+ *
+ * Chrome stylesheets are emitted to /public/themes/<id>.css by scripts/copy-themes.mjs;
+ * adapter bundles to /public/survey-adapters/<id>.css by scripts/copy-survey-adapters.mjs.
  */
 
-export type ColorThemeId = "default" | "zephyr" | "cosmo" | "morph";
+export type ColorThemeId =
+  | "default"
+  | "zephyr"
+  | "cosmo"
+  | "morph"
+  | "flatly"
+  | "darkly"
+  | "lux"
+  | "litera";
 export type ColorMode = "light" | "dark";
 
 export interface ColorTheme {
@@ -23,10 +36,16 @@ export interface ColorTheme {
   readonly description: string;
 }
 
+// Ordered by popularity: stock Bootstrap first (the baseline / default theme),
+// then Bootswatch themes by how widely they're used.
 export const colorThemes: readonly ColorTheme[] = [
   { id: "default", label: "Bootstrap", description: "Stock Bootstrap 5 palette." },
-  { id: "zephyr", label: "Zephyr", description: "Crisp, modern blue." },
+  { id: "flatly", label: "Flatly", description: "Flat, friendly teal." },
+  { id: "darkly", label: "Darkly", description: "Bold dark slate." },
   { id: "cosmo", label: "Cosmo", description: "Flat, ordered ocean blue." },
+  { id: "litera", label: "Litera", description: "Clean, readable neutral." },
+  { id: "lux", label: "Lux", description: "Minimal, premium serif." },
+  { id: "zephyr", label: "Zephyr", description: "Crisp, modern blue." },
   { id: "morph", label: "Morph", description: "Soft neumorphic purple." },
 ] as const;
 
@@ -53,6 +72,19 @@ export function themeHref(id: ColorThemeId): string {
 export const THEME_LINK_ID = "adapter-theme-css";
 
 /**
+ * The SurveyJS adapter bundle for a theme. Each theme ships its own
+ * `bootstrap-<id>` adapter (base + theme deltas), copied to
+ * /public/survey-adapters/<id>.css by scripts/copy-survey-adapters.mjs. Exactly
+ * one is active at a time; switching themes swaps this <link>'s href in tandem
+ * with the chrome stylesheet.
+ */
+export const SURVEY_ADAPTER_LINK_ID = "adapter-survey-css";
+
+export function surveyAdapterHref(id: ColorThemeId): string {
+  return `/survey-adapters/${id}.css`;
+}
+
+/**
  * Inline script that reads the persisted theme + mode from localStorage and
  * applies them, preventing a flash of the wrong theme.
  *
@@ -66,6 +98,10 @@ export const THEME_LINK_ID = "adapter-theme-css";
  * never via next/script: a <link> appended while the document is still loading is
  * render-blocking, which is what keeps `--bs-*` defined at first paint — and the
  * Bootstrap adapter is nothing but a mapping onto those tokens.
+ *
+ * It manages TWO links keyed to the same theme id: the Bootswatch chrome
+ * stylesheet AND the matching SurveyJS adapter bundle, so both are in force at
+ * first paint (no unadapted flash of stock survey-core V3 styling).
  */
 export function themeBootstrapScript(): string {
   return `(function(){try{
@@ -75,8 +111,8 @@ if(ids.indexOf(t)===-1)t=${JSON.stringify(DEFAULT_THEME)};
 var m=localStorage.getItem(${JSON.stringify(MODE_STORAGE_KEY)});
 if(m!=="light"&&m!=="dark")m=${JSON.stringify(DEFAULT_MODE)};
 document.documentElement.setAttribute("data-bs-theme",m);
-var l=document.getElementById(${JSON.stringify(THEME_LINK_ID)});
-if(!l){l=document.createElement("link");l.id=${JSON.stringify(THEME_LINK_ID)};l.rel="stylesheet";document.head.appendChild(l);}
-l.setAttribute("href","/themes/"+t+".css");
+function link(id){var l=document.getElementById(id);if(!l){l=document.createElement("link");l.id=id;l.rel="stylesheet";document.head.appendChild(l);}return l;}
+link(${JSON.stringify(THEME_LINK_ID)}).setAttribute("href","/themes/"+t+".css");
+link(${JSON.stringify(SURVEY_ADAPTER_LINK_ID)}).setAttribute("href","/survey-adapters/"+t+".css");
 }catch(e){}})();`;
 }

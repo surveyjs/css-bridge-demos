@@ -23,6 +23,10 @@ const sources = {
   zephyr: "bootswatch/dist/zephyr/bootstrap.min.css",
   cosmo: "bootswatch/dist/cosmo/bootstrap.min.css",
   morph: "bootswatch/dist/morph/bootstrap.min.css",
+  flatly: "bootswatch/dist/flatly/bootstrap.min.css",
+  darkly: "bootswatch/dist/darkly/bootstrap.min.css",
+  lux: "bootswatch/dist/lux/bootstrap.min.css",
+  litera: "bootswatch/dist/litera/bootstrap.min.css",
 };
 
 mkdirSync(outDir, { recursive: true });

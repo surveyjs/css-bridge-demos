@@ -37,7 +37,7 @@ const MEDICAL_FORM_JSON_BYTES = new TextEncoder().encode(
 
 export default function ClaimsPage() {
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-2">
+    <div className="grid items-start gap-6 lg:grid-cols-2" style={{ "--sd-mobile-width": "0px" } as React.CSSProperties}>
       <SurveyForm
         schema={medicalFormSchema}
         completedMessage="Thank you. Your intake form has been submitted."

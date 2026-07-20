@@ -274,7 +274,7 @@ export function NativeControls() {
             sharing the schema's exact description so only the "(…)" suffix
             differs between the two forms. */}
         <h2 className="mb-1">Patient Intake (Native Bootstrap)</h2>
-        <p className="text-body-secondary mb-4">
+        <p className="lead">
           {medicalFormJson.description as string}
         </p>
 
@@ -557,7 +557,7 @@ export function NativeControls() {
               <Card body className="mb-3">
               <Form.Label className="d-block">Allergies</Form.Label>
               {allergies.length === 0 && (
-                <p className="text-body-secondary">No allergies added.</p>
+                <div className="text-muted">No allergies added.</div>
               )}
               {allergies.length > 0 && (
                 <Table className="mb-2 align-middle">

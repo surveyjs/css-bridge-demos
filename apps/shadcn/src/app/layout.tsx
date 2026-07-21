@@ -30,10 +30,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: STYLE_BOOTSTRAP }} />
         {/*
-          Creates the SurveyJS theme adapter stylesheet <link> for the persisted visual
-          style. Runs while the document is still parsing, so the <link> it
-          appends is render-blocking and the adapter is in force at first paint.
-          (ShadcnSurveyAdapterStyles re-points the same element on style change.)
+          Creates the SurveyJS theme adapter + app-local overrides stylesheet
+          <link>s for the persisted visual style. Runs while the document is
+          still parsing, so the <link>s it appends are render-blocking and both
+          sheets are in force at first paint. (ShadcnSurveyAdapterStyles
+          re-points the same elements on style change.)
         */}
         <script dangerouslySetInnerHTML={{ __html: surveyAdapterBootstrapScript() }} />
       </head>

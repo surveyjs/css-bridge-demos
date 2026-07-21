@@ -14,11 +14,12 @@ import {
 import { useBorderlessMode } from "./BorderlessMode";
 import { FormCompleted } from "./FormCompleted";
 
-// Base V3 CSS only. The per-theme Bootstrap adapter (`bootstrap-<id>`) is loaded
-// as a swappable <link> by the pre-paint script + ThemeProvider (keyed to the
-// active theme), so it re-skins the form automatically whenever the theme/mode
-// changes. Its `--sjs2-* → --bs-*` overrides live on the `.sjs-theme-overrides`
-// root — there is NO SurveyJS-specific theme code here.
+// Base V3 CSS only. The per-theme Bootstrap adapter (`bootstrap-<id>`) and
+// app-local overrides (`/survey-overrides/<id>.css`) are loaded as swappable
+// <link>s by the pre-paint script + ThemeProvider (keyed to the active theme),
+// so the form re-skins automatically whenever the theme/mode changes. Adapter
+// `--sjs2-* → --bs-*` overrides live on `.sjs-theme-overrides`; host overrides
+// load AFTER the adapter for custom app chrome the adapter cannot cover.
 import "survey-core/survey-core.min.css";
 
 /**

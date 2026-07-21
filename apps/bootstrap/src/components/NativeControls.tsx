@@ -384,6 +384,9 @@ export function NativeControls() {
                     value={phone}
                     onChange={(e) => setPhone(maskPhone(e.target.value))}
                   />
+                  <Form.Text muted>
+                    We&apos;ll send appointment reminders to this number.
+                  </Form.Text>
                 </Form.Group>
                 <Form.Group as={Col} md={6} controlId="nf-contact">
                   <Form.Label>Preferred contact method</Form.Label>

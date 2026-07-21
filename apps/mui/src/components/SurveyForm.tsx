@@ -21,6 +21,10 @@ import { FormCompleted } from "./FormCompleted";
 // automatically whenever the active MUI scheme/palette changes. The `--mui-*`
 // variables it reads exist only because the app's theme was built with
 // `cssVariables` (see src/theme/theme.ts) — do not remove that flag.
+//
+// Per-palette app-local overrides (`/survey-overrides/<id>.css`) load AFTER the
+// adapter via a swappable <link> (see surveyOverridesCss + MuiSurveyOverridesStyles)
+// for host-only SurveyJS tweaks the adapter cannot cover.
 import "survey-core/survey-core.min.css";
 import "survey-core/themes/adapters/mui.min.css";
 

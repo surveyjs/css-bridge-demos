@@ -16,6 +16,8 @@
  *
  * Chrome stylesheets are emitted to /public/themes/<id>.css by scripts/copy-themes.mjs;
  * adapter bundles to /public/survey-adapters/<id>.css by scripts/copy-survey-adapters.mjs.
+ * App-local SurveyJS overrides (custom chrome the adapters cannot cover) live in
+ * /public/survey-overrides/<id>.css and swap on the same theme id.
  */
 
 export type ColorThemeId =
@@ -85,6 +87,18 @@ export function surveyAdapterHref(id: ColorThemeId): string {
 }
 
 /**
+ * App-local SurveyJS CSS for adapting the form to custom app components that
+ * have no stock Bootstrap counterpart. Lives in /public/survey-overrides/<id>.css
+ * (hand-authored; never overwritten by copy-survey-adapters). Loaded AFTER the
+ * adapter so host overrides win by source order.
+ */
+export const SURVEY_OVERRIDES_LINK_ID = "adapter-survey-overrides-css";
+
+export function surveyOverridesHref(id: ColorThemeId): string {
+  return `/survey-overrides/${id}.css`;
+}
+
+/**
  * Inline script that reads the persisted theme + mode from localStorage and
  * applies them, preventing a flash of the wrong theme.
  *
@@ -99,9 +113,10 @@ export function surveyAdapterHref(id: ColorThemeId): string {
  * render-blocking, which is what keeps `--bs-*` defined at first paint — and the
  * Bootstrap adapter is nothing but a mapping onto those tokens.
  *
- * It manages TWO links keyed to the same theme id: the Bootswatch chrome
- * stylesheet AND the matching SurveyJS adapter bundle, so both are in force at
- * first paint (no unadapted flash of stock survey-core V3 styling).
+ * It manages THREE links keyed to the same theme id: the Bootswatch chrome
+ * stylesheet, the matching SurveyJS adapter bundle, and the app-local survey
+ * overrides sheet — all in force at first paint (no unadapted flash of stock
+ * survey-core V3 styling).
  */
 export function themeBootstrapScript(): string {
   return `(function(){try{
@@ -114,5 +129,6 @@ document.documentElement.setAttribute("data-bs-theme",m);
 function link(id){var l=document.getElementById(id);if(!l){l=document.createElement("link");l.id=id;l.rel="stylesheet";document.head.appendChild(l);}return l;}
 link(${JSON.stringify(THEME_LINK_ID)}).setAttribute("href","/themes/"+t+".css");
 link(${JSON.stringify(SURVEY_ADAPTER_LINK_ID)}).setAttribute("href","/survey-adapters/"+t+".css");
+link(${JSON.stringify(SURVEY_OVERRIDES_LINK_ID)}).setAttribute("href","/survey-overrides/"+t+".css");
 }catch(e){}})();`;
 }

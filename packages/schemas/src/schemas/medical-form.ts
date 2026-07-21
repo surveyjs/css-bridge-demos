@@ -56,6 +56,8 @@ export const medicalFormJson: SurveyJSON = {
           type: "text",
           name: "phone",
           title: "Mobile phone",
+          description: "We'll send appointment reminders to this number.",
+          descriptionLocation: "underInput",
           inputType: "tel",
           maskType: "pattern",
           maskSettings: { pattern: "+1 (999) 999-9999" },

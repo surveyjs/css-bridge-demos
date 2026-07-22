@@ -147,7 +147,7 @@ export function SurveyForm({
   // inner padding; `overflow-hidden` clips the form's title bar to the radius.
   return (
     <Card className="overflow-hidden">
-      <Card.Body>
+      <Card.Body className="p-0">
       <Survey model={model} />
       </Card.Body>
     </Card>

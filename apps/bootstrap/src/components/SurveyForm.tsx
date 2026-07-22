@@ -14,12 +14,12 @@ import {
 import { useBorderlessMode } from "./BorderlessMode";
 import { FormCompleted } from "./FormCompleted";
 
-// Base V3 CSS only. The per-theme Bootstrap adapter (`bootstrap-<id>`) and
-// app-local overrides (`/survey-overrides/<id>.css`) are loaded as swappable
-// <link>s by the pre-paint script + ThemeProvider (keyed to the active theme),
-// so the form re-skins automatically whenever the theme/mode changes. Adapter
-// `--sjs2-* → --bs-*` overrides live on `.sjs-theme-overrides`; host overrides
-// load AFTER the adapter for custom app chrome the adapter cannot cover.
+// Base V3 CSS only. The per-theme Bootstrap adapter (`bootstrap-<id>`), shared
+// app-local overrides (`/survey-overrides/bootstrap.css`), and optional
+// per-theme overrides (`/survey-overrides/<id>.css`) are loaded as <link>s by
+// the pre-paint script + ThemeProvider. Adapter `--sjs2-* → --bs-*` overrides
+// live on `.sjs-theme-overrides`; host overrides load AFTER the adapter for
+// custom app chrome the adapter cannot cover.
 import "survey-core/survey-core.min.css";
 
 /**
@@ -147,7 +147,9 @@ export function SurveyForm({
   // inner padding; `overflow-hidden` clips the form's title bar to the radius.
   return (
     <Card className="overflow-hidden">
+      <Card.Body>
       <Survey model={model} />
+      </Card.Body>
     </Card>
   );
 }

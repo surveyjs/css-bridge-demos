@@ -1,0 +1,76 @@
+/**
+ * App-local SurveyJS overrides shared across every Bootstrap/Bootswatch theme.
+ *
+ * Always loaded after the SurveyJS adapter so these rules win by source order.
+ * Theme-specific tweaks stay in `/survey-overrides/<theme-id>.css`.
+ *
+ * Prefer `--sjs2-*` token overrides on `.sjs-theme-overrides` when possible;
+ * use SurveyJS class selectors only when tokens are not enough.
+ */
+
+.sjs-theme-overrides {
+  --sjs2-typography-line-height-component-header-title: 1.2;
+
+  --sjs2-layout-component-page-content-area-gap-vertical: 1rem;
+  --sjs2-layout-component-page-content-area-gap-horizontal: 1rem;
+
+  --sjs2-layout-component-page-footer-action-group-gap: 0.5rem;
+}
+
+.sv-header__title~.sv-header__description {
+  margin-top: .25rem;
+}
+
+/* header */
+.sv-header__content {
+
+  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+
+}
+
+/* stepper */
+.sd-progress-buttons {
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+.sd-progress-buttons--titles-bottom .sd-progress-buttons__button {
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+.sd-progress-buttons__page-description {
+  display: none;
+}
+
+.sd-progress-buttons--titles-bottom .sd-progress-buttons__list-container {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.sd-progress-buttons__page-title {
+  line-height: 1.5;
+}
+
+/* body */
+.sd-body.sd-body--responsive {
+
+  padding: 0 var(--bs-card-spacer-x);
+
+}
+
+
+
+.sd-root--compact .sd-page,
+.sd-root--compact .sd-page__content {
+  row-gap: var(--sjs2-layout-component-page-content-area-gap-vertical);
+}
+
+.sd-root--compact .sd-body.sd-body--responsive .sd-body__navigation,
+.sd-root--compact .sd-body.sd-body--static .sd-body__navigation {
+  padding-top: 1.5rem;
+}
+
+.sd-root-modern {
+  --sd-mobile-width: 0px;
+}

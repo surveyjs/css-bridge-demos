@@ -4,16 +4,17 @@ import { useEffect } from "react";
 import {
   SURVEY_ADAPTER_LINK_ID,
   SURVEY_OVERRIDES_LINK_ID,
+  SURVEY_OVERRIDES_SHARED_LINK_ID,
   surveyAdapterHref,
   surveyOverridesHref,
 } from "@/lib/surveyAdapterCss";
 import { useStyle } from "./StyleProvider";
 
 /**
- * Points the survey adapter + app-local overrides <link>s at the active visual
+ * Points the survey adapter + per-style overrides <link>s at the active visual
  * style's bundles. Each adapter bundle is self-contained (base + style deltas);
- * overrides hold host-only SurveyJS tweaks the adapter cannot cover. Switching
- * the style is just an href swap on both links.
+ * `shadcn.css` holds shared host tweaks (always on); `<id>.css` holds optional
+ * per-style deltas. Switching the style swaps the adapter + per-style hrefs.
  *
  * The <link>s themselves are created before paint by the inline script in the
  * root layout — this only re-points them after a style change, so there is no
@@ -27,10 +28,16 @@ export function ShadcnSurveyAdapterStyles() {
     if (adapterLink instanceof HTMLLinkElement) {
       adapterLink.setAttribute("href", surveyAdapterHref(style));
     }
+    const sharedOverridesLink = document.getElementById(
+      SURVEY_OVERRIDES_SHARED_LINK_ID,
+    );
     const overridesLink = document.getElementById(SURVEY_OVERRIDES_LINK_ID);
+    // Keep shared then per-style host overrides after the adapter sheet.
+    if (sharedOverridesLink instanceof HTMLLinkElement) {
+      document.head.appendChild(sharedOverridesLink);
+    }
     if (overridesLink instanceof HTMLLinkElement) {
       overridesLink.setAttribute("href", surveyOverridesHref(style));
-      // Keep host overrides after the adapter sheet in the cascade.
       document.head.appendChild(overridesLink);
     }
   }, [style]);

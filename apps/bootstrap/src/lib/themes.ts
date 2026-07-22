@@ -17,7 +17,8 @@
  * Chrome stylesheets are emitted to /public/themes/<id>.css by scripts/copy-themes.mjs;
  * adapter bundles to /public/survey-adapters/<id>.css by scripts/copy-survey-adapters.mjs.
  * App-local SurveyJS overrides (custom chrome the adapters cannot cover) live in
- * /public/survey-overrides/<id>.css and swap on the same theme id.
+ * /public/survey-overrides/bootstrap.css (always on) plus optional
+ * /public/survey-overrides/<id>.css (swapped on the same theme id).
  */
 
 export type ColorThemeId =
@@ -88,10 +89,15 @@ export function surveyAdapterHref(id: ColorThemeId): string {
 
 /**
  * App-local SurveyJS CSS for adapting the form to custom app components that
- * have no stock Bootstrap counterpart. Lives in /public/survey-overrides/<id>.css
- * (hand-authored; never overwritten by copy-survey-adapters). Loaded AFTER the
- * adapter so host overrides win by source order.
+ * have no stock Bootstrap counterpart (hand-authored; never overwritten by
+ * copy-survey-adapters). Loaded AFTER the adapter so host overrides win by
+ * source order.
+ *
+ *  - `bootstrap.css` — shared across every theme; always linked.
+ *  - `<id>.css` — optional per-theme deltas; swapped with the active theme.
  */
+export const SURVEY_OVERRIDES_SHARED_HREF = "/survey-overrides/bootstrap.css";
+export const SURVEY_OVERRIDES_SHARED_LINK_ID = "adapter-survey-overrides-shared-css";
 export const SURVEY_OVERRIDES_LINK_ID = "adapter-survey-overrides-css";
 
 export function surveyOverridesHref(id: ColorThemeId): string {
@@ -113,10 +119,10 @@ export function surveyOverridesHref(id: ColorThemeId): string {
  * render-blocking, which is what keeps `--bs-*` defined at first paint — and the
  * Bootstrap adapter is nothing but a mapping onto those tokens.
  *
- * It manages THREE links keyed to the same theme id: the Bootswatch chrome
- * stylesheet, the matching SurveyJS adapter bundle, and the app-local survey
- * overrides sheet — all in force at first paint (no unadapted flash of stock
- * survey-core V3 styling).
+ * It manages FOUR links: the Bootswatch chrome stylesheet and matching SurveyJS
+ * adapter (keyed to the theme id), plus the shared app-local overrides sheet
+ * and the optional per-theme overrides sheet — all in force at first paint
+ * (no unadapted flash of stock survey-core V3 styling).
  */
 export function themeBootstrapScript(): string {
   return `(function(){try{
@@ -129,6 +135,7 @@ document.documentElement.setAttribute("data-bs-theme",m);
 function link(id){var l=document.getElementById(id);if(!l){l=document.createElement("link");l.id=id;l.rel="stylesheet";document.head.appendChild(l);}return l;}
 link(${JSON.stringify(THEME_LINK_ID)}).setAttribute("href","/themes/"+t+".css");
 link(${JSON.stringify(SURVEY_ADAPTER_LINK_ID)}).setAttribute("href","/survey-adapters/"+t+".css");
+link(${JSON.stringify(SURVEY_OVERRIDES_SHARED_LINK_ID)}).setAttribute("href",${JSON.stringify(SURVEY_OVERRIDES_SHARED_HREF)});
 link(${JSON.stringify(SURVEY_OVERRIDES_LINK_ID)}).setAttribute("href","/survey-overrides/"+t+".css");
 }catch(e){}})();`;
 }

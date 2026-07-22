@@ -16,7 +16,8 @@ import { FormCompleted } from "./FormCompleted";
 
 // Base V3 CSS FIRST, then the shadcn adapter from survey-core ON TOP so the
 // adapter's `--sjs2-*` overrides win by source order. The active visual-style
-// adapter + app-local overrides (`/survey-overrides/<id>.css`) are loaded by
+// adapter, shared overrides (`/survey-overrides/shadcn.css`), and optional
+// per-style overrides (`/survey-overrides/<id>.css`) are loaded by
 // <ShadcnSurveyAdapterStyles /> (see ThemeProvider) and track `data-shadcn-style`
 // on <html>; light/dark flips shadcn tokens via `.dark` on the same root.
 // Host overrides load AFTER the adapter for custom app chrome the adapter

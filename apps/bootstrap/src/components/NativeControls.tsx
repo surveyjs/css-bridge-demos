@@ -308,7 +308,7 @@ export function NativeControls() {
           {/* ── Patient ───────────────────────────────────────────── */}
           {currentPage === 0 && (
             <>
-              <Row className="g-3 mb-3">
+              <Row className="mb-3">
                 <Form.Group as={Col} md={6} controlId="nf-first-name">
                   <Form.Label>First name</Form.Label>
                   <Form.Control
@@ -337,7 +337,7 @@ export function NativeControls() {
                 </Form.Group>
               </Row>
 
-              <Row className="g-3 mb-3">
+              <Row className="mb-3">
                 <Form.Group as={Col} md={6} controlId="nf-dob">
                   <Form.Label>Date of birth</Form.Label>
                   <Form.Control
@@ -374,7 +374,7 @@ export function NativeControls() {
                 </Form.Group>
               </Row>
 
-              <Row className="g-3">
+              <Row>
                 <Form.Group as={Col} md={6} controlId="nf-phone">
                   <Form.Label>Mobile phone</Form.Label>
                   <Form.Control
@@ -411,7 +411,7 @@ export function NativeControls() {
             <>
               <Card body className="mb-3">
                 <Card.Title>Primary insurance</Card.Title>
-                <Row className="g-3 mb-3">
+                <Row className="mb-3">
                   <Form.Group as={Col} md={6} controlId="nf-carrier">
                     <Form.Label>Insurance carrier</Form.Label>
                     <Form.Control
@@ -439,7 +439,7 @@ export function NativeControls() {
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
-                <Row className="g-3 mb-3">
+                <Row className="mb-3">
                   <Form.Group as={Col} md={6} controlId="nf-group-number">
                     <Form.Label>Group number</Form.Label>
                     <Form.Control
@@ -485,7 +485,7 @@ export function NativeControls() {
               {hasSecondary && (
                 <Card body>
                   <Card.Title>Secondary insurance</Card.Title>
-                  <Row className="g-3">
+                  <Row>
                     <Form.Group as={Col} md={6} controlId="nf-carrier2">
                       <Form.Label>Insurance carrier</Form.Label>
                       <Form.Control

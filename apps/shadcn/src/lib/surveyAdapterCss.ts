@@ -6,8 +6,9 @@
  * Exactly one is active at a time; switching styles swaps the <link>'s href.
  *
  * App-local SurveyJS overrides (custom chrome the adapters cannot cover) live in
- * `public/survey-overrides/<id>.css` and swap on the same visual-style id, AFTER
- * the adapter so host overrides win by source order.
+ * `public/survey-overrides/shadcn.css` (always on) plus optional
+ * `public/survey-overrides/<id>.css` (swapped on the same visual-style id),
+ * AFTER the adapter so host overrides win by source order.
  *
  * They are NOT webpack `import()`s: the active style is read from localStorage,
  * so a bundler-loaded stylesheet could not land until after hydration — the
@@ -18,6 +19,8 @@
 import { DEFAULT_STYLE_ID, STYLE_STORAGE_KEY, VISUAL_STYLES, type VisualStyleId } from "./styles";
 
 export const SURVEY_ADAPTER_LINK_ID = "shadcn-survey-adapter-css";
+export const SURVEY_OVERRIDES_SHARED_HREF = "/survey-overrides/shadcn.css";
+export const SURVEY_OVERRIDES_SHARED_LINK_ID = "shadcn-survey-overrides-shared-css";
 export const SURVEY_OVERRIDES_LINK_ID = "shadcn-survey-overrides-css";
 
 export function surveyAdapterHref(style: VisualStyleId): string {
@@ -30,8 +33,9 @@ export function surveyOverridesHref(style: VisualStyleId): string {
 
 /**
  * Pre-paint <link> bootstrap, inlined into <head> by the root layout. Reads the
- * persisted visual style and creates the adapter + overrides stylesheet <link>s
- * while the document is still parsing — which is what makes them render-blocking.
+ * persisted visual style and creates the adapter + shared overrides + per-style
+ * overrides stylesheet <link>s while the document is still parsing — which is
+ * what makes them render-blocking.
  *
  * The links are owned outside React (ShadcnSurveyAdapterStyles mutates the same
  * elements by id), so nothing is server-rendered for React to diff. Kept
@@ -46,6 +50,7 @@ var s=localStorage.getItem(${JSON.stringify(STYLE_STORAGE_KEY)});
 if(ids.indexOf(s)===-1)s=${JSON.stringify(DEFAULT_STYLE_ID)};
 function link(id){var l=document.getElementById(id);if(!l){l=document.createElement("link");l.id=id;l.rel="stylesheet";document.head.appendChild(l);}return l;}
 link(${JSON.stringify(SURVEY_ADAPTER_LINK_ID)}).setAttribute("href","/survey-adapters/"+s+".css");
+link(${JSON.stringify(SURVEY_OVERRIDES_SHARED_LINK_ID)}).setAttribute("href",${JSON.stringify(SURVEY_OVERRIDES_SHARED_HREF)});
 link(${JSON.stringify(SURVEY_OVERRIDES_LINK_ID)}).setAttribute("href","/survey-overrides/"+s+".css");
 }catch(e){}})();`;
 }

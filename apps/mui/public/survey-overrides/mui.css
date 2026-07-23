@@ -1,0 +1,13 @@
+/**
+ * App-local SurveyJS overrides shared across every MUI palette.
+ *
+ * Always loaded after the SurveyJS adapter so these rules win by source order.
+ * Palette-specific tweaks stay in `/survey-overrides/<palette-id>.css`.
+ *
+ * Prefer `--sjs2-*` token overrides on `.sjs-theme-overrides` when possible;
+ * use SurveyJS class selectors only when tokens are not enough.
+ */
+
+.sd-root-modern {
+  --sd-mobile-width: 0px;
+}

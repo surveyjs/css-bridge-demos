@@ -1,0 +1,13 @@
+/**
+ * App-local SurveyJS overrides shared across every shadcn visual style.
+ *
+ * Always loaded after the SurveyJS adapter so these rules win by source order.
+ * Style-specific tweaks stay in `/survey-overrides/<style-id>.css`.
+ *
+ * Prefer `--sjs2-*` token overrides on `.sjs-theme-overrides` when possible;
+ * use SurveyJS class selectors only when tokens are not enough.
+ */
+
+.sd-root-modern {
+  --sd-mobile-width: 0px;
+}

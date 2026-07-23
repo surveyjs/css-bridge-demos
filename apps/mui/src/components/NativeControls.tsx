@@ -390,6 +390,7 @@ export function NativeControls() {
                   placeholder="+1 (___) ___-____"
                   value={phone}
                   onChange={(e) => setPhone(maskPhone(e.target.value))}
+                  helperText="We'll send appointment reminders to this number."
                 />
                 <FormControl fullWidth>
                   <InputLabel id="nf-contact-label">Preferred contact method</InputLabel>

@@ -429,6 +429,9 @@ export function NativeControls() {
                     value={phone}
                     onChange={(e) => setPhone(maskPhone(e.target.value))}
                   />
+                  <FieldDescription>
+                    We&apos;ll send appointment reminders to this number.
+                  </FieldDescription>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="nf-contact">Preferred contact method</FieldLabel>

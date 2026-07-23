@@ -13,9 +13,12 @@ import {
   DEFAULT_THEME,
   MODE_STORAGE_KEY,
   SURVEY_ADAPTER_LINK_ID,
+  SURVEY_OVERRIDES_LINK_ID,
+  SURVEY_OVERRIDES_SHARED_LINK_ID,
   THEME_LINK_ID,
   THEME_STORAGE_KEY,
   surveyAdapterHref,
+  surveyOverridesHref,
   themeHref,
   type ColorMode,
   type ColorThemeId,
@@ -53,12 +56,26 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setTheme = useCallback((next: ColorThemeId) => {
     setThemeState(next);
-    // Swap BOTH the Bootswatch chrome sheet and the paired survey adapter, keyed
-    // to the same id — they are created before paint by the inline script.
+    // Swap the Bootswatch chrome sheet, the paired survey adapter, and the
+    // per-theme survey overrides — keyed to the same id. The shared
+    // bootstrap.css link stays put. Links are created before paint by the
+    // inline script.
     const themeLink = document.getElementById(THEME_LINK_ID) as HTMLLinkElement | null;
     if (themeLink) themeLink.setAttribute("href", themeHref(next));
     const adapterLink = document.getElementById(SURVEY_ADAPTER_LINK_ID) as HTMLLinkElement | null;
     if (adapterLink) adapterLink.setAttribute("href", surveyAdapterHref(next));
+    const sharedOverridesLink = document.getElementById(
+      SURVEY_OVERRIDES_SHARED_LINK_ID,
+    ) as HTMLLinkElement | null;
+    const overridesLink = document.getElementById(
+      SURVEY_OVERRIDES_LINK_ID,
+    ) as HTMLLinkElement | null;
+    // Keep shared then per-theme host overrides after framework/adapter sheets.
+    if (sharedOverridesLink) document.head.appendChild(sharedOverridesLink);
+    if (overridesLink) {
+      overridesLink.setAttribute("href", surveyOverridesHref(next));
+      document.head.appendChild(overridesLink);
+    }
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch {

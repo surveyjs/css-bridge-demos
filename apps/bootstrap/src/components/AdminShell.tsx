@@ -24,7 +24,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const isBuilder = pathname === routes.builder;
 
   return (
-    <div className="d-flex flex-column min-vh-100 bg-body-tertiary">
+    <div className="d-flex flex-column min-vh-100 vh-100 bg-body-tertiary">
       <Navbar
         as="header"
         sticky="top"
@@ -50,7 +50,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         </div>
       </Navbar>
 
-      <div className="d-flex flex-grow-1">
+      <div className="d-flex flex-grow-1" style={{ height: 0 }}>
         {/* Persistent sidebar (large screens) */}
         <aside
           className="d-none d-lg-block border-end bg-body"
@@ -78,7 +78,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           {isBuilder ? (
             children
           ) : (
-            <Container fluid className="px-0">
+            <Container fluid className="px-0" style={{ height: "100%" }}>
               {children}
             </Container>
           )}

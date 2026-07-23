@@ -55,7 +55,7 @@
 /* body */
 .sd-body.sd-body--responsive {
 
-  padding: 0 var(--bs-card-spacer-x);
+  /*padding: 0 var(--bs-card-spacer-x);*/
 
 }
 

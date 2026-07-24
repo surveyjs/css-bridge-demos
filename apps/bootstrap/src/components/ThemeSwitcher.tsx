@@ -3,6 +3,7 @@
 import { Button, Dropdown, ButtonGroup } from "react-bootstrap";
 import { colorThemes } from "@/lib/themes";
 import { useTheme } from "./ThemeProvider";
+import "./ThemeSwitcher.css";
 
 /**
  * Header theme controls, built entirely from react-bootstrap:
@@ -15,7 +16,7 @@ export function ThemeSwitcher() {
     colorThemes.find((t) => t.id === theme)?.label ?? "Theme";
 
   return (
-    <ButtonGroup>
+    <ButtonGroup className="theme-switcher">
       <Button
         variant="outline-secondary"
         onClick={toggleMode}
@@ -39,7 +40,7 @@ export function ThemeSwitcher() {
               onClick={() => setTheme(t.id)}
             >
               <div className="fw-medium">{t.label}</div>
-              <small className="text-body-secondary">{t.description}</small>
+              <small className="opacity-75">{t.description}</small>
             </Dropdown.Item>
           ))}
         </Dropdown.Menu>

@@ -36,7 +36,10 @@ export function AdminShell({ children }: { children: ReactNode }) {
           className="d-lg-none me-2"
           onClick={() => setNavOpen(true)}
         />
-        <Navbar.Brand className="fw-bold d-flex align-items-center gap-2">
+        <Navbar.Brand
+          className="fw-bold d-flex align-items-center gap-2"
+          style={{ color: "var(--bs-body-color)" }}
+        >
           <span aria-hidden>🧩</span>
           SurveyJS Theme Adapter
           <span className="badge text-bg-primary fw-normal">Bootstrap</span>
